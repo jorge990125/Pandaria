@@ -31,10 +31,6 @@
 #include "Implementation/CharacterDatabase.h"
 #include "Implementation/WorldDatabase.h"
 
-
-
-#include "Master.h"
-
 #include "AppenderDB.h"
 #include "AsyncAcceptor.h"
 #include "Banner.h"
@@ -55,6 +51,8 @@
 #include "TCSoap.h"
 #include "ThreadPool.h"
 #include "World.h"
+#include "WorldSocket.h"
+#include "WorldSocketMgr.h"
 
 #include <boost/dll/runtime_symbol_info.hpp>
 #include <boost/asio/signal_set.hpp>
@@ -116,7 +114,7 @@ void StopDB();
 void WorldUpdateLoop();
 void ClearOnlineAccounts();
 void ShutdownCLIThread(std::thread* cliThread);
-//bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext);
+bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext);
 variables_map GetConsoleArguments(int argc, char** argv, fs::path& configFile, std::string& configService);
 
 /// Launch the Trinity server
@@ -216,8 +214,7 @@ extern int main(int argc, char** argv)
     // set server offline (not connectable)
     LoginDatabase.DirectPExecute("UPDATE realmlist SET flag = (flag & ~%u) | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, REALM_FLAG_INVALID, realm.Id.Realm);
 
-    //LoadRealmInfo(*ioContext);
-    sMaster->LoadRealmInfo(*ioContext);
+    LoadRealmInfo(*ioContext);
 
     //sScriptMgr->SetScriptLoader(AddScripts);
     sScriptMgr->SetLoader(AddScripts);
@@ -248,6 +245,42 @@ extern int main(int argc, char** argv)
         });
     }
 
+    // Launch the worldserver listener socket
+    uint16 worldPort = uint16(sWorld->getIntConfig(CONFIG_PORT_WORLD));
+    std::string worldListener = sConfigMgr->GetStringDefault("BindIP", "0.0.0.0");
+
+    int networkThreads = sConfigMgr->GetIntDefault("Network.Threads", 1);
+
+    if (networkThreads <= 0)
+    {
+        TC_LOG_ERROR("server.worldserver", "Network.Threads must be greater than 0");
+        World::StopNow(ERROR_EXIT_CODE);
+        return 1;
+    }
+
+    if (!sWorldSocketMgr.StartWorldNetwork(*ioContext, worldListener, worldPort, networkThreads))
+    {
+        TC_LOG_ERROR("server.worldserver", "Failed to initialize network");
+        World::StopNow(ERROR_EXIT_CODE);
+        return 1;
+    }
+
+    std::shared_ptr<void> sWorldSocketMgrHandle(nullptr, [](void*)
+    {
+        sWorld->KickAll();              // save and kick all players
+        sWorld->UpdateSessions(1);      // real players unload required UpdateSessions call
+
+        sWorldSocketMgr.StopNetwork();
+
+        ///- Clean database before leaving
+        ClearOnlineAccounts();
+    });
+
+    // Set server online (allow connecting now)
+    LoginDatabase.DirectPExecute("UPDATE realmlist SET flag = flag & ~%u, population = 0 WHERE id = '%u'", REALM_FLAG_OFFLINE, realm.Id.Realm);
+    realm.PopulationLevel = 0.0f;
+    realm.Flags = RealmFlags(realm.Flags & ~uint32(REALM_FLAG_OFFLINE));
+
     // Start the freeze check callback cycle in 5 seconds (cycle itself is 1 sec)
     std::shared_ptr<FreezeDetector> freezeDetector;
     if (int coreStuckTime = sConfigMgr->GetIntDefault("MaxCoreStuckTime", 60))
@@ -268,16 +301,7 @@ extern int main(int argc, char** argv)
         cliThread.reset(new std::thread(CliThread), &ShutdownCLIThread);
     }
 
-    //WorldUpdateLoop();
-
-    ///- and run the 'Master'
-    /// @todo Why do we need this 'Master'? Can't all of this be in the Main as for Realmd?
-    int ret = sMaster->Run();
-
-    // at sMaster return function exist with codes
-    // 0 - normal shutdown
-    // 1 - shutdown at error
-    // 2 - restart command used, this code can be used by restarter for restart Trinityd
+    WorldUpdateLoop();
 
     // Shutdown starts here
     ioContextStopHandle.reset();
@@ -293,7 +317,11 @@ extern int main(int argc, char** argv)
 
     TC_LOG_INFO("server.worldserver", "Halting process...");
 
-    return ret;
+    // 0 - normal shutdown
+    // 1 - shutdown at error
+    // 2 - restart command used, this code can be used by restarter for restart Trinityd
+
+    return World::GetExitCode();
 }
 
 /// @}
@@ -373,6 +401,8 @@ void WorldUpdateLoop()
     LoginDatabase.WarnAboutSyncQueries(true);
     CharacterDatabase.WarnAboutSyncQueries(true);
     WorldDatabase.WarnAboutSyncQueries(true);
+
+    sWorld->OnStartup();
 
     ///- While we have not World::m_stopEvent, update the world
     while (!World::IsStopped())
@@ -465,52 +495,52 @@ AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext)
     return acceptor;
 }
 
-// bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
-// {
-//     QueryResult result = LoginDatabase.PQuery("SELECT id, name, address, localAddress, localSubnetMask, port, icon, flag, timezone, allowedSecurityLevel, population, gamebuild FROM realmlist WHERE id = %u", realm.Id.Realm);
-//     if (!result)
-//         return false;
+bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
+{
+    QueryResult result = LoginDatabase.PQuery("SELECT id, name, address, localAddress, localSubnetMask, port, icon, flag, timezone, allowedSecurityLevel, population, gamebuild FROM realmlist WHERE id = %u", realm.Id.Realm);
+    if (!result)
+        return false;
 
-//     Trinity::Asio::Resolver resolver(ioContext);
+    Trinity::Asio::Resolver resolver(ioContext);
 
-//     Field* fields = result->Fetch();
-//     realm.Name = fields[1].GetString();
-//     Optional<boost::asio::ip::tcp::endpoint> externalAddress = resolver.Resolve(boost::asio::ip::tcp::v4(), fields[2].GetString(), "");
-//     if (!externalAddress)
-//     {
-//         TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[2].GetString().c_str());
-//         return false;
-//     }
+    Field* fields = result->Fetch();
+    realm.Name = fields[1].GetString();
+    Optional<boost::asio::ip::tcp::endpoint> externalAddress = resolver.Resolve(boost::asio::ip::tcp::v4(), fields[2].GetString(), "");
+    if (!externalAddress)
+    {
+        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[2].GetString().c_str());
+        return false;
+    }
 
-//     realm.ExternalAddress = std::make_unique<boost::asio::ip::address>(externalAddress->address());
+    realm.ExternalAddress = std::make_unique<boost::asio::ip::address>(externalAddress->address());
 
-//     Optional<boost::asio::ip::tcp::endpoint> localAddress = resolver.Resolve(boost::asio::ip::tcp::v4(), fields[3].GetString(), "");
-//     if (!localAddress)
-//     {
-//         TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[3].GetString().c_str());
-//         return false;
-//     }
+    Optional<boost::asio::ip::tcp::endpoint> localAddress = resolver.Resolve(boost::asio::ip::tcp::v4(), fields[3].GetString(), "");
+    if (!localAddress)
+    {
+        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[3].GetString().c_str());
+        return false;
+    }
 
-//     realm.LocalAddress = std::make_unique<boost::asio::ip::address>(localAddress->address());
+    realm.LocalAddress = std::make_unique<boost::asio::ip::address>(localAddress->address());
 
-//     Optional<boost::asio::ip::tcp::endpoint> localSubmask = resolver.Resolve(boost::asio::ip::tcp::v4(), fields[4].GetString(), "");
-//     if (!localSubmask)
-//     {
-//         TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[4].GetString().c_str());
-//         return false;
-//     }
+    Optional<boost::asio::ip::tcp::endpoint> localSubmask = resolver.Resolve(boost::asio::ip::tcp::v4(), fields[4].GetString(), "");
+    if (!localSubmask)
+    {
+        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[4].GetString().c_str());
+        return false;
+    }
 
-//     realm.LocalSubnetMask = std::make_unique<boost::asio::ip::address>(localSubmask->address());
+    realm.LocalSubnetMask = std::make_unique<boost::asio::ip::address>(localSubmask->address());
 
-//     realm.Port = fields[5].GetUInt16();
-//     realm.Type = fields[6].GetUInt8();
-//     realm.Flags = RealmFlags(fields[7].GetUInt8());
-//     realm.Timezone = fields[8].GetUInt8();
-//     realm.AllowedSecurityLevel = AccountTypes(fields[9].GetUInt8());
-//     realm.PopulationLevel = fields[10].GetFloat();
-//     realm.Build = fields[11].GetUInt32();
-//     return true;
-// }
+    realm.Port = fields[5].GetUInt16();
+    realm.Type = fields[6].GetUInt8();
+    realm.Flags = RealmFlags(fields[7].GetUInt8());
+    realm.Timezone = fields[8].GetUInt8();
+    realm.AllowedSecurityLevel = AccountTypes(fields[9].GetUInt8());
+    realm.PopulationLevel = fields[10].GetFloat();
+    realm.Build = fields[11].GetUInt32();
+    return true;
+}
 
 /// Initialize connection to the databases
 bool StartDB()

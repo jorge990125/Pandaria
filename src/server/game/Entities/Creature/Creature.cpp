@@ -53,7 +53,6 @@
 #include "WorldPacket.h"
 #include "BattlePetSpawnMgr.h"
 #include "Transport.h"
-#include "ace/Stack_Trace.h"
 #include "Define.h"
 
 TrainerSpell const* TrainerSpellData::Find(uint32 spell_id) const

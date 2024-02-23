@@ -54,7 +54,6 @@ set(shared_STAT_SRCS
 include_directories(
   PUBLIC
     ${CMAKE_BINARY_DIR}
-    ${ACE_INCLUDE_DIR} 
     ${OPENSSL_INCLUDE_DIR} 
     ${Boost_INCLUDE_DIRS}  
   PRIVATE
@@ -98,7 +97,6 @@ target_link_libraries(shared
     sfmt
     fmt
     common
-    ${ACE_LIBRARY}
     ${OPENSSL_LIBRARIES}
 )
 

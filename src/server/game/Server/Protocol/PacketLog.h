@@ -20,6 +20,7 @@
 
 #include "Common.h"
 
+#include <boost/asio/ip/address.hpp>
 #include <mutex>
 
 enum Direction
@@ -32,7 +33,6 @@ class WorldPacket;
 
 class TC_GAME_API PacketLog
 {
-
     private:
         PacketLog();
         ~PacketLog();
@@ -44,7 +44,7 @@ class TC_GAME_API PacketLog
 
         void Initialize();
         bool CanLogPacket() const { return (_file != nullptr); }
-        void LogPacket(WorldPacket const& packet, Direction direction);
+        void LogPacket(WorldPacket const& packet, Direction direction, boost::asio::ip::address const& addr, uint16 port);
 
     private:
         FILE* _file;

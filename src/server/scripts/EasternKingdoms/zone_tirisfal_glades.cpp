@@ -689,7 +689,7 @@ struct npc_mindless_zombie : public ScriptedAI
     }
 };
 
-enum PlaceDescription
+enum class PlaceDescription : uint8
 {
     Unknown                                 = 0,
     Outsite                                 = 1,

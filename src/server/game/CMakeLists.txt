@@ -184,7 +184,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Recast/Include
     ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
     ${CMAKE_SOURCE_DIR}/dep/SFMT
-    ${ACE_INCLUDE_DIR}
     ${MYSQL_INCLUDE_DIR}
     ${OPENSSL_INCLUDE_DIR}
     ${CMAKE_SOURCE_DIR}/src/common
@@ -331,7 +330,6 @@ target_link_libraries(game
     common
     database
     shared
-    ${ACE_LIBRARY}
 )
 
 if (ELUNA)

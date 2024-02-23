@@ -2555,7 +2555,7 @@ public:
     void RemoveAreaTrigger(AuraEffect const* eff);
     void RemoveAllAreasTrigger();
 
-    void AddAuraAreaTrigger(IAreaTrigger* interface);
+    void AddAuraAreaTrigger(IAreaTrigger* interfaceAreaTrigger);
     IAreaTrigger* RemoveAuraAreaTrigger(AuraEffect const* auraEffect, AuraApplication const* auraApplication);
 
     GameObject* GetGameObject(uint32 spellId) const;

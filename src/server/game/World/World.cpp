@@ -88,7 +88,6 @@
 #include "BattlePetMgr.h"
 #include "BattlePetSpawnMgr.h"
 #include "PetBattle.h"
-#include "TaskMgr.h"
 #include "DevTool.h"
 #include "AnticheatMgr.h"
 #include "ServiceBoost.h"
@@ -265,7 +264,6 @@ void World::AddSession(WorldSession* s)
 void World::AddSession_(WorldSession* s)
 {
     ASSERT(s);
-
     //NOTE - Still there is race condition in WorldSession* being used in the Sockets
 
     ///- kick already loaded player with same account (if any) and remove session
@@ -394,7 +392,7 @@ bool World::RemoveQueuedPlayer(WorldSession* sess)
         if (*iter == sess)
         {
             sess->SetInQueue(false);
-            sess->ResetTimeOutTime();
+            sess->ResetTimeOutTime(false);
             iter = m_QueuedPlayer.erase(iter);
             found = true;                                   // removing queued session
             break;
@@ -413,7 +411,7 @@ bool World::RemoveQueuedPlayer(WorldSession* sess)
     {
         WorldSession* pop_sess = m_QueuedPlayer.front();
         pop_sess->SetInQueue(false);
-        pop_sess->ResetTimeOutTime();
+        pop_sess->ResetTimeOutTime(false);
         pop_sess->SendAuthWaitQue(0);
         pop_sess->SendAddonsInfo();
 
@@ -544,7 +542,10 @@ void World::LoadConfigSettings(bool reload)
     else
         m_int_configs[CONFIG_PORT_WORLD] = sConfigMgr->GetIntDefault("WorldServerPort", 8085);
 
-    m_int_configs[CONFIG_SOCKET_TIMEOUTTIME] = sConfigMgr->GetIntDefault("SocketTimeOutTime", 900000);
+    // Config values are in "milliseconds" but we handle SocketTimeOut only as "seconds" so divide by 1000
+    m_int_configs[CONFIG_SOCKET_TIMEOUTTIME] = sConfigMgr->GetIntDefault("SocketTimeOutTime", 900000) / 1000;
+    m_int_configs[CONFIG_SOCKET_TIMEOUTTIME_ACTIVE] = sConfigMgr->GetIntDefault("SocketTimeOutTimeActive", 60000) / 1000;
+
     m_int_configs[CONFIG_SESSION_ADD_DELAY] = sConfigMgr->GetIntDefault("SessionAddDelay", 10000);
 
     m_float_configs[CONFIG_GROUP_XP_DISTANCE] = sConfigMgr->GetFloatDefault("MaxGroupXPDistance", 74.0f);
@@ -2556,9 +2557,7 @@ void World::Update(uint32 diff)
 
     /// <li> Handle session updates when the timer has passed
 
-    RecordTimeDiff(NULL);
-    TaskMgr::Default()->Update();
-    RecordTimeDiff("TaskMgr::Update");
+    RecordTimeDiff(nullptr);
     UpdateSessions(diff);
     RecordTimeDiff("UpdateSessions");
 

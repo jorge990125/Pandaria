@@ -32,7 +32,6 @@ set(collision_STAT_SRCS
 include_directories(
   PUBLIC
     ${CMAKE_BINARY_DIR}
-    ${ACE_INCLUDE_DIR}    
   PRIVATE
     ${CMAKE_SOURCE_DIR}/src/common
     ${CMAKE_SOURCE_DIR}/src/common/Asio
