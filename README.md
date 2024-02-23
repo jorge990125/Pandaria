@@ -15,9 +15,9 @@ Pandaria 5.4.8 docker [(Thanks diff3)](https://github.com/diff3): https://github
 + AMD64 or AArch64 CPU architecture
 + Processor with SSE2(AMD64 CPU architecture) support
 + ACE = 7.0.0 (included for Windows) 
-+ MySQL = 5.7, 8.0
++ MySQL = 5.7 / 8.0-8.1
 + CMake ≥ 3.27.2 
-+ OpenSSL = 1.1.1 / 3.0
++ OpenSSL = 1.1.1 / 3.0-3.1.1 (3.2.0 not supported)
 + Boost ≥ 1.74.0_msvc 14.2 x64
 + Windows SDK version 10.0.22621
 + MS Visual Studio (Community) ≥ 16.4 (2019) (Desktop) (Not previews) 
@@ -45,4 +45,4 @@ Read file [THANKS](THANKS.md)
        src="https://img.shields.io/coverity/scan/26941.svg"/>
 </a>
 
-ПО всем вопросам обращайтесь в дискорд или на наш форум: http://legendsemu.funbb.ru/
+For any questions, please contact us on discord or our forum: http://legendsemu.funbb.ru/
