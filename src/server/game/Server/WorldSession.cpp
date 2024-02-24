@@ -321,12 +321,9 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
 
     ///- Retrieve packets from the receive queue and call the appropriate handlers
     /// not process packets if socket already closed
-    WorldPacket* packet = NULL;
+    WorldPacket* packet = nullptr;
     //! Delete packet after processing by default
     bool deletePacket = true;
-    //! To prevent infinite loop
-    WorldPacket* firstDelayedPacket = NULL;
-    //! If _recvQueue.peek() == firstDelayedPacket it means that in this Update call, we've processed all
     //! *properly timed* packets, and we're now at the part of the queue where we find
     //! delayed packets that were re-enqueued due to improper timing. To prevent an infinite
     //! loop caused by re-enqueueing the same packets over and over again, we stop updating this session
@@ -335,9 +332,6 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     uint32 processedPackets = 0;
     time_t currentTime = time(nullptr);
 
-    // while (m_Socket && !m_Socket->IsClosed() &&
-    //         !_recvQueue.empty() && _recvQueue.peek(true) != firstDelayedPacket &&
-    //         _recvQueue.next(packet, updater))
     while (m_Socket && _recvQueue.next(packet, updater))
     {
 
@@ -354,9 +348,6 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         //! the client to be in world yet. We will re-add the packets to the bottom of the queue and process them later.
                         if (!m_playerRecentlyLogout)
                         {
-                            //! Prevent infinite loop
-                            if (!firstDelayedPacket)
-                                firstDelayedPacket = packet;
                             //! Because checking a bool is faster than reallocating memory
                             deletePacket = false;
                             QueuePacket(packet);
@@ -479,7 +470,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     //logout procedure should happen only in World::UpdateSessions() method!!!
     if (updater.ProcessLogout())
     {
-        time_t currTime = time(NULL);
+        time_t currTime = time(nullptr);
         ///- If necessary, log the player out
         if (ShouldLogOut(currTime) && !m_playerLoading)
             LogoutPlayer(true);

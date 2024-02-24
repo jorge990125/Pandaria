@@ -429,6 +429,26 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
                 TC_LOG_ERROR("network", "WorldSocket::ReadDataHandler(): client %s sent malformed CMSG_AUTH_SESSION", GetRemoteIpAddress().to_string().c_str());
                 return ReadDataHandlerResult::Error;
             }
+            case CMSG_AUTH_CONTINUED_SESSION:
+            {
+                LogOpcodeText(opcode, sessionGuard);
+                if (_authed)
+                {
+                    // locking just to safely log offending user is probably overkill but we are disconnecting him anyway
+                    if (sessionGuard.try_lock())
+                        TC_LOG_ERROR("network", "WorldSocket::ProcessIncoming: received duplicate CMSG_AUTH_CONTINUED_SESSION from %s", _worldSession->GetPlayerInfo().c_str());
+                    return ReadDataHandlerResult::Error;
+                }
+
+                // std::shared_ptr<WorldPackets::Auth::AuthContinuedSession> authSession = std::make_shared<WorldPackets::Auth::AuthContinuedSession>(std::move(packet));
+                // if (!authSession->ReadNoThrow())
+                // {
+                //     TC_LOG_ERROR("network", "WorldSocket::ReadDataHandler(): client %s sent malformed CMSG_AUTH_CONTINUED_SESSION", GetRemoteIpAddress().to_string().c_str());
+                //     return ReadDataHandlerResult::Error;
+                // }
+                // HandleAuthContinuedSession(authSession);
+                return ReadDataHandlerResult::WaitingForQuery;
+            }            
             case CMSG_KEEP_ALIVE: // todo: handle this packet in the same way of CMSG_TIME_SYNC_RESP
                 sessionGuard.lock();
                 LogOpcodeText(opcode, sessionGuard);
@@ -446,26 +466,12 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
                 DelayedCloseSocket();
                 return ReadDataHandlerResult::Ok;
 
-            case MSG_VERIFY_CONNECTIVITY:
-            {
-                //sScriptMgr->OnPacketReceive(_worldSession, WorldPacket(*new_pct));
-                std::string str;
-                packet >> str;
-                if (str != "D OF WARCRAFT CONNECTION - CLIENT TO SERVER")
-                    return ReadDataHandlerResult::Error;
-                HandleSendAuthSession();
-                return ReadDataHandlerResult::Ok;
-            }
-
             case CMSG_TIME_SYNC_RESP:
-                //packetToQueue = new WorldPacket(std::move(packet), std::chrono::steady_clock::now());
-                //packetToQueue = new WorldPacket(packet, std::chrono::steady_clock::now());
-                //packetToQueue = new WorldPacket(std::move(packet));
-                packetToQueue = new WorldPacket(packet);
+                packetToQueue = new WorldPacket(std::move(packet), std::chrono::steady_clock::now());
                 break;
 
             default:
-                packetToQueue = new WorldPacket(packet);
+                packetToQueue = new WorldPacket(std::move(packet));
                 break;
         }
 
@@ -617,17 +623,6 @@ void WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
 void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSession, PreparedQueryResult result)
 {
-    // // Stop if the account is not found
-    // if (!result)
-    // {
-    //     // We can not log here, as we do not know the account. Thus, no accountId.
-    //     SendAuthResponseError(AUTH_UNKNOWN_ACCOUNT);
-    //     TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: Sent Auth Response (unknown account).");
-    //     DelayedCloseSocket();
-    //     return;
-    // }
-
-    // AccountInfo account(result->Fetch());
 
     // // For hook purposes, we get Remoteaddress at this point.
     // std::string address = GetRemoteIpAddress().to_string();
@@ -646,15 +641,6 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSes
 
     // // even if auth credentials are bad, try using the session key we have - client cannot read auth response error without it
     // _authCrypt.Init(account.SessionKey);
-
-    // // First reject the connection if packet contains invalid data or realm state doesn't allow logging in
-    // if (sWorld->IsClosed())
-    // {
-    //     SendAuthResponseError(AUTH_REJECT);
-    //     TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: World closed, denying client (%s).", GetRemoteIpAddress().to_string().c_str());
-    //     DelayedCloseSocket();
-    //     return;
-    // }
 
     // if (authSession->RealmID != realm.Id.Realm)
     // {
@@ -787,6 +773,7 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSes
     // Stop if the account is not found
     if (!result)
     {
+        // We can not log here, as we do not know the account. Thus, no accountId.
         SendAuthResponseError(AUTH_UNKNOWN_ACCOUNT);
         TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: Sent Auth Response (unknown account).");
         DelayedCloseSocket();
@@ -939,8 +926,16 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSes
     _authCrypt.Init(account.SessionKey);
     _headerBuffer.Resize(sizeof(WorldClientPktHeader));
 
-    // NOTE ATM the socket is single-threaded, have this in mind ...
-    //ACE_NEW_RETURN(_worldSession, WorldSession(account.Id, this, AccountTypes(security), account.Expansion, account.MuteTime, account.Locale, account.Recruiter, account.Flags, isRecruiter, hasBoost), -1);
+    // First reject the connection if packet contains invalid data or realm state doesn't allow logging in
+    if (sWorld->IsClosed())
+    {
+        SendAuthResponseError(AUTH_REJECT);
+        TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: World closed, denying client (%s).", GetRemoteIpAddress().to_string().c_str());
+        DelayedCloseSocket();
+        return;
+    }
+
+    _authed = true;
     _worldSession = new WorldSession(account.Id, shared_from_this(), AccountTypes(security), account.Expansion, account.MuteTime, account.Locale, account.Recruiter, account.Flags, isRecruiter, hasBoost);
     _worldSession->SetMute({ onlineMuteTimer, mutedBy, muteReason, mutedInPublicChannelsOnly });
 
@@ -952,13 +947,13 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSes
         _worldSession->InitWarden(&k, account.OS);
 
     // Sleep this Network thread for
-    uint32 sleepTime = sWorld->getIntConfig(CONFIG_SESSION_ADD_DELAY);
-    std::this_thread::sleep_for(Microseconds(sleepTime));
+    // uint32 sleepTime = sWorld->getIntConfig(CONFIG_SESSION_ADD_DELAY);
+    // std::this_thread::sleep_for(Microseconds(sleepTime));
     sWorld->AddSession(_worldSession);
 
     //_queryProcessor.AddCallback(_worldSession->LoadPermissionsAsync().WithPreparedCallback(std::bind(&WorldSocket::LoadSessionPermissionsCallback, this, std::placeholders::_1)));
     
-    // AsyncRead();
+    //AsyncRead();
 }
 
 void WorldSocket::LoadSessionPermissionsCallback(PreparedQueryResult result)

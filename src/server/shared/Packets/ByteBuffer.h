@@ -91,13 +91,13 @@ public:
         _storage.reserve(reserve);
     }
 
-    // copy constructor
     ByteBuffer(const ByteBuffer &buf) : _rpos(buf._rpos), _wpos(buf._wpos),
         _bitpos(buf._bitpos), _curbitval(buf._curbitval), _storage(buf._storage)
     {
     }
 
-    ByteBuffer(ByteBuffer&& buf) noexcept : _rpos(buf._rpos), _wpos(buf._wpos), _storage(std::move(buf._storage))
+    ByteBuffer(ByteBuffer&& buf) noexcept : _rpos(buf._rpos), _wpos(buf._wpos), _bitpos(buf._bitpos), 
+        _curbitval(buf._curbitval), _storage(std::move(buf._storage))
     {
         buf._rpos = 0;
         buf._wpos = 0;
@@ -111,6 +111,8 @@ public:
         {
             _rpos = right._rpos;
             _wpos = right._wpos;
+            _bitpos = right._bitpos;
+            _curbitval = right._curbitval;            
             _storage = right._storage;
         }
 
@@ -130,6 +132,8 @@ public:
 
         return *this;
     }
+
+    virtual ~ByteBuffer() { }
 
     void clear();
 
