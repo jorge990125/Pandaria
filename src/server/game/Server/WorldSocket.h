@@ -156,7 +156,6 @@ private:
     QueryCallbackProcessor _queryProcessor;
     std::string _ipCountry;
 
-    WorldPacket* m_RecvWPct;
 };
 
 #endif
