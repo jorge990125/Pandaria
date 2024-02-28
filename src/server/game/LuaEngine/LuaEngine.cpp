@@ -10,6 +10,7 @@
 
 #if PLATFORM == PLATFORM_UNIX
 #include <dirent.h>
+#include <sys/stat.h>
 #endif
 
 template<typename T> const char* GetTName() { return NULL; }

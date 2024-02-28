@@ -14,7 +14,6 @@ Pandaria 5.4.8 docker [(Thanks diff3)](https://github.com/diff3): https://github
 + Platform: Linux, Windows or Mac
 + AMD64 or AArch64 CPU architecture
 + Processor with SSE2(AMD64 CPU architecture) support
-+ ACE = 7.0.0 (included for Windows) 
 + MySQL = 5.7 / 8.0-8.1
 + CMake ≥ 3.27.2 
 + OpenSSL = 1.1.1 / 3.0-3.1.1 (3.2.0 not supported)

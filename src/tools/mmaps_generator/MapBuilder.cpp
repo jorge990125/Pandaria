@@ -1,21 +1,19 @@
 /*
- * Copyright (C) 2011-2016 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2016 MaNGOS <http://getmangos.com/>
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 3 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+* This file is part of the Pandaria 5.4.8 Project. See THANKS file for Copyright information
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "PathCommon.h"
 #include "MapBuilder.h"
@@ -28,7 +26,6 @@
 #include "DetourCommon.h"
 
 #include "DisableMgr.h"
-#include <ace/OS_NS_unistd.h>
 
 #include "SharedDefines.h"
 
@@ -42,7 +39,7 @@ namespace MMAP
     MapBuilder::MapBuilder(float maxWalkableAngle, bool skipLiquid,
         bool skipContinents, bool skipJunkMaps, bool skipBattlegrounds, bool skipArenas, bool skipDungeons, bool skipTransports,
         bool debugOutput, bool bigBaseUnit, const char* offMeshFilePath) :
-        m_terrainBuilder     (NULL),
+        m_terrainBuilder     (nullptr),
         m_debugOutput        (debugOutput),
         m_offMeshFilePath    (offMeshFilePath),
         m_skipContinents     (skipContinents),
@@ -53,11 +50,16 @@ namespace MMAP
         m_skipTransports     (skipTransports),
         m_maxWalkableAngle   (maxWalkableAngle),
         m_bigBaseUnit        (bigBaseUnit),
-        m_rcContext          (NULL)
+        m_rcContext          (nullptr),
+        _cancelationToken (false)
     {
         m_terrainBuilder = new TerrainBuilder(skipLiquid);
 
         m_rcContext = new rcContext(false);
+
+        // percentageDone - Initializing
+        m_totalTiles = 0;
+        m_totalTilesBuilt = 0;
 
         discoverTiles();
     }
@@ -157,6 +159,14 @@ namespace MMAP
                             count++;
         }
         printf("found %u.\n\n", count);
+
+        // Calculate tiles to process in total
+        for (TileList::iterator it = m_tiles.begin(); it != m_tiles.end(); ++it)
+        {
+            if (!shouldSkipMap(it->m_mapId))
+                m_totalTiles += it->m_tiles->size();
+        }
+
     }
 
     /**************************************************************************/
@@ -174,9 +184,12 @@ namespace MMAP
     /**************************************************************************/
     void MapBuilder::buildAllMaps(int threads)
     {
-        std::vector<BuilderThread*> _threads;
+        printf("Using %u threads to extract mmaps\n", threads);
 
-        BuilderThreadPool* pool = threads > 0 ? new BuilderThreadPool() : NULL;
+        for (unsigned int i = 0; i < threads; ++i)
+        {
+            _workerThreads.push_back(std::thread(&MapBuilder::WorkerThread, this));
+        }
 
         m_tiles.sort([](MapTiles a, MapTiles b)
         {
@@ -185,27 +198,29 @@ namespace MMAP
 
         for (TileList::iterator it = m_tiles.begin(); it != m_tiles.end(); ++it)
         {
-            uint32 mapID = it->m_mapId;
-            if (!shouldSkipMap(mapID))
+            uint32 mapId = it->m_mapId;
+            if (!shouldSkipMap(mapId))
             {
                 if (threads > 0)
-                    pool->Enqueue(new MapBuildRequest(mapID));
+                    _queue.Push(mapId);
                 else
-                    buildMap(mapID);
+                    buildMap(mapId);
             }
         }
 
-        for (int i = 0; i < threads; ++i)
-            _threads.push_back(new BuilderThread(this, pool->Queue()));
-
-        // Free memory
-        for (std::vector<BuilderThread*>::iterator _th = _threads.begin(); _th != _threads.end(); ++_th)
+        while (!_queue.Empty())
         {
-            (*_th)->wait();
-            delete *_th;
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
 
-        delete pool;
+        _cancelationToken = true;
+
+        _queue.Cancel();
+
+        for (auto& thread : _workerThreads)
+        {
+            thread.join();
+        }
     }
 
     /**************************************************************************/
@@ -275,7 +290,7 @@ namespace MMAP
             return;
         }
 
-        dtNavMesh* navMesh = NULL;
+        dtNavMesh* navMesh = nullptr;
         buildNavMesh(mapId, navMesh);
         if (!navMesh)
         {
@@ -339,7 +354,7 @@ namespace MMAP
     /**************************************************************************/
     void MapBuilder::buildSingleTile(uint32 mapID, uint32 tileX, uint32 tileY)
     {
-        dtNavMesh* navMesh = NULL;
+        dtNavMesh* navMesh = nullptr;
         buildNavMesh(mapID, navMesh);
         if (!navMesh)
         {
@@ -351,12 +366,24 @@ namespace MMAP
         dtFreeNavMesh(navMesh);
     }
 
+    void MapBuilder::WorkerThread()
+    {
+        while (1)
+        {
+            uint32 mapId = 0;
+
+            _queue.WaitAndPop(mapId);
+
+            if (_cancelationToken)
+                return;
+
+            buildMap(mapId);
+        }
+    }
+
     /**************************************************************************/
     void MapBuilder::buildMap(uint32 mapID)
     {
-#ifndef __APPLE__
-        printf("[Thread %u] Building map %04u:\n", uint32(ACE_Thread::self()), mapID);
-#endif
 
         std::set<uint32>* tiles = getTileList(mapID);
 
@@ -376,7 +403,7 @@ namespace MMAP
         if (!tiles->empty())
         {
             // build navMesh
-            dtNavMesh* navMesh = NULL;
+            dtNavMesh* navMesh = nullptr;
             buildNavMesh(mapID, navMesh);
             if (!navMesh)
             {
@@ -388,6 +415,8 @@ namespace MMAP
             printf("[Map %04i] We have %u tiles.                          \n", mapID, (unsigned int)tiles->size());
             for (std::set<uint32>::iterator it = tiles->begin(); it != tiles->end(); ++it)
             {
+                // percentageDone - increment tiles built
+                m_totalTilesBuilt++;                
                 uint32 tileX, tileY;
 
                 // unpack tile coords
@@ -480,7 +509,7 @@ namespace MMAP
 
         // use Max because '32 - tileX' is negative for values over 32
         float bmin[3], bmax[3];
-        getTileBounds(tileXMax, tileYMax, NULL, 0, bmin, bmax);
+        getTileBounds(tileXMax, tileYMax, nullptr, 0, bmin, bmax);
 
         /***       now create the navmesh       ***/
 
@@ -678,11 +707,11 @@ namespace MMAP
                 // we may want to keep them in the future for debug
                 // but right now, we don't have the code to merge them
                 rcFreeHeightField(tile.solid);
-                tile.solid = NULL;
+                tile.solid = nullptr;
                 rcFreeCompactHeightfield(tile.chf);
-                tile.chf = NULL;
+                tile.chf = nullptr;
                 rcFreeContourSet(tile.cset);
-                tile.cset = NULL;
+                tile.cset = nullptr;
 
                 pmmerge[nmerge] = tile.pmesh;
                 dmmerge[nmerge] = tile.dmesh;
@@ -759,7 +788,7 @@ namespace MMAP
         params.buildBvTree = true;
 
         // will hold final navmesh
-        unsigned char* navData = NULL;
+        unsigned char* navData = nullptr;
         int navDataSize = 0;
 
         do
@@ -827,7 +856,7 @@ namespace MMAP
                 char message[1024];
                 sprintf(message, "[Map %04i] Failed to open %s for writing!\n", mapID, fileName);
                 perror(message);
-                navMesh->removeTile(tileRef, NULL, NULL);
+                navMesh->removeTile(tileRef, nullptr, nullptr);
                 continue;
             }
 
@@ -844,7 +873,7 @@ namespace MMAP
             fclose(file);
 
             // now that tile is written to disk, we can unload it
-            navMesh->removeTile(tileRef, NULL, NULL);
+            navMesh->removeTile(tileRef, nullptr, nullptr);
         }
         while (0);
 

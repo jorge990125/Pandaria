@@ -15,7 +15,6 @@ include_directories(
   PUBLIC
     ${CMAKE_BINARY_DIR}
   PRIVATE  
-    ${ACE_INCLUDE_DIR}
     ${CMAKE_SOURCE_DIR}/dep/zlib
     ${CMAKE_SOURCE_DIR}/dep/bzip2
     ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
@@ -25,6 +24,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour/Include
     ${CMAKE_SOURCE_DIR}/src/common
     ${CMAKE_SOURCE_DIR}/src/common/Logging
+    ${CMAKE_SOURCE_DIR}/src/common/Threading
     ${CMAKE_SOURCE_DIR}/src/common/Utilities
     ${CMAKE_SOURCE_DIR}/src/server/shared
     ${CMAKE_SOURCE_DIR}/src/server/shared/Database
@@ -47,7 +47,6 @@ target_link_libraries(mmaps_generator
     g3dlib
     Recast
     Detour
-    ${ACE_LIBRARY}
     ${BZIP2_LIBRARIES}
     ${ZLIB_LIBRARIES}
     ${Boost_LIBRARIES}
