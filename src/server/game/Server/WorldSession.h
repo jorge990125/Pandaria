@@ -455,7 +455,6 @@ class TC_GAME_API WorldSession
         void SetBoost(bool boost) { m_hasBoost = boost; }
         CharacterBooster* GetBoost() { return m_charBooster; }
 
-        z_stream_s* GetCompressionStream() { return _compressionStream; }
         AccountAchievementMgr& GetAchievementMgr() const { return *_achievementMgr; }
 
         bool HasFlag(AccountFlags flag) const { return m_flags & flag; }
@@ -1252,7 +1251,6 @@ class TC_GAME_API WorldSession
         bool m_hasBoost;
         LockedQueue<WorldPacket*> _recvQueue;
         time_t timeLastWhoCommand;
-        z_stream_s* _compressionStream;
 
         std::unique_ptr<AccountAchievementMgr> _achievementMgr;
 
