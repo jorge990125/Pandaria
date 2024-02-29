@@ -920,9 +920,6 @@ void WorldSession::HandleLoadScreenOpcode(WorldPacket& recvPacket)
     TC_LOG_INFO("general", "WORLD: Recvd CMSG_LOAD_SCREEN");
     uint32 mapID = recvPacket.read<uint32>();
     bool loading = recvPacket.ReadBit();
-
-    if (!loading)
-        sWorld->SendRaidQueueInfo(GetPlayer());
 }
 
 void WorldSession::HandlePlayerLogin(LoginQueryHolder const& holder)

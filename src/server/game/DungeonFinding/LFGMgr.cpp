@@ -945,12 +945,6 @@ void LFGMgr::LeaveLfg(uint64 guid, uint32 queueId)
             break;
     }
 
-    if (std::any_of(dungeons.begin(), dungeons.end(), [](uint32 dungeonId)
-    {
-        auto dungeon = sLFGDungeonStore.LookupEntry(dungeonId);
-        return dungeon && dungeon->difficulty == RAID_DIFFICULTY_25MAN_LFR;
-    }))
-        sWorld->SendRaidQueueInfo();
 }
 
 /**

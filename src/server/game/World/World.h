@@ -1152,8 +1152,6 @@ class TC_GAME_API World
         bool IsArenaPrecastSpell(uint32 spellID) const { return m_arenaPrecastSpells.find(spellID) != m_arenaPrecastSpells.end(); }
         std::set<uint32> m_arenaPrecastSpells;
 
-        void SendRaidQueueInfo(Player* player = nullptr);
-
         union DebugValue { uint32 UInt32; float Float; };
         DebugValue & GetDebugValue(uint32 id) { return m_debugValues[id]; }
 
