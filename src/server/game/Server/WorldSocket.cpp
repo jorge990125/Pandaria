@@ -531,6 +531,11 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
                 DelayedCloseSocket();
                 return ReadDataHandlerResult::Ok;
 
+            case CMSG_ENABLE_NAGLE:
+                LogOpcodeText(opcode, sessionGuard);
+                SetNoDelay(false);
+                return ReadDataHandlerResult::Ok;
+
             case CMSG_TIME_SYNC_RESP:
                 packetToQueue = new WorldPacket(std::move(packet), std::chrono::steady_clock::now());
                 break;
