@@ -2480,7 +2480,7 @@ class cond_blind_hatred : public ConditionScript
     public:
         cond_blind_hatred() : ConditionScript("cond_blind_hatred") { }
 
-        bool OnConditionCheck(Condition* cond, ConditionSourceInfo& source) override
+        bool OnConditionCheck(const Condition* cond, ConditionSourceInfo& source) override
         {
             if (source.mConditionTargets[0] && source.mConditionTargets[1])
             {

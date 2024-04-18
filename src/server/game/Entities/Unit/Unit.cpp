@@ -11468,7 +11468,7 @@ void Unit::Mount(uint32 mount, uint32 VehicleId, uint32 creatureEntry)
             }
         }
 
-        player->SendMovementSetCollisionHeight(player->GetCollisionHeight(true));
+        player->SendMovementSetCollisionHeight(player->GetCollisionHeight());
     }
 
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MOUNT);
@@ -11483,7 +11483,7 @@ void Unit::Dismount()
     RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_MOUNT);
 
     if (Player* thisPlayer = ToPlayer())
-        thisPlayer->SendMovementSetCollisionHeight(thisPlayer->GetCollisionHeight(false));
+        thisPlayer->SendMovementSetCollisionHeight(thisPlayer->GetCollisionHeight());
 
     ObjectGuid guid = GetGUID();
     WorldPacket data(SMSG_DISMOUNT, 8);
@@ -11704,7 +11704,7 @@ void Unit::SetInCombatState(bool PvP, Unit* enemy)
                     RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC); // unit has engaged in combat, remove immunity so players can fight back
             }
             if (creature->GetFormation())
-                creature->GetFormation()->MemberAttackStart(creature, enemy);
+                creature->GetFormation()->MemberEngagingTarget(creature, enemy);
         }
 
         if (!(creature->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_MOUNTED_COMBAT))
@@ -13983,9 +13983,24 @@ void CharmInfo::InitEmptyActionBar(bool withAttack)
 
 void CharmInfo::InitPossessCreateSpells()
 {
-    InitEmptyActionBar();
     if (_unit->GetTypeId() == TYPEID_UNIT)
     {
+        
+        // Adding switch until better way is found. Malcrom
+        // Adding entrys to this switch will prevent COMMAND_ATTACK being added to pet bar.
+        switch (_unit->GetEntry())
+        {
+            case 23575: // Mindless Abomination
+            case 24783: // Trained Rock Falcon
+            case 27664: // Crashin' Thrashin' Racer
+            case 40281: // Crashin' Thrashin' Racer
+            case 28511: // Eye of Acherus
+                break;
+            default:
+                InitEmptyActionBar();
+                break;
+        }
+
         for (uint32 i = 0; i < CREATURE_MAX_SPELLS; ++i)
         {
             uint32 spellId = _unit->ToCreature()->m_spells [i];
@@ -13995,10 +14010,12 @@ void CharmInfo::InitPossessCreateSpells()
                 if (spellInfo->IsPassive())
                     _unit->CastSpell(_unit, spellInfo, true);
                 else
-                    AddSpellToActionBar(spellInfo, ACT_PASSIVE);
+                    AddSpellToActionBar(spellInfo, ACT_PASSIVE, i % MAX_UNIT_ACTION_BAR_INDEX);
             }
         }
     }
+    else
+        InitEmptyActionBar();    
 }
 
 void CharmInfo::InitCharmCreateSpells()
@@ -14069,11 +14086,12 @@ void CharmInfo::InitCharmCreateSpells()
     }
 }
 
-bool CharmInfo::AddSpellToActionBar(SpellInfo const* spellInfo, ActiveStates newstate)
+bool CharmInfo::AddSpellToActionBar(SpellInfo const* spellInfo, ActiveStates newstate, uint8 preferredSlot)
 {
     uint32 spell_id = spellInfo->Id;
     uint32 first_id = spellInfo->GetFirstRankSpell()->Id;
 
+    ASSERT(preferredSlot < MAX_UNIT_ACTION_BAR_INDEX);
     // new spell rank can be already listed
     for (uint8 i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
     {
@@ -14090,9 +14108,10 @@ bool CharmInfo::AddSpellToActionBar(SpellInfo const* spellInfo, ActiveStates new
     // or use empty slot in other case
     for (uint8 i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
     {
-        if (!PetActionBar [i].GetAction() && PetActionBar [i].IsActionBarForSpell())
+        uint8 j = (preferredSlot + i) % MAX_UNIT_ACTION_BAR_INDEX;
+        if (!PetActionBar[j].GetAction() && PetActionBar[j].IsActionBarForSpell())
         {
-            SetActionBar(i, spell_id, newstate == ACT_DECIDE ? spellInfo->IsAutocastable() ? ACT_DISABLED : ACT_PASSIVE : newstate);
+            SetActionBar(j, spell_id, newstate == ACT_DECIDE ? spellInfo->IsAutocastable() ? ACT_DISABLED : ACT_PASSIVE : newstate);
             return true;
         }
     }
@@ -14421,9 +14440,7 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* target, uint32 procFlag, u
             continue;
 
         // do checks using conditions table
-        ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_SPELL_PROC, spellProto->Id);
-        ConditionSourceInfo condInfo = ConditionSourceInfo(eventInfo.GetActor(), eventInfo.GetActionTarget());
-        if (!sConditionMgr->IsObjectMeetToConditions(condInfo, conditions))
+        if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_SPELL_PROC, spellProto->Id, eventInfo.GetActor(), eventInfo.GetActionTarget()))
             continue;
 
         // Triggered spells not triggering additional spells
@@ -17993,9 +18010,7 @@ bool Unit::HandleSpellClick(Unit* clicker, int8 seatId)
             continue;
 
         //! Check database conditions
-        ConditionList conds = sConditionMgr->GetConditionsForSpellClickEvent(spellClickEntry, itr->second.spellId);
-        ConditionSourceInfo info = ConditionSourceInfo(clicker, this);
-        if (!sConditionMgr->IsObjectMeetToConditions(info, conds))
+        if (!sConditionMgr->IsObjectMeetingSpellClickConditions(spellClickEntry, itr->second.spellId, clicker, this))        
             continue;
 
         Unit* caster = (itr->second.castFlags & NPC_CLICK_CAST_CASTER_CLICKER) ? clicker : this;
@@ -18223,6 +18238,20 @@ void Unit::_ExitVehicle(Position const* exitPosition)
 bool Unit::IsFalling() const
 {
     return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_FALLING | MOVEMENTFLAG_FALLING_FAR) || movespline->isFalling();
+}
+
+bool Unit::CanSwim() const
+{
+    // Mirror client behavior, if this method returns false then client will not use swimming animation and for players will apply gravity as if there was no water
+    if (HasUnitFlag(UNIT_FLAG_CANNOT_SWIM))
+        return false;
+    if (HasUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED)) // is player
+        return true;
+    if (HasUnitFlag2(UNIT_FLAG2_UNUSED_6))
+        return false;
+    if (HasUnitFlag(UNIT_FLAG_PET_IN_COMBAT))
+        return true;
+    return HasUnitFlag(UNIT_FLAG_RENAME | UNIT_FLAG_CAN_SWIM);
 }
 
 void Unit::NearTeleportTo(float x, float y, float z, float orientation, bool casting /*= false*/)
@@ -19210,7 +19239,7 @@ bool Unit::SetSwim(bool enable)
         RemoveUnitMovementFlag(MOVEMENTFLAG_SWIMMING);
 
     if (GetTypeId() == TYPEID_UNIT)
-        ApplyModFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15, enable); // Acts like MOVEMENTFLAG_FLYING when underwater - prevents creature from falling down, allows pitching
+        ApplyModFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_CAN_SWIM, enable); // Acts like MOVEMENTFLAG_FLYING when underwater - prevents creature from falling down, allows pitching
 
     if (enable)
         Movement::PacketSender(this, SMSG_SPLINE_MOVE_START_SWIM, NULL_OPCODE).Send();

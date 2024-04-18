@@ -35,12 +35,12 @@ m_timer(0), m_lifetime(0), m_visibleBySummonerOnly(false)
 
 Unit* TempSummon::GetSummoner() const
 {
-    return m_summonerGUID ? ObjectAccessor::GetUnit(*this, m_summonerGUID) : NULL;
+    return m_summonerGUID ? ObjectAccessor::GetUnit(*this, m_summonerGUID) : nullptr;
 }
 
 Creature* TempSummon::GetSummonerCreatureBase() const
 {
-    return m_summonerGUID ? ObjectAccessor::GetCreature(*this, m_summonerGUID) : NULL;
+    return m_summonerGUID ? ObjectAccessor::GetCreature(*this, m_summonerGUID) : nullptr;
 }
 
 void TempSummon::Update(uint32 diff)
@@ -59,6 +59,7 @@ void TempSummon::Update(uint32 diff)
     switch (m_type)
     {
         case TEMPSUMMON_MANUAL_DESPAWN:
+        case TEMPSUMMON_DEAD_DESPAWN:    
             break;
         case TEMPSUMMON_TIMED_DESPAWN:
         {
@@ -113,15 +114,6 @@ void TempSummon::Update(uint32 diff)
                 return;
             }
 
-            break;
-        }
-        case TEMPSUMMON_DEAD_DESPAWN:
-        {
-            if (m_deathState == DEAD)
-            {
-                UnSummon();
-                return;
-            }
             break;
         }
         case TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN:
@@ -305,8 +297,6 @@ void TempSummon::InitStats(uint32 duration)
 
 void TempSummon::InitSummon()
 {
-    LoadCreaturesAddon();
-
     Unit* owner = GetSummoner();
     if (owner)
     {
@@ -315,8 +305,6 @@ void TempSummon::InitSummon()
         if (IsAIEnabled)
             AI()->IsSummonedBy(owner);
     }
-    if (GetMap()->IsRaid() && ((InstanceMap*)GetMap())->GetInstanceScript())
-        ((InstanceMap*)GetMap())->GetInstanceScript()->UpdateDynamicHealth(GetGUID());
 }
 
 void TempSummon::SetTempSummonType(TempSummonType type)
@@ -345,8 +333,6 @@ void TempSummon::UnSummon(uint32 msTime)
     Unit* owner = GetSummoner();
     if (owner && owner->GetTypeId() == TYPEID_UNIT && owner->ToCreature()->IsAIEnabled)
         owner->ToCreature()->AI()->SummonedCreatureDespawn(this);
-    if (IsAIEnabled)
-        AI()->Unsummoned();
 
     AddObjectToRemoveList();
 }
@@ -416,7 +402,7 @@ Minion::Minion(SummonPropertiesEntry const* properties, Unit* owner, bool isWorl
     m_unitTypeMask |= UNIT_MASK_MINION;
     m_followAngle = PET_FOLLOW_ANGLE;
     // Uncomment this if crashes
-    //InitCharmInfo();
+    // InitCharmInfo();
 }
 
 void Minion::InitStats(uint32 duration)
@@ -425,7 +411,7 @@ void Minion::InitStats(uint32 duration)
 
     SetReactState(REACT_PASSIVE);
 
-    SetUInt64Value(UNIT_FIELD_DEMON_CREATOR, GetOwner()->GetGUID());
+    //SetUInt64Value(UNIT_FIELD_DEMON_CREATOR, GetOwner()->GetGUID());
     SetCreatorGUID(GetOwner()->GetGUID());
     SetFaction(GetOwner()->GetFaction());
 
@@ -443,18 +429,14 @@ void Minion::RemoveFromWorld()
 
 bool Minion::IsGuardianPet() const
 {
-    if (IsPet())
-        return !ToPet()->IsTemporary();
-    
-    return m_Properties && m_Properties->Category == SUMMON_CATEGORY_PET;
+    return IsPet() || (m_Properties && m_Properties->Category == SUMMON_CATEGORY_PET);
 }
 
 Guardian::Guardian(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject) : Minion(properties, owner, isWorldObject), m_bonusSpellDamage(0)
 {
     memset(m_statFromOwner, 0, sizeof(float)*MAX_STATS);
     m_unitTypeMask |= UNIT_MASK_GUARDIAN;
-    if (properties && (properties->Category == SUMMON_CATEGORY_PET ||
-        (properties->Type == SUMMON_TYPE_PET && properties->Category != SUMMON_CATEGORY_ALLY)))
+    if (properties && properties->Type == SUMMON_TYPE_PET)
     {
         m_unitTypeMask |= UNIT_MASK_CONTROLABLE_GUARDIAN;
         InitCharmInfo();
@@ -493,9 +475,6 @@ Puppet::Puppet(SummonPropertiesEntry const* properties, Unit* owner)
 {
     ASSERT(m_owner->GetTypeId() == TYPEID_PLAYER);
     m_unitTypeMask |= UNIT_MASK_PUPPET;
-    // Uncomment if crashes
-    //delete m_charmInfo;
-    //m_charmInfo = nullptr;
 }
 
 void Puppet::InitStats(uint32 duration)
@@ -531,6 +510,6 @@ void Puppet::RemoveFromWorld()
     if (!IsInWorld())
         return;
 
-    RemoveCharmedBy(NULL);
+    RemoveCharmedBy(nullptr);
     Minion::RemoveFromWorld();
 }

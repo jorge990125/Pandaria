@@ -328,7 +328,7 @@ void BattlePetSpawnZoneMgr::SpawnCreature(uint64 guid, BattlePetSpawnTemplate* s
         return;
 
     // initialise replacement creature
-    auto replacementCreature = new Creature();
+    Creature* replacementCreature = new Creature();
     replacementCreature->m_isTempWorldObject = true;
 
     if (!replacementCreature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), creature->GetMap(), creature->GetPhaseMask(),

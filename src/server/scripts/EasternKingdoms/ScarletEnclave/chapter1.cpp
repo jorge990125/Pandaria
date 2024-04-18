@@ -325,123 +325,159 @@ public:
 
 };
 
-
-/*######
-## npc_eye_of_acherus
-######*/
-
-enum EyeOfAcherus
+enum EyeOfAcherusMisc
 {
-    DISPLAYID_EYE_HUGE          = 26320,
-    DISPLAYID_EYE_SMALL         = 25499,
+    SPELL_THE_EYE_OF_ACHERUS                = 51852,
+    SPELL_EYE_OF_ACHERUS_VISUAL             = 51892,
+    SPELL_EYE_OF_ACHERUS_FLIGHT_BOOST       = 51923,
+    SPELL_EYE_OF_ACHERUS_FLIGHT             = 51890,
+    SPELL_ROOT_SELF                         = 51860,
 
-    SPELL_EYE_PHASEMASK         = 70889,
-    SPELL_EYE_VISUAL            = 51892,
-    SPELL_EYE_FL_BOOST_RUN      = 51923,
-    SPELL_EYE_FL_BOOST_FLY      = 51890,
-    SPELL_EYE_CONTROL           = 51852,
+    EVENT_ANNOUNCE_LAUNCH_TO_DESTINATION    = 1,
+    EVENT_UNROOT                            = 2,
+    EVENT_LAUNCH_TOWARDS_DESTINATION        = 3,
+    EVENT_GRANT_CONTROL                     = 4,
+
+    SAY_LAUNCH_TOWARDS_DESTINATION          = 0,
+    SAY_EYE_UNDER_CONTROL                   = 1,
+
+    POINT_NEW_AVALON                        = 1
 };
 
-enum Texts
+static constexpr uint8 const EyeOfAcherusPathSize = 4;
+G3D::Vector3 const EyeOfAcherusPath[EyeOfAcherusPathSize] =
 {
-    SAY_EYE_LAUNCHED            = 1,
-    SAY_EYE_UNDER_CONTROL       = 2,
+    { 2361.21f,  -5660.45f,  496.744f  },
+    { 2341.571f, -5672.797f, 538.3942f },
+    { 1957.4f,   -5844.1f,   273.867f  },
+    { 1758.01f,  -5876.79f,  166.867f  }
 };
 
-//#define SAY_START  "The Eye of Acherus launches towards its destination"
-//#define SAY_STOP   "The Eye of Acherus is in your control"
-
-static Position Center[]=       // played by eye on this, it's a floating position.
+struct npc_eye_of_acherus : public ScriptedAI
 {
-    { 2361.21f, -5660.45f, 496.7444f, 0.0f },
-};
-
-class npc_eye_of_acherus : public CreatureScript
-{
-public:
-    npc_eye_of_acherus() : CreatureScript("npc_eye_of_acherus") { }
-
-    CreatureAI* GetAI(Creature* creature) const
+    npc_eye_of_acherus(Creature* creature) : ScriptedAI(creature)
     {
-        return new npc_eye_of_acherusAI(creature);
+        creature->SetDisplayId(creature->GetCreatureTemplate()->Modelid1);
+        creature->SetReactState(REACT_PASSIVE);
     }
 
-    struct npc_eye_of_acherusAI : public ScriptedAI
+    void InitializeAI() override
     {
-        npc_eye_of_acherusAI(Creature* creature) : ScriptedAI(creature)
+        DoCastSelf(SPELL_ROOT_SELF);
+        DoCastSelf(SPELL_EYE_OF_ACHERUS_VISUAL);
+        _events.ScheduleEvent(EVENT_ANNOUNCE_LAUNCH_TO_DESTINATION, 7s);
+    }
+
+    void OnCharmed(bool apply) override
+    {
+        if (!apply)
         {
-            Reset();
+            me->GetCharmerOrOwner()->RemoveAurasDueToSpell(SPELL_THE_EYE_OF_ACHERUS);
+            me->GetCharmerOrOwner()->RemoveAurasDueToSpell(SPELL_EYE_OF_ACHERUS_FLIGHT_BOOST);
         }
+    }
 
-        uint32 startTimer;
-        bool IsActive;
+    void UpdateAI(uint32 diff) override
+    {
+        _events.Update(diff);
 
-        void Reset()
+        while (uint32 eventId = _events.ExecuteEvent())
         {
-            if (Unit* controller = me->GetCharmer())
-                me->SetLevel(controller->GetLevel());
-
-                me->CastSpell(me, SPELL_EYE_FL_BOOST_FLY, true);
-                me->SetDisplayId(DISPLAYID_EYE_HUGE);
-                Talk(SAY_EYE_LAUNCHED);
-                // Sniff calls for SMSG_MESSAGECHAT | Type: RaidBossWhisper (42) | Language: Universal (0).
-                //me->MonsterSay(SAY_START, LANG_UNIVERSAL, 0);
-                me->SetHomePosition(2361.21f, -5660.45f, 496.7444f, 0);
-                me->GetMotionMaster()->MoveCharge(1758.007f, -5876.785f, 166.8667f, 0); //position center
-                me->SetReactState(REACT_AGGRESSIVE);
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_STUNNED);
-
-            IsActive   = false;
-            startTimer = 2000;
-        }
-
-        void AttackStart(Unit *) {}
-        void MoveInLineOfSight(Unit *) {}
-
-        void JustDied(Unit* /*killer*/)
-        {
-            if (Unit* charmer = me->GetCharmer())
-               charmer->RemoveAurasDueToSpell(SPELL_EYE_CONTROL);
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            if (me->GetCharmer())
+            switch (eventId)
             {
-                if (startTimer <=  diff && !IsActive)    // fly to start point
+                case EVENT_ANNOUNCE_LAUNCH_TO_DESTINATION:
+                    if (Unit* owner = me->GetCharmerOrOwner())
+                        Talk(SAY_LAUNCH_TOWARDS_DESTINATION, owner);
+                    _events.ScheduleEvent(EVENT_UNROOT, 1s + 200ms);
+                    break;
+                case EVENT_UNROOT:
+                    me->RemoveAurasDueToSpell(SPELL_ROOT_SELF);
+                    DoCastSelf(SPELL_EYE_OF_ACHERUS_FLIGHT_BOOST);
+                    _events.ScheduleEvent(EVENT_LAUNCH_TOWARDS_DESTINATION, 1s + 200ms);
+                    break;
+                case EVENT_LAUNCH_TOWARDS_DESTINATION:
                 {
-                    me->CastSpell(me, SPELL_EYE_PHASEMASK, true);
-                    me->CastSpell(me, SPELL_EYE_VISUAL, true);
-                    me->CastSpell(me, SPELL_EYE_FL_BOOST_FLY, true);
+                    // std::function<void(Movement::MoveSplineInit&)> initializer = [=](Movement::MoveSplineInit& init)
+                    // {
+                    //     Movement::PointsArray path(EyeOfAcherusPath, EyeOfAcherusPath + EyeOfAcherusPathSize);
+                    //     init.MovebyPath(path);
+                    //     init.SetFly();
+                    //     if (Unit* owner = me->GetCharmerOrOwner())
+                    //         init.SetVelocity(owner->GetSpeed(MOVE_RUN));
+                    // };
+                    // //me->GetMotionMaster()->MovePoint(EYE_POINT_DESTINATION_1, EYE_DESTINATION_1);
+                    // me->GetMotionMaster()->LaunchMoveSpline(std::move(initializer), POINT_NEW_AVALON, MOTION_SLOT_ACTIVE, POINT_MOTION_TYPE);
+                    Movement::PointsArray path(EyeOfAcherusPath, EyeOfAcherusPath + EyeOfAcherusPathSize);
+                    Movement::MoveSplineInit init(me);
+                    init.MovebyPath(path);
+                    init.SetFly();
+                    init.SetUncompressed();
+                    init.SetSmooth();
+                    if (Unit* owner = me->GetCharmerOrOwner())
+                        init.SetVelocity(owner->GetSpeed(MOVE_RUN));
 
-                    me->CastSpell(me, SPELL_EYE_FL_BOOST_RUN, true);
-                    me->SetSpeed(MOVE_FLIGHT, 4.5f, true);
-                    me->GetMotionMaster()->MovePoint(0, 1758.0f, -5876.7f, 166.8f);
-                    return;
+                    me->GetMotionMaster()->LaunchMoveSpline(std::move(init), POINT_NEW_AVALON, MOTION_SLOT_ACTIVE, POINT_MOTION_TYPE);
+                    break;
                 }
-                else
-                    startTimer -= diff;
+                case EVENT_GRANT_CONTROL:
+                    me->RemoveAurasDueToSpell(SPELL_ROOT_SELF);
+                    DoCastSelf(SPELL_EYE_OF_ACHERUS_FLIGHT);
+                    me->RemoveAurasDueToSpell(SPELL_EYE_OF_ACHERUS_FLIGHT_BOOST);
+                    if (Unit* owner = me->GetCharmerOrOwner())
+                        Talk(SAY_EYE_UNDER_CONTROL, owner);
+                    break;
+                default:
+                    break;
             }
-            else
-                me->DespawnOrUnsummon();
+        }
+    }
+
+    void MovementInform(uint32 movementType, uint32 pointId) override
+    {
+        if (movementType != POINT_MOTION_TYPE)
+            return;
+
+        switch (pointId)
+        {
+            case POINT_NEW_AVALON:
+                DoCastSelf(SPELL_ROOT_SELF);
+                _events.ScheduleEvent(EVENT_GRANT_CONTROL, 2s + 500ms);
+                break;
+            default:
+                break;
+        }
+    }
+
+private:
+    EventMap _events;
+};
+
+class spell_q12641_death_comes_from_on_high_summon_ghouls : public SpellScriptLoader
+{
+public:
+    spell_q12641_death_comes_from_on_high_summon_ghouls() : SpellScriptLoader("spell_q12641_death_comes_from_on_high_summon_ghouls") { }
+
+    class spell_q12641_death_comes_from_on_high_summon_ghouls_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_q12641_death_comes_from_on_high_summon_ghouls_SpellScript);
+
+        void HandleScriptEffect(SpellEffIndex effIndex)
+        {
+            PreventHitEffect(effIndex);
+            if (Unit* target = GetHitUnit())
+                GetCaster()->CastSpell(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 54522, true);
         }
 
-        void MovementInform(uint32 type, uint32 pointId)
+        void Register() override
         {
-            if (type != POINT_MOTION_TYPE || pointId != 0)
-               return;
-
-            // this should never happen
-            me->SetDisplayId(DISPLAYID_EYE_SMALL);
-
-            // this spell does not work if casted before the wp movement.
-            me->CastSpell(me, SPELL_EYE_VISUAL, true);
-            me->CastSpell(me, SPELL_EYE_FL_BOOST_FLY, true);
-            Talk(SAY_EYE_UNDER_CONTROL);
-            //me->MonsterSay(SAY_STOP, LANG_UNIVERSAL, 0);
-            ((Player*)(me->GetCharmer()))->SetClientControl(me, 1);
+            OnEffectHitTarget += SpellEffectFn(spell_q12641_death_comes_from_on_high_summon_ghouls_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
         }
     };
+
+    SpellScript* GetSpellScript() const override
+    {
+        return new spell_q12641_death_comes_from_on_high_summon_ghouls_SpellScript();
+    }
 };
 
 
@@ -492,7 +528,7 @@ public:
             }
 
             creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
-            creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15);
+            creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_CAN_SWIM);
 
             sCreatureTextMgr->SendChat(creature, SAY_DUEL, 0, CHAT_MSG_ADDON, LANG_ADDON, TEXT_RANGE_NORMAL, 0, TEAM_OTHER, false, player);
 
@@ -541,7 +577,7 @@ public:
             me->RestoreFaction();
             CombatAI::Reset();
 
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_CAN_SWIM);
 
             m_uiDuelerGUID = 0;
             m_uiDuelTimer = 5000;
@@ -1247,7 +1283,6 @@ void AddSC_the_scarlet_enclave_c1()
     new npc_unworthy_initiate();
     new npc_unworthy_initiate_anchor();
     new go_acherus_soul_prison();
-    new npc_eye_of_acherus();
     new npc_death_knight_initiate();
     new npc_salanar_the_horseman();
     new npc_dark_rider_of_acherus();
@@ -1257,4 +1292,6 @@ void AddSC_the_scarlet_enclave_c1()
     new npc_scarlet_ghoul();
     new npc_scarlet_miner();
     new npc_scarlet_miner_cart();
+    RegisterCreatureAI(npc_eye_of_acherus);
+    new spell_q12641_death_comes_from_on_high_summon_ghouls();    
 }

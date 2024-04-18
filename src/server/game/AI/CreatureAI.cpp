@@ -404,7 +404,7 @@ void VehicleAIBase::Reset()
 
 void VehicleAIBase::OnCharmed(bool apply)
 {
-    if (m_IsVehicleInUse && !apply && !conditions.empty())//was used and has conditions
+    if (m_IsVehicleInUse && !apply && !m_HasConditions)//was used and has conditions
     {
         m_DoDismiss = true;//needs reset
         m_vehicleBase->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_PLAYER_VEHICLE);
@@ -425,16 +425,14 @@ void VehicleAIBase::LoadConditions()
         sConditionMgr->RegisterVehicleAI(this);
     }
 
-    conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE, m_vehicleBase->GetEntry());
-    if (!conditions.empty())
-        TC_LOG_DEBUG("condition", "VehicleAI::LoadConditions: loaded %u conditions", uint32(conditions.size()));
+    m_HasConditions = sConditionMgr->HasConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE, m_vehicleBase->GetEntry());
 }
 
 void VehicleAIBase::CheckConditions(uint32 const diff)
 {
     if (m_ConditionsTimer < diff)
     {
-        if (!conditions.empty())
+        if (m_HasConditions)
         {
             for (auto&& seat : m_vehicle->Seats)
             {
@@ -442,7 +440,8 @@ void VehicleAIBase::CheckConditions(uint32 const diff)
                 {
                     if (Player* player = passenger->ToPlayer())
                     {
-                        if (!sConditionMgr->IsObjectMeetToConditions(player, m_vehicleBase, conditions))
+                        //if (!sConditionMgr->IsObjectMeetToConditions(player, m_vehicleBase, conditions))
+                        if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE, m_vehicleBase->GetEntry(), player, m_vehicleBase))
                         {
                             player->ExitVehicle();
                             return;//check other pessanger in next tick
@@ -503,7 +502,6 @@ Creature* SummonablePremiumNpcAI::FindOrSpawn(PlayerOrChatHandler player, uint32
 {
     ASSERT(entry >= 190000);
     ASSERT(sObjectMgr->GetCreatureTemplate(entry));
-    ASSERT(sObjectMgr->GetCreatureTemplate(entry)->flags_extra & CREATURE_FLAG_EXTRA_project_NPC);
 
     SummonablePremiumNpcSearcher searcher { entry, player->GetGUID() };
     player->GetMap()->LoadGrid(0, 0);

@@ -1868,6 +1868,7 @@ class boss_aerial_unit : public CreatureScript
 
             void DoAction(int32 action) override
             {
+                Position destination;
                 switch (action)
                 {
                     case DO_START_AERIAL:
@@ -1887,7 +1888,6 @@ class boss_aerial_unit : public CreatureScript
                             DoCast(me, SPELL_MAGNETIC_CORE);
                             DoCast(me, SPELL_MAGNETIC_CORE_VISUAL);
                             // Move to floor.
-                            Position destination;
                             me->GetPosition(&destination);
                             destination.m_positionZ = 368.965f;
                             me->GetMotionMaster()->MoveLand(1, destination, 5.0f);  // Check if MoveLand is ok here, a flying unit should have a landing animation, but... just 4 the case
@@ -1928,6 +1928,7 @@ class boss_aerial_unit : public CreatureScript
 
                 while (uint32 eventId = _events.ExecuteEvent())
                 {
+                    Position destination;
                     switch (eventId)
                     {
                         case EVENT_PLASMA_BALL:
@@ -1955,7 +1956,6 @@ class boss_aerial_unit : public CreatureScript
                             return;
                         case EVENT_REACTIVATE_AERIAL:
                             me->RemoveAurasDueToSpell(SPELL_MAGNETIC_CORE_VISUAL);
-                            Position destination;
                             me->GetPosition(&destination);
                             destination.m_positionZ = 380.04f;
                             // FIXME find correct speed

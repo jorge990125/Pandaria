@@ -2256,7 +2256,7 @@ class cond_hookshot : public ConditionScript
     public:
         cond_hookshot() : ConditionScript("cond_hookshot") { }
 
-        bool OnConditionCheck(Condition* condition, ConditionSourceInfo& sourceInfo) override
+        bool OnConditionCheck(const Condition* condition, ConditionSourceInfo& sourceInfo) override
         {
             if (Unit* seat = sourceInfo.mConditionTargets[0]->ToUnit())
                 if (Vehicle* vehicle = seat->GetVehicleKit())

@@ -3975,7 +3975,7 @@ class cond_icc_ashen_verdict_ring_retrieve : public ConditionScript
     public:
         cond_icc_ashen_verdict_ring_retrieve() : ConditionScript("cond_icc_ashen_verdict_ring_retrieve") { }
 
-        bool OnConditionCheck(Condition* /*condition*/, ConditionSourceInfo& sourceInfo) override
+        bool OnConditionCheck(const Condition* /*condition*/, ConditionSourceInfo& sourceInfo) override
         {
             if (!sourceInfo.mConditionTargets[0])
                 return false;

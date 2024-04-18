@@ -23,6 +23,7 @@
 
 #include "DBCStores.h"
 #include "SharedDefines.h"
+#include "Types.h"
 #include "World.h"
 #include "Weather.h"
 #include "ItemPrototype.h"
@@ -603,7 +604,7 @@ class ConditionScript : public ScriptObject
     public:
 
         // Called when a single condition is checked for a player.
-        virtual bool OnConditionCheck(Condition* /*condition*/, ConditionSourceInfo& /*sourceInfo*/) { return true; }
+        virtual bool OnConditionCheck(const Condition* /*condition*/, ConditionSourceInfo& /*sourceInfo*/) { return true; }
 };
 
 class VehicleScript : public ScriptObject
@@ -943,7 +944,7 @@ extern UnusedScriptContainer UnusedScripts;
 extern UnusedScriptNamesContainer UnusedScriptNames;
 
 // Manages registration, loading, and execution of scripts.
-class ScriptMgr
+class TC_GAME_API ScriptMgr
 {
     friend class ScriptObject;
 
@@ -1099,7 +1100,7 @@ class ScriptMgr
 
     public: /* ConditionScript */
 
-        bool OnConditionCheck(Condition* condition, ConditionSourceInfo& sourceInfo);
+        bool OnConditionCheck(const Condition* condition, ConditionSourceInfo& sourceInfo);
 
     public: /* VehicleScript */
 
@@ -1235,6 +1236,36 @@ class ScriptMgr
         std::atomic_long _scheduledScripts;
 };
 
+// template <typename... Ts>
+// class GenericSpellAndAuraScriptLoader : public SpellScriptLoader
+// {
+//     using SpellScriptType = typename Trinity::find_type_if_t<Trinity::SpellScripts::is_SpellScript, Ts...>;
+//     using AuraScriptType = typename Trinity::find_type_if_t<Trinity::SpellScripts::is_AuraScript, Ts...>;
+//     using ArgsType = typename Trinity::find_type_if_t<Trinity::is_tuple, Ts...>;
+
+// public:
+//     GenericSpellAndAuraScriptLoader(char const* name, ArgsType&& args) : SpellScriptLoader(name), _args(std::move(args)) { }
+
+// private:
+//     SpellScript* GetSpellScript() const override
+//     {
+//         if constexpr (!std::is_same_v<SpellScriptType, Trinity::find_type_end>)
+//             return Trinity::new_from_tuple<SpellScriptType>(_args);
+//         else
+//             return nullptr;
+//     }
+
+//     AuraScript* GetAuraScript() const override
+//     {
+//         if constexpr (!std::is_same_v<AuraScriptType, Trinity::find_type_end>)
+//             return Trinity::new_from_tuple<AuraScriptType>(_args);
+//         else
+//             return nullptr;
+//     }
+
+//     ArgsType _args;
+// };
+
 template <class T>
 struct aura_script : SpellScriptLoader
 {
@@ -1248,6 +1279,11 @@ struct spell_script : SpellScriptLoader
     spell_script(char const* name) : SpellScriptLoader(name) { }
     SpellScript* GetSpellScript() const override { return new T(); }
 };
+
+#define RegisterSpellScriptWithArgs(spell_script, script_name, ...) new GenericSpellAndAuraScriptLoader<spell_script, decltype(std::make_tuple(__VA_ARGS__))>(script_name, std::make_tuple(__VA_ARGS__))
+#define RegisterSpellScript(spell_script) RegisterSpellScriptWithArgs(spell_script, #spell_script)
+#define RegisterSpellAndAuraScriptPairWithArgs(script_1, script_2, script_name, ...) new GenericSpellAndAuraScriptLoader<script_1, script_2, decltype(std::make_tuple(__VA_ARGS__))>(script_name, std::make_tuple(__VA_ARGS__))
+#define RegisterSpellAndAuraScriptPair(script_1, script_2) RegisterSpellAndAuraScriptPairWithArgs(script_1, script_2, #script_1)
 
 template <class T>
 struct atrigger_script : public SpellAreaTriggerScript

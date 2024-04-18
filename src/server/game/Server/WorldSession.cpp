@@ -104,13 +104,13 @@ WorldSession::WorldSession(uint32 id, std::shared_ptr<WorldSocket> sock, Account
     m_muteTime(mute_time),
     m_timeOutTime(0),
     AntiDOS(this),
-    _player(NULL),
+    _player(nullptr),
     m_Socket(sock),
     _security(sec),
     _accountId(id),
     m_expansion(expansion),
     m_charBooster(new CharacterBooster(this)),
-    _warden(NULL),
+    _warden(nullptr),
     _logoutTime(0),
     m_inQueue(false),
     m_playerLoading(false),
@@ -151,14 +151,14 @@ WorldSession::~WorldSession()
     if (m_Socket)
     {
         m_Socket->CloseSocket();
-        m_Socket = nullptr;
+        m_Socket.reset();
     }
 
     delete _warden;
     delete m_charBooster;
 
     ///- empty incoming packet queue
-    WorldPacket* packet = NULL;
+    WorldPacket* packet = nullptr;
     while (_recvQueue.next(packet))
         delete packet;
 
@@ -225,28 +225,28 @@ void WorldSession::SendPacket(WorldPacket const* packet, bool forced /*= false*/
     static uint64 sendPacketCount = 0;
     static uint64 sendPacketBytes = 0;
 
-    static time_t firstTime = time(NULL);
+    static time_t firstTime = GameTime::GetGameTime();
     static time_t lastTime = firstTime;                     // next 60 secs start time
 
     static uint64 sendLastPacketCount = 0;
     static uint64 sendLastPacketBytes = 0;
 
-    time_t cur_time = time(NULL);
+    time_t cur_time = GameTime::GetGameTime();
 
     if ((cur_time - lastTime) < 60)
     {
-        sendPacketCount+=1;
-        sendPacketBytes+=packet->size();
+        sendPacketCount += 1;
+        sendPacketBytes += packet->size();
 
-        sendLastPacketCount+=1;
-        sendLastPacketBytes+=packet->size();
+        sendLastPacketCount += 1;
+        sendLastPacketBytes += packet->size();
     }
     else
     {
         uint64 minTime = uint64(cur_time - lastTime);
         uint64 fullTime = uint64(lastTime - firstTime);
-        TC_LOG_INFO("misc", "Send all time packets count: " UI64FMTD " bytes: " UI64FMTD " avr.count/sec: %f avr.bytes/sec: %f time: %u", sendPacketCount, sendPacketBytes, float(sendPacketCount)/fullTime, float(sendPacketBytes)/fullTime, uint32(fullTime));
-        TC_LOG_INFO("misc", "Send last min packets count: " UI64FMTD " bytes: " UI64FMTD " avr.count/sec: %f avr.bytes/sec: %f", sendLastPacketCount, sendLastPacketBytes, float(sendLastPacketCount)/minTime, float(sendLastPacketBytes)/minTime);
+        TC_LOG_DEBUG("misc", "Send all time packets count: " UI64FMTD " bytes: " UI64FMTD " avr.count/sec: %f avr.bytes/sec: %f time: %u", sendPacketCount, sendPacketBytes, float(sendPacketCount)/fullTime, float(sendPacketBytes)/fullTime, uint32(fullTime));
+        TC_LOG_DEBUG("misc", "Send last min packets count: " UI64FMTD " bytes: " UI64FMTD " avr.count/sec: %f avr.bytes/sec: %f", sendLastPacketCount, sendLastPacketBytes, float(sendLastPacketCount)/minTime, float(sendLastPacketBytes)/minTime);
 
         lastTime = cur_time;
         sendLastPacketCount = 1;
@@ -308,13 +308,12 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     WorldPacket* packet = nullptr;
     //! Delete packet after processing by default
     bool deletePacket = true;
-    //! *properly timed* packets, and we're now at the part of the queue where we find
-    //! delayed packets that were re-enqueued due to improper timing. To prevent an infinite
-    //! loop caused by re-enqueueing the same packets over and over again, we stop updating this session
-    //! and continue updating others. The re-enqueued packets will be handled in the next Update call for this session.
+    std::vector<WorldPacket*> requeuePackets;
     uint32 _startMSTime = getMSTime();
     uint32 processedPackets = 0;
     time_t currentTime = time(nullptr);
+
+    constexpr uint32 MAX_PROCESSED_PACKETS_IN_SAME_WORLDSESSION_UPDATE = 100;
 
     while (m_Socket && _recvQueue.next(packet, updater))
     {
@@ -332,12 +331,10 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         //! the client to be in world yet. We will re-add the packets to the bottom of the queue and process them later.
                         if (!m_playerRecentlyLogout)
                         {
-                            //! Because checking a bool is faster than reallocating memory
+                            requeuePackets.push_back(packet);
                             deletePacket = false;
-                            QueuePacket(packet);
-                            //! Log
-                                TC_LOG_DEBUG("network", "Re-enqueueing packet with opcode %s with with status STATUS_LOGGEDIN. "
-                                    "Player is currently not in world yet.", GetOpcodeNameForLogging(packet->GetOpcode(), false).c_str());
+                            TC_LOG_DEBUG("network", "Re-enqueueing packet with opcode %s with with status STATUS_LOGGEDIN. "
+                                "Player is currently not in world yet.", GetOpcodeNameForLogging(packet->GetOpcode(), false).c_str());
                         }
                     }
                     else if (_player->IsInWorld() && AntiDOS.EvaluateOpcode(*packet, currentTime))
@@ -348,6 +345,8 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         LogUnprocessedTail(packet);
                         sWorld->RecordTimeDiffLocal(start, "WorldSession::Update %s %s", opHandle->Name, GetPlayerInfo().c_str());
                     }
+                    else
+                        processedPackets = MAX_PROCESSED_PACKETS_IN_SAME_WORLDSESSION_UPDATE;   // break out of packet processing loop
                     // lag can cause STATUS_LOGGEDIN opcodes to arrive after the player started a transfer
                     break;
                 case STATUS_LOGGEDIN_OR_RECENTLY_LOGGOUT:
@@ -361,6 +360,8 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         (this->*opHandle->Handler)(*packet);
                         LogUnprocessedTail(packet);
                     }
+                    else
+                        processedPackets = MAX_PROCESSED_PACKETS_IN_SAME_WORLDSESSION_UPDATE;   // break out of packet processing loop                    
                     break;
                 case STATUS_TRANSFER:
                     if (!_player)
@@ -373,6 +374,8 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         (this->*opHandle->Handler)(*packet);
                         LogUnprocessedTail(packet);
                     }
+                    else
+                        processedPackets = MAX_PROCESSED_PACKETS_IN_SAME_WORLDSESSION_UPDATE;   // break out of packet processing loop                    
                     break;
                 case STATUS_AUTHED:
                     // prevent cheating with skip queue wait
@@ -395,6 +398,8 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                            LogUnprocessedTail(packet);
                               break;
                     }
+                    else
+                        processedPackets = MAX_PROCESSED_PACKETS_IN_SAME_WORLDSESSION_UPDATE;   // break out of packet processing loop                    
                 case STATUS_NEVER:
                         TC_LOG_ERROR("network.opcode", "Received not allowed opcode %s from %s", GetOpcodeNameForLogging(packet->GetOpcode(), false).c_str(),
                             GetPlayerInfo().c_str());
@@ -417,17 +422,16 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
 
         deletePacket = true;
 
-#define MAX_PROCESSED_PACKETS_IN_SAME_WORLDSESSION_UPDATE 100
         processedPackets++;
 
         //process only a max amout of packets in 1 Update() call.
         //Any leftover will be processed in next update
-        if (++processedPackets >= 100) // limit (by count) packets processed in one update, prevent DDoS
+        if (processedPackets > MAX_PROCESSED_PACKETS_IN_SAME_WORLDSESSION_UPDATE)
             break;
 
-        if (getMSTimeDiff(_startMSTime, getMSTime()) >= 3) // limit (by time) packets processed in one update, prevent DDoS
-            break;
     }
+
+    _recvQueue.readd(requeuePackets.begin(), requeuePackets.end());
 
     if (m_Socket && m_Socket->IsOpen() && _warden)
         _warden->Update();
@@ -454,7 +458,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     //logout procedure should happen only in World::UpdateSessions() method!!!
     if (updater.ProcessLogout())
     {
-        time_t currTime = time(nullptr);
+        time_t currTime = GameTime::GetGameTime();
         ///- If necessary, log the player out
         if (ShouldLogOut(currTime) && !m_playerLoading)
             LogoutPlayer(true);
@@ -465,7 +469,8 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
         ///- Cleanup socket pointer if need
         if (m_Socket && !m_Socket->IsOpen())
         {
-            m_Socket = nullptr;
+            m_Socket->CloseSocket();
+            m_Socket.reset();
         }
 
         if (!m_Socket)
@@ -906,17 +911,18 @@ void WorldSession::SendAccountDataTimes(uint32 mask)
     SendPacket(&data);
 }
 
-void WorldSession::LoadTutorialsData()
+void WorldSession::LoadTutorialsData(PreparedQueryResult result)
 {
     memset(m_Tutorials, 0, sizeof(uint32) * MAX_ACCOUNT_TUTORIAL_VALUES);
 
-    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_TUTORIALS);
-    stmt->setUInt32(0, GetAccountId());
-    if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
+    if (result)
+    {
         for (uint8 i = 0; i < MAX_ACCOUNT_TUTORIAL_VALUES; ++i)
             m_Tutorials[i] = (*result)[i].GetUInt32();
+        m_TutorialsChanged |= TUTORIALS_FLAG_LOADED_FROM_DB;
+    }
 
-    m_TutorialsChanged = false;
+    m_TutorialsChanged &= ~TUTORIALS_FLAG_CHANGED;
 }
 
 void WorldSession::SendTutorialsData()
@@ -1221,6 +1227,69 @@ void WorldSession::InitWarden(BigNumber* k, std::string const& os)
         // _warden->Init(this, k);
     }
 }
+
+class AccountInfoQueryHolderPerRealm : public CharacterDatabaseQueryHolder
+{
+public:
+    enum
+    {
+        GLOBAL_ACCOUNT_DATA = 0,
+        TUTORIALS,
+
+        MAX_QUERIES
+    };
+
+    AccountInfoQueryHolderPerRealm() { SetSize(MAX_QUERIES); }
+
+    bool Initialize(uint32 accountId)
+    {
+        bool ok = true;
+
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_DATA);
+        stmt->setUInt32(0, accountId);
+        ok = SetPreparedQuery(GLOBAL_ACCOUNT_DATA, stmt) && ok;
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_TUTORIALS);
+        stmt->setUInt32(0, accountId);
+        ok = SetPreparedQuery(TUTORIALS, stmt) && ok;
+
+        return ok;
+    }
+};
+
+void WorldSession::InitializeSession()
+{
+    std::shared_ptr<AccountInfoQueryHolderPerRealm> realmHolder = std::make_shared<AccountInfoQueryHolderPerRealm>();
+    if (!realmHolder->Initialize(GetAccountId()))
+    {
+        SendAuthResponse(AUTH_SYSTEM_ERROR, false);
+        return;
+    }
+
+    AddQueryHolderCallback(CharacterDatabase.DelayQueryHolder(realmHolder)).AfterComplete([this](SQLQueryHolderBase const& holder)
+    {
+            InitializeSessionCallback(static_cast<AccountInfoQueryHolderPerRealm const&>(holder));
+    });
+}
+
+void WorldSession::InitializeSessionCallback(CharacterDatabaseQueryHolder const& realmHolder)
+{
+    LoadAccountData(realmHolder.GetPreparedResult(AccountInfoQueryHolderPerRealm::GLOBAL_ACCOUNT_DATA), GLOBAL_CACHE_MASK);
+    LoadTutorialsData(realmHolder.GetPreparedResult(AccountInfoQueryHolderPerRealm::TUTORIALS));
+
+    if (!m_inQueue)
+        SendAuthResponse(AUTH_OK, false);
+    else
+        SendAuthWaitQue(0);
+
+    SetInQueue(false);
+    ResetTimeOutTime(false);
+
+    SendAddonsInfo();
+    SendClientCacheVersion(sWorld->getIntConfig(CONFIG_CLIENTCACHE_VERSION));
+    SendTutorialsData();
+}
+
 
 bool WorldSession::DosProtection::EvaluateOpcode(WorldPacket& p, time_t time) const
 {

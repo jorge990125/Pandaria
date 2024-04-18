@@ -52,6 +52,7 @@
 #include "BattlefieldMgr.h"
 #include "Chat.h"
 #include "Transport.h"
+#include "VMapManager2.h"
 // #include "timeless_isle.h" remove hack , fix in future
 
 #define STEALTH_VISIBILITY_UPDATE_TIMER 500
@@ -80,7 +81,7 @@ Object::Object() : m_PackGUID(sizeof(uint64)+1)
     m_objectTypeId      = TYPEID_OBJECT;
     m_objectType        = TYPEMASK_OBJECT;
 
-    m_uint32Values      = NULL;
+    m_uint32Values      = nullptr;
     m_valuesCount       = 0;
     _fieldNotifyFlags   = UF_FLAG_URGENT;
 
@@ -123,7 +124,7 @@ Object::~Object()
     }
 
     delete [] m_uint32Values;
-    m_uint32Values = 0;
+    m_uint32Values = nullptr;
 }
 
 void Object::_InitValues()
@@ -1531,67 +1532,6 @@ bool WorldObject::_IsWithinDist(WorldObject const* obj, float dist2compare, bool
     return distsq < maxdist * maxdist;
 }
 
-bool WorldObject::IsWithinLOSInMap(const WorldObject* obj) const
-{
-    if (!IsInMap(obj))
-        return false;
-
-    float ox, oy, oz;
-    obj->GetPosition(ox, oy, oz);
-
-    if (obj->GetTypeId() == TYPEID_UNIT)
-        switch (obj->GetEntry())
-        {
-            // Hack fix for Burning Tendons (Spine of Deathwing)
-            case 56341:
-            case 56575:
-            // Hack fix of Ozumat (Throne of the Tides)
-            case 44566:
-            // Hack fix for Ice Wall (Throne of Thunder)
-            case 69582:
-            // Hack fix for Ice Tomb (Siege of Orgrimmar)
-            case 69398:
-            // Hack fix for Encase in Amber (Siege of Orgrimmar)
-            case 71407:
-            // Hack fix for Siege Engineer (Siege of Orgrimmar)
-            case 71984:
-            // Hack fix for Incompleted Drakari Colossus ( Isle of Thunder)
-            case 69347:
-                return true;
-            default:
-                break;
-        }
-
-    // AoE spells
-    if (GetTypeId() == TYPEID_UNIT)
-        switch (GetEntry())
-        {
-            // Hack fix for Burning Tendons (Spine of Deathwing)
-            case 56341:
-            case 56575:
-            // Hack fix for Ice Wall (Throne of Thunder)
-            case 69582:
-            // Hack fix for Ice Tomb (Siege of Orgrimmar)
-            case 69398:
-            // Hack fix for Encase in Amber (Siege of Orgrimmar)
-            case 71407:
-            // Hack fix for Siege Engineer (Siege of Orgrimmar)
-            case 71984:
-            // Hack fix for Incompleted Drakari Colossus ( Isle of Thunder)
-            case 69347:
-                return true;
-            default:
-                break;
-        }
-
-    // Hack fix for Alysrazor
-    if (GetMapId() == 720 && GetAreaId() == 5766)
-        if ((GetTypeId() == TYPEID_PLAYER) || (obj->GetTypeId() == TYPEID_PLAYER))
-            return true;
-
-    return IsWithinLOS(ox, oy, oz);
-}
-
 float WorldObject::GetDistance(const WorldObject* obj) const
 {
     float d = GetExactDist(obj) - GetObjectSize() - obj->GetObjectSize();
@@ -1661,16 +1601,117 @@ bool WorldObject::IsWithinDist(WorldObject const* obj, float dist2compare, bool 
     return obj && _IsWithinDist(obj, dist2compare, is3D);
 }
 
-bool WorldObject::IsWithinLOS(float ox, float oy, float oz) const
+Position WorldObject::GetHitSpherePointFor(Position const& dest) const
 {
-    /*float x, y, z;
-    GetPosition(x, y, z);
-    VMAP::IVMapManager* vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
-    return vMapManager->isInLineOfSight(GetMapId(), x, y, z+2.0f, ox, oy, oz+2.0f);*/
+    G3D::Vector3 vThis(GetPositionX(), GetPositionY(), GetPositionZ() + GetCollisionHeight());
+    G3D::Vector3 vObj(dest.GetPositionX(), dest.GetPositionY(), dest.GetPositionZ());
+    G3D::Vector3 contactPoint = vThis + (vObj - vThis).directionOrZero() * std::min(dest.GetExactDist(GetPosition()), GetCombatReach());
+
+    return Position(contactPoint.x, contactPoint.y, contactPoint.z, GetAbsoluteAngle(contactPoint.x, contactPoint.y));
+}
+
+bool WorldObject::IsWithinLOS(float ox, float oy, float oz, VMAP::ModelIgnoreFlags ignoreFlags) const
+{
     if (IsInWorld())
-        return GetMap()->isInLineOfSight(GetPositionX(), GetPositionY(), GetPositionZ()+2.f, ox, oy, oz+2.f, GetPhaseMask());
+    {
+        oz += GetCollisionHeight();
+        float x, y, z;
+        if (GetTypeId() == TYPEID_PLAYER)
+        {
+            GetPosition(x, y, z);
+            z += GetCollisionHeight();
+        }
+        else
+            GetHitSpherePointFor({ ox, oy, oz }, x, y, z);
+
+        return GetMap()->isInLineOfSight(x, y, z, ox, oy, oz, GetPhaseMask(), ignoreFlags);  // missing checks todo 
+    }
 
     return true;
+}
+
+bool WorldObject::IsWithinLOSInMap(const WorldObject* obj, VMAP::ModelIgnoreFlags ignoreFlags) const
+{
+    if (!IsInMap(obj))
+        return false;
+
+    float ox, oy, oz;
+    if (obj->GetTypeId() == TYPEID_PLAYER)
+    {
+        obj->GetPosition(ox, oy, oz);
+        oz += GetCollisionHeight();
+    }
+    else
+        obj->GetHitSpherePointFor({ GetPositionX(), GetPositionY(), GetPositionZ() + GetCollisionHeight() }, ox, oy, oz);
+
+    float x, y, z;
+    if (GetTypeId() == TYPEID_PLAYER)
+    {
+        GetPosition(x, y, z);
+        z += GetCollisionHeight();
+    }
+    else
+        GetHitSpherePointFor({ obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ() + obj->GetCollisionHeight() }, x, y, z);
+
+    if (obj->GetTypeId() == TYPEID_UNIT)
+        switch (obj->GetEntry())
+        {
+            // Hack fix for Burning Tendons (Spine of Deathwing)
+            case 56341:
+            case 56575:
+            // Hack fix of Ozumat (Throne of the Tides)
+            case 44566:
+            // Hack fix for Ice Wall (Throne of Thunder)
+            case 69582:
+            // Hack fix for Ice Tomb (Siege of Orgrimmar)
+            case 69398:
+            // Hack fix for Encase in Amber (Siege of Orgrimmar)
+            case 71407:
+            // Hack fix for Siege Engineer (Siege of Orgrimmar)
+            case 71984:
+            // Hack fix for Incompleted Drakari Colossus ( Isle of Thunder)
+            case 69347:
+                return true;
+            default:
+                break;
+        }
+
+    // AoE spells
+    if (GetTypeId() == TYPEID_UNIT)
+        switch (GetEntry())
+        {
+            // Hack fix for Burning Tendons (Spine of Deathwing)
+            case 56341:
+            case 56575:
+            // Hack fix for Ice Wall (Throne of Thunder)
+            case 69582:
+            // Hack fix for Ice Tomb (Siege of Orgrimmar)
+            case 69398:
+            // Hack fix for Encase in Amber (Siege of Orgrimmar)
+            case 71407:
+            // Hack fix for Siege Engineer (Siege of Orgrimmar)
+            case 71984:
+            // Hack fix for Incompleted Drakari Colossus ( Isle of Thunder)
+            case 69347:
+                return true;
+            default:
+                break;
+        }
+
+    // Hack fix for Alysrazor
+    if (GetMapId() == 720 && GetAreaId() == 5766)
+        if ((GetTypeId() == TYPEID_PLAYER) || (obj->GetTypeId() == TYPEID_PLAYER))
+            return true;
+
+    return GetMap()->isInLineOfSight(x, y, z, ox, oy, oz, GetPhaseMask(), ignoreFlags); // missing checks todo 
+}
+
+void WorldObject::GetHitSpherePointFor(Position const& dest, float& x, float& y, float& z) const
+{
+    Position pos = GetHitSpherePointFor(dest);
+    x = pos.GetPositionX();
+    y = pos.GetPositionY();
+    z = pos.GetPositionZ();
 }
 
 bool WorldObject::GetDistanceOrder(WorldObject const* obj1, WorldObject const* obj2, bool is3D /* = true */) const
@@ -1906,6 +1947,7 @@ void WorldObject::GetRandomPoint(const Position &pos, float distance, float &ran
     // angle to face `obj` to `this`
     float angle = (float)rand_norm()*static_cast<float>(2*M_PI);
     float new_dist = (float)rand_norm()*static_cast<float>(distance);
+    new_dist = distance * (new_dist > 1 ? new_dist - 2 : new_dist);
 
     rand_x = pos.m_positionX + new_dist * std::cos(angle);
     rand_y = pos.m_positionY + new_dist * std::sin(angle);
@@ -2000,7 +2042,7 @@ void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z, float offse
             if (!ToPlayer()->CanFly())
             {
                 float ground_z = z;
-                float max_z = GetMap()->GetWaterOrGroundLevel(GetPhaseMask(), x, y, z + offset, &ground_z, !ToUnit()->HasAuraType(SPELL_AURA_WATER_WALK), ToPlayer()->GetCollisionHeight(ToPlayer()->IsMounted()));
+                float max_z = GetMap()->GetWaterOrGroundLevel(GetPhaseMask(), x, y, z + offset, &ground_z, !ToUnit()->HasAuraType(SPELL_AURA_WATER_WALK), ToPlayer()->GetCollisionHeight());
                 if (max_z > INVALID_HEIGHT)
                 {
                     if (z > max_z)
@@ -3284,20 +3326,20 @@ void WorldObject::MovePosition(Position &pos, float dist, float angle)
 
     ground = GetMap()->GetHeight(GetPhaseMask(), destx, desty, MAX_HEIGHT, true);
     floor = GetMap()->GetHeight(GetPhaseMask(), destx, desty, pos.m_positionZ, true);
-    destz = fabs(ground - pos.m_positionZ) <= fabs(floor - pos.m_positionZ) ? ground : floor;
+    destz = std::fabs(ground - pos.m_positionZ) <= fabs(floor - pos.m_positionZ) ? ground : floor;
 
     float step = dist/10.0f;
 
     for (uint8 j = 0; j < 10; ++j)
     {
         // do not allow too big z changes
-        if (fabs(pos.m_positionZ - destz) > 6)
+        if (std::fabs(pos.m_positionZ - destz) > 6)
         {
             destx -= step * std::cos(angle);
             desty -= step * std::sin(angle);
             ground = GetMap()->GetHeight(GetPhaseMask(), destx, desty, MAX_HEIGHT, true);
             floor = GetMap()->GetHeight(GetPhaseMask(), destx, desty, pos.m_positionZ, true);
-            destz = fabs(ground - pos.m_positionZ) <= fabs(floor - pos.m_positionZ) ? ground : floor;
+            destz = std::fabs(ground - pos.m_positionZ) <= std::fabs(floor - pos.m_positionZ) ? ground : floor;
         }
         // we have correct destz now
         else
@@ -3326,6 +3368,7 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
     float destx, desty, destz;
     destx = pos.m_positionX + dist * std::cos(angle);
     desty = pos.m_positionY + dist * std::sin(angle);
+    destz = pos.m_positionZ;
 
     // Prevent invalid coordinates here, position is unchanged
     if (!Trinity::IsValidMapCoord(destx, desty))
@@ -3334,58 +3377,84 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
         return;
     }
 
-    destz = NormalizeZforCollision(this, destx, desty, pos.GetPositionZ());
-    destz += offsetZ;
+    // Use a detour raycast to get our first collision point
+    PathGenerator path(this);
+    path.SetUseRaycast(true);
+    path.CalculatePath(destx, desty, destz, false);
 
-    bool col = VMAP::VMapFactory::createOrGetVMapManager()->getObjectHitPos(GetMapId(), pos.m_positionX, pos.m_positionY, pos.m_positionZ+0.5f, destx, desty, destz+0.5f, destx, desty, destz, -0.5f);
+    // Check for valid path types before we proceed
+    if (!(path.GetPathType() & PATHFIND_NOT_USING_PATH))
+        if (path.GetPathType() & ~(PATHFIND_NORMAL | PATHFIND_SHORTCUT | PATHFIND_INCOMPLETE | PATHFIND_FARFROMPOLY_END))
+            return;
 
-    // collision occured
-    if (col)
+    G3D::Vector3 result = path.GetPath().back();
+    destx = result.x;
+    desty = result.y;
+    destz = result.z;
+
+    // check static LOS
+    float halfHeight = GetCollisionHeight() * 0.5f;
+    bool col = false;
+
+    // Unit is flying, check for potential collision via vmaps
+    if (path.GetPathType() & PATHFIND_NOT_USING_PATH)
     {
-        // move back a bit
-        destx -= CONTACT_DISTANCE * std::cos(angle);
-        desty -= CONTACT_DISTANCE * std::sin(angle);
-        dist = sqrt((pos.m_positionX - destx)*(pos.m_positionX - destx) + (pos.m_positionY - desty)*(pos.m_positionY - desty));
+        col = VMAP::VMapFactory::createOrGetVMapManager()->getObjectHitPos(GetMapId(),
+            pos.m_positionX, pos.m_positionY, pos.m_positionZ + halfHeight,
+            destx, desty, destz + halfHeight,
+            destx, desty, destz, -0.5f);
+
+        destz -= halfHeight;
+
+        // Collided with static LOS object, move back to collision point
+        if (col)
+        {
+            destx -= CONTACT_DISTANCE * std::cos(angle);
+            desty -= CONTACT_DISTANCE * std::sin(angle);
+            dist = std::sqrt((pos.m_positionX - destx) * (pos.m_positionX - destx) + (pos.m_positionY - desty) * (pos.m_positionY - desty));
+        }
     }
-    else
-        destz -= 0.5f;
 
     // check dynamic collision
-    col = GetMap()->getObjectHitPos(GetPhaseMask(), pos.m_positionX, pos.m_positionY, pos.m_positionZ+0.5f, destx, desty, destz+0.5f, destx, desty, destz, -0.5f);
+    col = GetMap()->getObjectHitPos(GetPhaseMask(),
+        pos.m_positionX, pos.m_positionY, pos.m_positionZ + halfHeight,
+        destx, desty, destz + halfHeight,
+        destx, desty, destz, -0.5f);
 
-    // Collided with a gameobject
+    destz -= halfHeight;
+
+    // Collided with a gameobject, move back to collision point
     if (col)
     {
         destx -= CONTACT_DISTANCE * std::cos(angle);
         desty -= CONTACT_DISTANCE * std::sin(angle);
-        dist = sqrt((pos.m_positionX - destx)*(pos.m_positionX - destx) + (pos.m_positionY - desty)*(pos.m_positionY - desty));
-    }
-    else
-        destz -= 0.5f;
-
-    float step = dist/10.0f;
-
-    for (uint8 j = 0; j < 10; ++j)
-    {
-        // do not allow too big z changes
-        if (fabs(pos.m_positionZ - destz) > 6)
-        {
-            destx -= step * std::cos(angle);
-            desty -= step * std::sin(angle);
-            destz = NormalizeZforCollision(this, destx, desty, pos.GetPositionZ());
-        }
-        // we have correct destz now
-        else
-        {
-            pos.Relocate(destx, desty, destz);
-            break;
-        }
+        dist = std::sqrt((pos.m_positionX - destx)*(pos.m_positionX - destx) + (pos.m_positionY - desty) * (pos.m_positionY - desty));
     }
 
+    float groundZ = VMAP_INVALID_HEIGHT_VALUE;
     Trinity::NormalizeMapCoord(pos.m_positionX);
     Trinity::NormalizeMapCoord(pos.m_positionY);
-    pos.m_positionZ = NormalizeZforCollision(this, destx, desty, pos.GetPositionZ());
+    //UpdateAllowedPositionZ(destx, desty, destz, &groundZ);
+    UpdateAllowedPositionZ(destx, desty, destz); // todo
+
     pos.SetOrientation(GetOrientation());
+    pos.Relocate(destx, desty, destz);
+
+    // position has no ground under it (or is too far away)
+    if (groundZ <= INVALID_HEIGHT)
+    {
+        if (Unit const* unit = ToUnit())
+        {
+            // unit can fly, ignore.
+            if (unit->CanFly())
+                return;
+
+            // fall back to gridHeight if any
+            float gridHeight = GetMap()->GetGridHeight(pos.m_positionX, pos.m_positionY);
+            if (gridHeight > INVALID_HEIGHT)
+                pos.m_positionZ = gridHeight + unit->GetHoverOffset();
+        }
+    }
 }
 
 void WorldObject::SetPhaseMask(uint32 newPhaseMask, bool update)
@@ -3640,6 +3709,14 @@ uint64 WorldObject::GetTransGUID() const
     return 0;
 }
 
+float WorldObject::GetMapHeight(float x, float y, float z, bool vmap/* = true*/, float distanceToSearch/* = DEFAULT_HEIGHT_SEARCH*/) const
+{
+    if (z != MAX_HEIGHT)
+        z += Z_OFFSET_FIND_HEIGHT;
+
+    return GetMap()->GetHeight(GetPhaseMask(), x, y, z, vmap, distanceToSearch);
+}
+
 bool WorldObject::AddToTransportIfNeeded(Transport* transport, bool setHome, float extents)
 {
     if (!transport)
@@ -3687,7 +3764,7 @@ WMOAreaTableEntry const* WorldObject::GetWMOArea() const
     uint32 mogpFlags;
     int32 adtId, rootId, groupId;
 
-    if (map->GetAreaInfo(GetPositionX(), GetPositionY(), GetPositionZ(), mogpFlags, adtId, rootId, groupId))
+    if (map->GetAreaInfo(m_phaseMask, GetPositionX(), GetPositionY(), GetPositionZ(), mogpFlags, adtId, rootId, groupId))
     {
         const WMOAreaTableEntry * wmoEntry = GetWMOAreaTableEntryByTripple(rootId, adtId, groupId);
         if (wmoEntry)
@@ -3723,13 +3800,6 @@ void WorldObject::AddToUpdate()
         return;
     }
 
-    if (m_currMap != CurrentMap && CurrentMap)
-    {
-        TC_LOG_ERROR("shitlog", "WorldObject::AddToUpdate - invalid map, m_currMap ID %u, CurrentMap ID: %u. Object type: %u, entry: %u, GUID: %u, InWorld: %u, position: { %f, %f, %f }.\nStack trace:\n",
-            m_currMap->GetId(), CurrentMap->GetId(), uint32(GetTypeId()), GetEntry(), GetGUIDLow(), IsInWorld(), GetPositionX(), GetPositionY(), GetPositionZ());
-        return;
-    }
-
     m_currMap->AddUpdateObject(this);
     m_objectUpdated = true;
 }
@@ -3740,13 +3810,6 @@ void WorldObject::RemoveFromUpdate()
     {
         TC_LOG_ERROR("shitlog", "WorldObject::RemoveFromUpdate - NULL in m_currMap (typeId %u, entry %u, guid " UI64FMTD ")",
             GetTypeId(), GetEntry(), GetGUID());
-        return;
-    }
-
-    if (m_currMap != CurrentMap && CurrentMap)
-    {
-        TC_LOG_ERROR("shitlog", "WorldObject::RemoveFromUpdate - invalid map, m_currMap ID %u, CurrentMap ID: %u. Object type: %u, entry: %u, GUID: %u, InWorld: %u, position: { %f, %f, %f }.\nStack trace:\n",
-            m_currMap->GetId(), CurrentMap->GetId(), uint32(GetTypeId()), GetEntry(), GetGUIDLow(), IsInWorld(), GetPositionX(), GetPositionY(), GetPositionZ());
         return;
     }
 

@@ -5637,7 +5637,7 @@ class cond_brawlers_guild_far_sight_totem : public ConditionScript
     public:
         cond_brawlers_guild_far_sight_totem() : ConditionScript("cond_brawlers_guild_far_sight_totem") { }
 
-        bool OnConditionCheck(Condition* cond, ConditionSourceInfo& source) override
+        bool OnConditionCheck(const Condition* cond, ConditionSourceInfo& source) override
         {
             if (source.mConditionTargets[0])
                 if (Player* target = source.mConditionTargets[0]->ToPlayer())

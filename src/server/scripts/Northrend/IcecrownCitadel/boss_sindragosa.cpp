@@ -20,7 +20,7 @@
 #include "ScriptedCreature.h"
 #include "SpellAuraEffects.h"
 #include "icecrown_citadel.h"
-#include "../../../collision/Management/VMapFactory.h"
+#include "VMapFactory.h"
 
 enum Texts
 {

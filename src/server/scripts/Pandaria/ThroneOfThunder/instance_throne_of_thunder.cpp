@@ -419,7 +419,7 @@ class instance_throne_of_thunder : public InstanceMapScript
                         creature->AddUnitMovementFlag(MOVEMENTFLAG_CAN_FLY | MOVEMENTFLAG_DISABLE_GRAVITY);
                         break;
                     case NPC_GARA_JAL:
-                        creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15);
+                        creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_CAN_SWIM);
                         creature->SetStandFlags(UNIT_STAND_FLAGS_CREEP);
                         garajalHelperGUID = creature->GetGUID();
                         break;

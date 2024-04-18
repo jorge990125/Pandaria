@@ -66,12 +66,6 @@ void VisibleNotifier::SendToSelf()
 
     for (Player::ClientGUIDs::const_iterator it = vis_guids.begin();it != vis_guids.end(); ++it)
     {
-        if (IS_CRE_OR_VEH_GUID(*it))
-            if (GUID_ENPART(*it) >= 190000)
-                if (Creature* npc = ObjectAccessor::GetCreature(i_player, *it))
-                    if (npc->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_project_NPC)
-                        continue;
-
         i_player.m_clientGUIDs.erase(*it);
         i_data.AddOutOfRangeGUID(*it);
 

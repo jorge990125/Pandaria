@@ -206,7 +206,7 @@ bool SpellClickInfo::IsFitToRequirements(Unit const* clicker, Unit const* clicke
     if (!playerClicker)
         return true;
 
-    Unit const* summoner = NULL;
+    Unit const* summoner = nullptr;
     // Check summoners for party
     if (clickee->IsSummon())
         summoner = clickee->ToTempSummon()->GetSummoner();
@@ -1059,7 +1059,7 @@ void ObjectMgr::CheckCreatureTemplate(CreatureTemplate const* cInfo)
     if (cInfo->scale <= 0.0f)
     {
         if (displayScaleEntry)
-            const_cast<CreatureTemplate*>(cInfo)->scale = displayScaleEntry->scale;
+            const_cast<CreatureTemplate*>(cInfo)->scale = displayScaleEntry->CreatureModelScale;
         else
             const_cast<CreatureTemplate*>(cInfo)->scale = 1.0f;
     }
@@ -1410,7 +1410,7 @@ CreatureModelInfo const* ObjectMgr::GetCreatureModelInfo(uint32 modelId)
     if (itr != _creatureModelStore.end())
         return &(itr->second);
 
-    return NULL;
+    return nullptr;
 }
 
 uint32 ObjectMgr::ChooseDisplayId(CreatureTemplate const* cinfo, CreatureData const* data /*= NULL*/)
@@ -6118,8 +6118,10 @@ WorldSafeLocsEntry const* ObjectMgr::GetClosestGraveYard(WorldLocation const& lo
         if ((data.safeLocId == 1704 || data.safeLocId == 1705) && zoneId == 4720 && areaId == 4924)
             continue;
 
-        if (conditionObject && !sConditionMgr->IsObjectMeetToConditions(conditionSource, sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_GRAVEYARD, data.safeLocId)))
-            continue;
+        // not in skyfire,maybe hack
+        // if (conditionObject && !sConditionMgr->IsObjectMeetToConditions(conditionSource, sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_GRAVEYARD, data.safeLocId)))
+        // if (conditionObject && !sConditionMgr->IsObjectMeetToConditions(conditionSource, IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_GRAVEYARD, data.safeLocId, ConditionSourceInfo& sourceInfo)))
+        //     continue;
 
         // find now nearest graveyard at other map
         if (MapId != entry->map_id)
@@ -7676,13 +7678,12 @@ void ObjectMgr::LoadNPCSpellClickSpells()
 
     // all spellclick data loaded, now we check if there are creatures with NPC_FLAG_SPELLCLICK but with no data
     // NOTE: It *CAN* be the other way around: no spellclick flag but with spellclick data, in case of creature-only vehicle accessories
-    CreatureTemplateContainer const* ctc = sObjectMgr->GetCreatureTemplates();
-    for (CreatureTemplateContainer::const_iterator itr = ctc->begin(); itr != ctc->end(); ++itr)
+    for (auto& creatureTemplatePair : _creatureTemplateStore)
     {
-        if ((itr->second.npcflag & UNIT_NPC_FLAG_SPELLCLICK) && _spellClickInfoStore.find(itr->second.Entry) == _spellClickInfoStore.end())
+        if ((creatureTemplatePair.second.npcflag & UNIT_NPC_FLAG_SPELLCLICK) && !_spellClickInfoStore.count(creatureTemplatePair.first))
         {
-            TC_LOG_ERROR("sql.sql", "npc_spellclick_spells: Creature template %u has UNIT_NPC_FLAG_SPELLCLICK but no data in spellclick table! Removing flag", itr->second.Entry);
-            const_cast<CreatureTemplate*>(&itr->second)->npcflag &= ~UNIT_NPC_FLAG_SPELLCLICK;
+            TC_LOG_ERROR("sql.sql", "npc_spellclick_spells: Creature template %u has UNIT_NPC_FLAG_SPELLCLICK but no data in spellclick table! Removing flag", creatureTemplatePair.first);
+            creatureTemplatePair.second.npcflag &= ~UNIT_NPC_FLAG_SPELLCLICK;
         }
     }
 

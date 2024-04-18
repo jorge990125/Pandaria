@@ -1880,9 +1880,6 @@ SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 a
 
 SpellCastResult SpellInfo::CheckTarget(Unit const* caster, WorldObject const* target, bool implicit) const
 {
-    if (target->GetTypeId() == TYPEID_UNIT && target->ToCreature()->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_project_NPC)
-        return SPELL_FAILED_BAD_TARGETS;
-
     if (AttributesEx & SPELL_ATTR1_CANT_TARGET_SELF && caster == target)
         return SPELL_FAILED_BAD_TARGETS;
 
@@ -3288,7 +3285,7 @@ void SpellInfo::_UnloadImplicitTargetConditionLists()
     // find the same instances of ConditionList and delete them.
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
-        ConditionList* cur = Effects[i].ImplicitTargetConditions;
+        ConditionContainer* cur = Effects[i].ImplicitTargetConditions;
         if (!cur)
             continue;
         for (uint8 j = i; j < MAX_SPELL_EFFECTS; ++j)

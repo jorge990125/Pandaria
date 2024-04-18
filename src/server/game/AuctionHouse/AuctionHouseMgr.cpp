@@ -1179,7 +1179,7 @@ std::string AuctionEntry::BuildAuctionMailSubject(MailAuctionAnswers response) c
     return strm.str();
 }
 
-#if COMPILER == COMPILER_MICROSOFT
+#if COMPILER == TRINITY_COMPILER_MICROSOFT
 #define GUID_FORMAT "%16I64X"
 #else
 #define GUID_FORMAT "%16llX"

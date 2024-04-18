@@ -1488,7 +1488,7 @@ class cond_burn_mantid_corpse : public ConditionScript
     public:
         cond_burn_mantid_corpse() : ConditionScript("cond_burn_mantid_corpse") { }
 
-        bool OnConditionCheck(Condition* cond, ConditionSourceInfo& source) override
+        bool OnConditionCheck(const Condition* cond, ConditionSourceInfo& source) override
         {
             Player* player = source.mConditionTargets[0]->ToPlayer();
             if (!player)

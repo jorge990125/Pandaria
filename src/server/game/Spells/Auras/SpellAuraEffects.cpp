@@ -3120,14 +3120,43 @@ void AuraEffect::HandleModFixateTarget(AuraApplication const* aurApp, uint8 mode
     if (!(mode & AURA_EFFECT_HANDLE_REAL))
         return;
 
-    Unit* caster = GetCaster();
     Unit* target = aurApp->GetTarget();
-
-    if (!caster || !target)
+    if (!target->IsAlive())
         return;
 
+    Unit* caster = GetCaster();
+    if (!caster || caster->GetTypeId() != TYPEID_UNIT || !caster->IsAlive())
+        return;
+
+    // if (apply)
+    //     caster->BindAura(aurApp->GetBase());
+
+    Pet* pet = target->ToPet();
     if (apply)
-        caster->BindAura(aurApp->GetBase());
+    {
+        if (caster->ToPlayer()->GetPet() != pet)
+            return;
+
+        pet->SetCharmedBy(caster, CHARM_TYPE_POSSESS, aurApp);
+    }
+    else
+    {
+        pet->RemoveCharmedBy(caster);
+
+        if (!pet->IsWithinDistInMap(caster, pet->GetMap()->GetVisibilityRange()))
+            pet->Remove(PET_REMOVE_DISMISS, PET_REMOVE_FLAG_RETURN_REAGENT | PET_REMOVE_FLAG_RESET_CURRENT);
+            //pet->Remove(PET_REMOVE_DISMISS, true); // PET_SAVE_NOT_IN_SLOT
+        else
+        {
+            // Reinitialize the pet bar or it will appear greyed out
+            caster->ToPlayer()->PetSpellInitialize();
+
+            // TODO: remove this
+            if (!pet->GetVictim() && !pet->GetCharmInfo()->HasCommandState(COMMAND_STAY))
+                pet->GetMotionMaster()->MoveFollow(caster, PET_FOLLOW_DIST, pet->GetFollowAngle());
+        }
+    }
+
     // No need to unbind it will happen automatically
 }
 
@@ -4994,15 +5023,15 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
     Unit* caster = GetCaster();
 
-    if (mode & AURA_EFFECT_HANDLE_REAL)
+    // pet auras
+    if (target->GetTypeId() == TYPEID_PLAYER && (mode & AURA_EFFECT_HANDLE_REAL))
     {
-        // pet auras
         if (PetAura const* petSpell = sSpellMgr->GetPetAura(GetId(), m_effIndex))
         {
             if (apply)
-                target->AddPetAura(petSpell);
+                target->ToPlayer()->AddPetAura(petSpell);
             else
-                target->RemovePetAura(petSpell);
+                target->ToPlayer()->RemovePetAura(petSpell);
         }
     }
 

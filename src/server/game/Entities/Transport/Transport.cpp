@@ -38,7 +38,7 @@
 #include "G3D/Matrix4.h"
 
 Transport::Transport() : GameObject(),
-    _transportInfo(NULL), _isMoving(true), _pendingStop(false),
+    _transportInfo(nullptr), _isMoving(true), _pendingStop(false),
     _triggeredArrivalEvent(false), _triggeredDepartureEvent(false),
     _passengerTeleportItr(_passengers.begin()), _delayedAddModel(false), _delayedTeleport(false)
 {
@@ -114,7 +114,7 @@ bool Transport::CreateLocal(uint32 guidlow, uint32 entry, Map* map, float x, flo
     if (goinfo->transport.pause)
         m_goValue.Transport.PathProgress = goinfo->transport.startOpen ? goinfo->transport.pause : m_goValue.Transport.AnimationInfo->TotalTime - 1;
 
-    m_model = GameObjectModel::Create(*this);
+    CreateModel();
     LastUsedScriptID = GetGOInfo()->ScriptId;
     AIM_Initialize();
 
@@ -252,7 +252,7 @@ bool Transport::Create(uint32 guidlow, uint32 entry, uint32 mapid, float x, floa
     SetWorldRotationAngles(ang, 0, 0);
     SetParentRotation({ });
 
-    m_model = GameObjectModel::Create(*this);
+    CreateModel();
     LastUsedScriptID = GetGOInfo()->ScriptId;
     AIM_Initialize();
 
@@ -260,7 +260,7 @@ bool Transport::Create(uint32 guidlow, uint32 entry, uint32 mapid, float x, floa
     std::string basePath = (sWorld->GetDataPath() + "mmaps").c_str();
     for (uint32 x = 31; x <= 32; ++x)
         for (uint32 y = 31; y <= 32; ++y)
-            MMAP::MMapFactory::createOrGetMMapManager()->loadMap(basePath, GetGOInfo()->moTransport.mapID, x, y);
+            MMAP::MMapFactory::createOrGetMMapManager()->loadMap(GetGOInfo()->moTransport.mapID, x, y);
 
     return true;
 }
@@ -676,13 +676,13 @@ GameObject* Transport::CreateGOPassenger(uint32 guid, GameObjectData const* data
     {
         TC_LOG_ERROR("entities.transport", "GameObject (guidlow %d, entry %d) not created. Suggested coordinates aren't valid (X: %f Y: %f)", go->GetGUIDLow(), go->GetEntry(), go->GetPositionX(), go->GetPositionY());
         delete go;
-        return NULL;
+        return nullptr;
     }
 
     if (!map->AddToMap(go))
     {
         delete go;
-        return NULL;
+        return nullptr;
     }
 
     _staticPassengers.insert(go);
@@ -751,7 +751,7 @@ TempSummon* Transport::SummonPassenger(uint32 entry, Position const& pos, TempSu
             team = summoner->ToPlayer()->GetTeam();
     }
 
-    TempSummon* summon = NULL;
+    TempSummon* summon = nullptr;
     switch (mask)
     {
         case UNIT_MASK_SUMMON:
@@ -778,7 +778,7 @@ TempSummon* Transport::SummonPassenger(uint32 entry, Position const& pos, TempSu
     if (!summon->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, phase, entry, vehId, team, x, y, z, o))
     {
         delete summon;
-        return NULL;
+        return nullptr;
     }
 
     summon->SetUInt32Value(UNIT_FIELD_CREATED_BY_SPELL, spellId);
@@ -800,7 +800,7 @@ TempSummon* Transport::SummonPassenger(uint32 entry, Position const& pos, TempSu
     if (!map->AddToMap<Creature>(summon))
     {
         delete summon;
-        return NULL;
+        return nullptr;
     }
 
     _staticPassengers.insert(summon);

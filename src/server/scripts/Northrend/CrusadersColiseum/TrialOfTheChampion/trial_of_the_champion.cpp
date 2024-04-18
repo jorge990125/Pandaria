@@ -214,7 +214,7 @@ class npc_anstart : public CreatureScript
 
 class npc_announcer_toc5 : public CreatureScript
 {
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
         InstanceScript* instance = creature->GetInstanceScript();
 

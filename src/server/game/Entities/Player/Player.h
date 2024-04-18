@@ -3149,13 +3149,8 @@ public:
 
     bool HasForcedMovement() const { return hasForcedMovement_; }
 
-    bool CanFly() const
-    {
-        return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY);
-    }
-
-    //! Return collision height sent to client
-    float GetCollisionHeight(bool mounted) const;
+    bool CanFly() const { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY);}
+    bool CanEnterWater() const override { return true; }
 
     std::string GetMapAreaAndZoneString();
     std::string GetCoordsMapAreaAndZoneString();

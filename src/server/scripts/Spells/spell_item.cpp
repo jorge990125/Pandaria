@@ -4412,6 +4412,56 @@ class spell_item_seesaw : public SpellScript
     }
 };
 
+// 71610, 71641 - Echoes of Light (Althor's Abacus)
+class spell_item_echoes_of_light : public SpellScript
+{
+    PrepareSpellScript(spell_item_echoes_of_light);
+
+    void FilterTargets(std::list<WorldObject*>& targets)
+    {
+        if (targets.size() < 2)
+            return;
+
+        targets.sort(Trinity::HealthPctOrderPred());
+
+        WorldObject* target = targets.front();
+        targets.clear();
+        targets.push_back(target);
+    }
+
+    void Register() override
+    {
+        OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_item_echoes_of_light::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ALLY);
+    }
+};
+
+// 7434 - Fate Rune of Unsurpassed Vigor
+enum FateRuneOfUnsurpassedVigor
+{
+    SPELL_UNSURPASSED_VIGOR = 25733
+};
+
+class spell_item_fate_rune_of_unsurpassed_vigor : public AuraScript
+{
+    PrepareAuraScript(spell_item_fate_rune_of_unsurpassed_vigor);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_UNSURPASSED_VIGOR });
+    }
+
+    void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
+    {
+        PreventDefaultAction();
+        GetTarget()->CastSpell(GetTarget(), SPELL_UNSURPASSED_VIGOR, true);
+    }
+
+    void Register() override
+    {
+        OnEffectProc += AuraEffectProcFn(spell_item_fate_rune_of_unsurpassed_vigor::HandleProc, EFFECT_0, SPELL_AURA_DUMMY);
+    }
+};
+
 void AddSC_item_spell_scripts()
 {
     // 23074 Arcanite Dragonling
@@ -4535,4 +4585,8 @@ void AddSC_item_spell_scripts()
     new spell_script<spell_item_party_grenade_eff>("spell_item_party_grenade_eff");
     new aura_script<spell_item_party_grenade>("spell_item_party_grenade");
     new spell_script<spell_item_seesaw>("spell_item_seesaw");
+    //RegisterSpellScript(spell_item_echoes_of_light);
+    new spell_script<spell_item_echoes_of_light>("spell_item_echoes_of_light");
+    new aura_script<spell_item_fate_rune_of_unsurpassed_vigor>("spell_item_fate_rune_of_unsurpassed_vigor");
+    
 }

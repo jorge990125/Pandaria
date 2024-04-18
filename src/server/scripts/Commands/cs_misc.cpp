@@ -15,34 +15,38 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Chat.h"
-#include "ScriptMgr.h"
 #include "AccountMgr.h"
+#include "BattlegroundMgr.h"
 #include "CellImpl.h"
+#include "Chat.h"
+#include "Config.h"
+#include "DevTool.h"
+#include "DisableMgr.h"
 #include "GridNotifiers.h"
 #include "Group.h"
+#include "GroupMgr.h"
 #include "InstanceSaveMgr.h"
 #include "Language.h"
 #include "MovementGenerator.h"
 #include "ObjectAccessor.h"
 #include "Opcodes.h"
-#include "SpellAuras.h"
 #include "TargetedMovementGenerator.h"
 #include "WeatherMgr.h"
 #include "Player.h"
 #include "Pet.h"
 #include "LFG.h"
-#include "GroupMgr.h"
 #include "MMapFactory.h"
-#include "DevTool.h"
-#include "BattlegroundMgr.h"
 #include "Realm.h"
 #include "ServiceMgr.h"
-#include "Config.h"
+#include "ScriptMgr.h"
 #include "ServiceMgr.h"
+#include "SpellAuras.h"
 #include "SpellHistory.h"
 #include "WordFilterMgr.h"
+#include "World.h"
 #include "IPLocation.h"
+
+
 #include <fstream>
 
 class misc_commandscript : public CommandScript
@@ -403,7 +407,7 @@ public:
 
         uint32 haveMap = Map::ExistMap(mapId, gridX, gridY) ? 1 : 0;
         uint32 haveVMap = Map::ExistVMap(mapId, gridX, gridY) ? 1 : 0;
-        uint32 haveMMap = (MMAP::MMapFactory::IsPathfindingEnabledInMap(mapId) && MMAP::MMapFactory::createOrGetMMapManager()->GetNavMesh(handler->GetSession()->GetPlayer()->GetMapId())) ? 1 : 0;
+        uint32 haveMMap = (sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_MAP, mapId, nullptr) && MMAP::MMapFactory::createOrGetMMapManager()->GetNavMesh(handler->GetSession()->GetPlayer()->GetMapId())) ? 1 : 0;
 
         if (haveVMap)
         {
@@ -444,7 +448,7 @@ public:
             zoneX, zoneY, groundZ, floorZ, haveMap, haveVMap, haveMMap);
 
         LiquidData liquidStatus;
-        float collisionHeight = object->GetTypeId() == TYPEID_PLAYER ? object->ToPlayer()->GetCollisionHeight(object->ToPlayer()->IsMounted()) : DEFAULT_UNIT_HEIGHT;
+        float collisionHeight = object->GetTypeId() == TYPEID_PLAYER ? object->ToPlayer()->GetCollisionHeight() : DEFAULT_UNIT_HEIGHT;
         ZLiquidStatus status = map->getLiquidStatus(object->GetPositionX(), object->GetPositionY(), object->GetPositionZ(), MAP_ALL_LIQUIDS, &liquidStatus, collisionHeight);
 
         if (status)

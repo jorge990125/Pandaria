@@ -1255,12 +1255,12 @@ DROP TABLE IF EXISTS `custom_solocraft_character_stats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `custom_solocraft_character_stats` (
-  `GUID` tinyint(3) unsigned NOT NULL,
+  `guid` int unsigned NOT NULL,
   `Difficulty` float NOT NULL,
   `GroupSize` int(11) NOT NULL,
   `SpellPower` int(10) unsigned NOT NULL DEFAULT '0',
   `Stats` float NOT NULL DEFAULT '100',
-  PRIMARY KEY (`GUID`)
+  PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

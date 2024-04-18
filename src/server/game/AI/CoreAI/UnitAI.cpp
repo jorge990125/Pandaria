@@ -28,8 +28,15 @@
 
 void UnitAI::AttackStart(Unit* victim)
 {
-    if (victim && me->Attack(victim, true))
+    if (victim && me->Attack(victim, true)){
+        // Clear distracted state on attacking
+        if (me->HasUnitState(UNIT_STATE_DISTRACTED))
+        {
+            me->ClearUnitState(UNIT_STATE_DISTRACTED);
+            me->GetMotionMaster()->Clear();
+        }        
         me->GetMotionMaster()->MoveChase(victim);
+    }
 }
 
 void UnitAI::AttackStartCaster(Unit* victim, float dist)
@@ -44,14 +51,17 @@ void UnitAI::DoMeleeAttackIfReady(bool ignoreLos)
         return;
 
     Unit* victim = me->GetVictim();
+
+    if (!me->IsWithinMeleeRange(victim))
+        return;
+
     //Make sure our attack is ready and we aren't currently casting before checking distance
-    if (me->isAttackReady() && me->IsWithinMeleeRange(victim))
+    if (me->isAttackReady())
     {
         me->AttackerStateUpdate(victim, ignoreLos);
         me->resetAttackTimer();
     }
-
-    if (me->HasOffhandWeapon() && me->isAttackReady(OFF_ATTACK) && me->IsWithinMeleeRange(victim))
+    if (me->HasOffhandWeapon() && me->isAttackReady(OFF_ATTACK))
     {
         me->AttackerStateUpdate(victim, ignoreLos, OFF_ATTACK);
         me->resetAttackTimer(OFF_ATTACK);
@@ -122,7 +132,7 @@ void UnitAI::DoCastToAllHostilePlayers(uint32 spellid, bool triggered)
 
 void UnitAI::DoCast(uint32 spellId)
 {
-    Unit* target = NULL;
+    Unit* target = nullptr;
 
     switch (AISpellInfo[spellId].target)
     {

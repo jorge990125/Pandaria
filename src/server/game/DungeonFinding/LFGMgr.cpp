@@ -49,8 +49,7 @@ template <typename... Args>
 static void AlmostAssert(char const* filter, Args... args)
 {
     auto str = Format(filter, args...);
-    TC_LOG_ERROR("lfg", str.c_str());
-    TC_LOG_ERROR("shitlog", "%s\n", str.c_str());
+    TC_LOG_ERROR("lfg %s", str.c_str());
 }
 
 namespace lfg
@@ -2023,14 +2022,6 @@ void LFGMgr::TeleportPlayer(Player* player, bool out, bool fromOpcode /*= false*
 */
 void LFGMgr::FinishDungeon(uint64 gguid, uint32 dungeonId, Map* map)
 {
-    // Map can't disappear, right? rigth?
-    // if (std::this_thread::get_id() != sWorld->GetThreadId())
-    // {
-    //     TaskMgr::Default()->ScheduleInvocation([=] { sLFGMgr->FinishDungeon(gguid, dungeonId, map); });
-    //     return;
-    // }
-    sLFGMgr->FinishDungeon(gguid, dungeonId, map);
-
     uint32 queueId = GetActiveQueueId(gguid);
     if (!queueId)
     {

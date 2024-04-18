@@ -479,7 +479,7 @@ typedef std::unordered_map<uint32/*(mapid, spawnMode) pair*/, CellObjectGuidsMap
 
 struct TrinityStringLocale
 {
-    StringVector Content;
+    std::vector<std::string> Content;
 };
 
 typedef std::map<uint64, uint64> LinkedRespawnContainer;
@@ -594,14 +594,14 @@ struct GossipMenuItems
     uint32              BoxMoney;
     std::string         BoxText;
     uint32              BoxBroadcastTextID;
-    ConditionList       Conditions;
+    ConditionContainer  Conditions;
 };
 
 struct GossipMenus
 {
     uint32              MenuID;
     uint32              TextID;
-    ConditionList   Conditions;
+    ConditionContainer  Conditions;
 };
 
 typedef std::multimap<uint32, GossipMenus> GossipMenusContainer;

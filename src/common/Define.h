@@ -28,12 +28,12 @@
 #define TRINITY_BIGENDIAN    1
 
 #if !defined(TRINITY_ENDIAN)
-#  if defined (ACE_BIG_ENDIAN)
+#  if defined (BOOST_BIG_ENDIAN)
 #    define TRINITY_ENDIAN TRINITY_BIGENDIAN
-#  else //ACE_BYTE_ORDER != ACE_BIG_ENDIAN
+#  else
 #    define TRINITY_ENDIAN TRINITY_LITTLEENDIAN
-#  endif //ACE_BYTE_ORDER
-#endif //TRINITY_ENDIAN
+#  endif
+#endif
 
 #if PLATFORM == PLATFORM_WINDOWS
 #  define TRINITY_PATH_MAX 260
@@ -58,15 +58,19 @@
 #  define TRINITY_INLINE
 #endif //!COREDEBUG
 
-#if COMPILER == COMPILER_GNU
+#if TRINITY_COMPILER == TRINITY_COMPILER_GNU
 #  define ATTR_NORETURN __attribute__((noreturn))
-#  define ATTR_PRINTF(F, V) __attribute__ ((format (printf, F, V)))
 #  define ATTR_DEPRECATED __attribute__((deprecated))
 #else //COMPILER != COMPILER_GNU
 #  define ATTR_NORETURN
-#  define ATTR_PRINTF(F, V)
 #  define ATTR_DEPRECATED
 #endif //COMPILER == COMPILER_GNU
+
+#if TRINITY_COMPILER == TRINITY_COMPILER_GNU
+#  define ATTR_PRINTF(F, V) __attribute__ ((__format__ (__printf__, F, V)))
+#else //TRINITY_COMPILER != TRINITY_COMPILER_GNU
+#  define ATTR_PRINTF(F, V)
+#endif //TRINITY_COMPILER == TRINITY_COMPILER_GNU
 
 #ifdef TRINITY_API_USE_DYNAMIC_LINKING
 #  if PLATFORM == PLATFORM_WINDOWS

@@ -10,7 +10,7 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 # Set build-directive (used in core to tell which buildtype we used)
-add_definitions(-D_BUILD_DIRECTIVE='"$(CONFIGURATION)"')
+add_compile_options(-D_BUILD_DIRECTIVE="$<CONFIG>")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17") # clang issue
 

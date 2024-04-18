@@ -21,6 +21,7 @@
 
 #include "ConfusedMovementGenerator.h"
 #include "FleeingMovementGenerator.h"
+#include "GenericMovementGenerator.h"
 #include "HomeMovementGenerator.h"
 #include "IdleMovementGenerator.h"
 #include "PointMovementGenerator.h"
@@ -717,6 +718,18 @@ void MotionMaster::MoveRotate(uint32 time, RotateDirection direction)
         return;
 
     Mutate(new RotateMovementGenerator(time, direction), MOTION_SLOT_ACTIVE);
+}
+
+void MotionMaster::LaunchMoveSpline(Movement::MoveSplineInit&& init, uint32 id/*= 0*/, MovementSlot slot/*= MOTION_SLOT_ACTIVE*/, MovementGeneratorType type/*= EFFECT_MOTION_TYPE*/)
+{
+    if (IsInvalidMovementGeneratorType(type))
+    {
+        TC_LOG_DEBUG("movement.motionmaster", "MotionMaster::LaunchMoveSpline: '%u', tried to launch a spline with an invalid MovementGeneratorType: %u (Id: %u, Slot: %u)", _owner->GetGUIDLow(), type, id, slot);
+        return;
+    }
+
+    TC_LOG_DEBUG("movement.motionmaster", "MotionMaster::LaunchMoveSpline: '%u', initiates spline Id: %u (Type: %u, Slot: %u)", _owner->GetGUIDLow(), id, type, slot);
+    Mutate(new GenericMovementGenerator(std::move(init), type, id), slot);
 }
 
 void MotionMaster::propagateSpeedChange()

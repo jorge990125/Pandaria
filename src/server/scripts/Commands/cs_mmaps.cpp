@@ -25,6 +25,7 @@
 
 #include "ScriptMgr.h"
 #include "Chat.h"
+#include "DisableMgr.h"
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "PointMovementGenerator.h"
@@ -35,7 +36,7 @@
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
 #include "CellImpl.h"
-#include "DisableMgr.h"
+#include "World.h"
 
 class mmaps_commandscript : public CommandScript
 {
@@ -252,13 +253,20 @@ public:
             target = handler->GetSession()->GetPlayer();
 
         uint32 mapId = target->GetMapId();
+        uint32 zoneId = target->GetZoneId();
+        uint32 areaId = target->GetAreaId();
+        uint32 entry = target->GetEntry();
         handler->PSendSysMessage("mmap stats:");
-        handler->PSendSysMessage("  global mmap pathfinding is %sabled|r", MMAP::MMapFactory::IsPathfindingEnabled() ? textEnabled : textDisabled);
-        handler->PSendSysMessage("  current target pathfinding is %sabled|r", MMAP::MMapFactory::IsPathfindingEnabled(mapId, target->GetZoneId(), target->GetAreaId(), target->GetEntry()) ? textEnabled : textDisabled);
-        handler->PSendSysMessage("    in map %u is %sabled|r", mapId, MMAP::MMapFactory::IsPathfindingEnabledInMap(mapId) ? textEnabled : textDisabled);
-        handler->PSendSysMessage("    in zone %u is %sabled|r", target->GetZoneId(), MMAP::MMapFactory::IsPathfindingEnabledInZone(target->GetZoneId()) ? textEnabled : textDisabled);
-        handler->PSendSysMessage("    in area %u is %sabled|r", target->GetAreaId(), MMAP::MMapFactory::IsPathfindingEnabledInArea(target->GetAreaId()) ? textEnabled : textDisabled);
-        handler->PSendSysMessage("    for creature %u is %sabled|r", target->GetEntry(), MMAP::MMapFactory::IsPathfindingEnabledForCreature(target->GetEntry()) ? textEnabled : textDisabled);
+        handler->PSendSysMessage("  global mmap pathfinding is %sabled|r", sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) ? textEnabled : textDisabled);
+        handler->PSendSysMessage("  current target pathfinding is %sabled|r", sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS)
+            && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_MAP, mapId, nullptr)
+            && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_ZONE, zoneId, nullptr)
+            && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_AREA, areaId, nullptr)
+            && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_CREATURE, entry, nullptr) ? textEnabled : textDisabled);
+        handler->PSendSysMessage("    in map %u is %sabled|r", mapId, sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_MAP, mapId, nullptr) ? textEnabled : textDisabled);
+        handler->PSendSysMessage("    in zone %u is %sabled|r", zoneId, sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_ZONE, zoneId, nullptr) ? textEnabled : textDisabled);
+        handler->PSendSysMessage("    in area %u is %sabled|r", areaId, sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_AREA, areaId, nullptr) ? textEnabled : textDisabled);
+        handler->PSendSysMessage("    for creature %u is %sabled|r", entry, sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_CREATURE, entry, nullptr) ? textEnabled : textDisabled);
 
         MMAP::MMapManager* manager = MMAP::MMapFactory::createOrGetMMapManager();
         handler->PSendSysMessage(" %u maps loaded with %u tiles overall", manager->getLoadedMapsCount(), manager->getLoadedTilesCount());
@@ -361,7 +369,7 @@ public:
         };
         const uint8 TABLE_ENTRIES_COUNT = 4;
 
-        if (!MMAP::MMapFactory::IsPathfindingEnabled())
+        if (!sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS))
         {
             handler->PSendSysMessage("Unable to execute command: pathfinding is globally disabled.");
             handler->SetSentErrorMessage(true);
@@ -380,7 +388,7 @@ public:
                 if (entry == -1)
                     entry = target->GetMapId();
                 if (entry != -1)
-                    skip = MMAP::MMapFactory::IsPathfindingEnabledInMap(entry) != disable;
+                    skip = (sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_MAP, entry, nullptr)) != disable;
                 if (MapEntry const* map = sMapStore.LookupEntry(entry))
                     ss << "Map - " << map->name[DEFAULT_LOCALE];
                 break;
@@ -388,7 +396,7 @@ public:
                 if (!entry)
                     entry = target->GetZoneId();
                 if (entry)
-                    skip = MMAP::MMapFactory::IsPathfindingEnabledInZone(entry) != disable;
+                    skip = (sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_ZONE, entry, nullptr)) != disable;
                 if (AreaTableEntry const* area = sAreaTableStore.LookupEntry(entry))
                     ss << "Area - " << area->area_name[DEFAULT_LOCALE];
                 break;
@@ -396,7 +404,7 @@ public:
                 if (!entry)
                     entry = target->GetAreaId();
                 if (entry)
-                    skip = MMAP::MMapFactory::IsPathfindingEnabledInArea(entry) != disable;
+                    skip = (sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_AREA, entry, nullptr)) != disable;
                 if (AreaTableEntry const* zone = sAreaTableStore.LookupEntry(entry))
                     ss << "Area - " << zone->area_name[DEFAULT_LOCALE];
                 break;
@@ -404,7 +412,7 @@ public:
                 if (!entry)
                     entry = target->GetEntry();
                 if (entry)
-                    skip = MMAP::MMapFactory::IsPathfindingEnabledForCreature(entry) != disable;
+                    skip = (sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) && !DisableMgr::IsDisabledFor(DISABLE_TYPE_MMAP_CREATURE, entry, nullptr)) != disable;
                 ss << "Creature - " << target->GetNameForLocaleIdx(DEFAULT_LOCALE);
                 break;
         }

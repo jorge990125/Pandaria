@@ -1458,59 +1458,59 @@ namespace LuaUnit
         return 1;
     }
 
-    int GetFriendlyUnitsInRange(lua_State* L, Unit* unit)
+    int GetFriendlyUnitsInRange(lua_State* L, Unit* unit) // error in compile TODO
     {
-        float range = luaL_optnumber(L, 1, SIZE_OF_GRIDS);
+        // float range = luaL_optnumber(L, 1, SIZE_OF_GRIDS);
 
-        UnitList list;
-        //WoWSource::AnyFriendlyUnitInObjectRangeCheck checker(unit, unit, range);
-        //WoWSource::UnitListSearcher<WoWSource::AnyFriendlyUnitInObjectRangeCheck> searcher(unit, list, checker);
-        Trinity::AnyFriendlyUnitInObjectRangeCheck u_check(unit, unit, range);
-        Trinity::UnitListSearcher<Trinity::AnyFriendlyUnitInObjectRangeCheck> searcher(unit, list, u_check);
-        unit->VisitNearbyObject(range, searcher);
-        Eluna::ObjectGUIDCheck guidCheck(unit->GetGUID());
-        list.remove_if (guidCheck);
+        // UnitList list;
+        // //WoWSource::AnyFriendlyUnitInObjectRangeCheck checker(unit, unit, range);
+        // //WoWSource::UnitListSearcher<WoWSource::AnyFriendlyUnitInObjectRangeCheck> searcher(unit, list, checker);
+        // Trinity::AnyFriendlyUnitInObjectRangeCheck u_check(unit, unit, range);
+        // Trinity::UnitListSearcher<Trinity::AnyFriendlyUnitInObjectRangeCheck> searcher(unit, list, u_check);
+        // unit->VisitNearbyObject(range, searcher);
+        // Eluna::ObjectGUIDCheck guidCheck(unit->GetGUID());
+        // list.remove_if (guidCheck);
 
-        lua_newtable(L);
-        int tbl = lua_gettop(L);
-        uint32 i = 0;
+        // lua_newtable(L);
+        // int tbl = lua_gettop(L);
+        // uint32 i = 0;
 
-        for (UnitList::const_iterator it = list.begin(); it != list.end(); ++it)
-        {
-            sEluna->Push(L, ++i);
-            sEluna->Push(L, *it);
-            lua_settable(L, tbl);
-        }
+        // for (UnitList::const_iterator it = list.begin(); it != list.end(); ++it)
+        // {
+        //     sEluna->Push(L, ++i);
+        //     sEluna->Push(L, *it);
+        //     lua_settable(L, tbl);
+        // }
 
-        lua_settop(L, tbl);
+        // lua_settop(L, tbl);
         return 1;
     }
 
-    int GetUnfriendlyUnitsInRange(lua_State* L, Unit* unit)
+    int GetUnfriendlyUnitsInRange(lua_State* L, Unit* unit) // error in compile TODO
     {
-        float range = luaL_optnumber(L, 1, SIZE_OF_GRIDS);
+        // float range = luaL_optnumber(L, 1, SIZE_OF_GRIDS);
 
-        UnitList list;
-        //WoWSource::AnyUnfriendlyUnitInObjectRangeCheck checker(unit, unit, range);
-        //WoWSource::UnitListSearcher<WoWSource::AnyUnfriendlyUnitInObjectRangeCheck> searcher(unit, list, checker);
-        Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check(unit, unit, range);
-        Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(unit, list, u_check);
-        unit->VisitNearbyObject(range, searcher);
-        Eluna::ObjectGUIDCheck guidCheck(unit->GetGUID());
-        list.remove_if (guidCheck);
+        // UnitList list;
+        // //WoWSource::AnyUnfriendlyUnitInObjectRangeCheck checker(unit, unit, range);
+        // //WoWSource::UnitListSearcher<WoWSource::AnyUnfriendlyUnitInObjectRangeCheck> searcher(unit, list, checker);
+        // Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check(unit, unit, range);
+        // Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(unit, list, u_check);
+        // unit->VisitNearbyObject(range, searcher);
+        // Eluna::ObjectGUIDCheck guidCheck(unit->GetGUID());
+        // list.remove_if (guidCheck);
 
-        lua_newtable(L);
-        int tbl = lua_gettop(L);
-        uint32 i = 0;
+        // lua_newtable(L);
+        // int tbl = lua_gettop(L);
+        // uint32 i = 0;
 
-        for (UnitList::const_iterator it = list.begin(); it != list.end(); ++it)
-        {
-            sEluna->Push(L, ++i);
-            sEluna->Push(L, *it);
-            lua_settable(L, tbl);
-        }
+        // for (UnitList::const_iterator it = list.begin(); it != list.end(); ++it)
+        // {
+        //     sEluna->Push(L, ++i);
+        //     sEluna->Push(L, *it);
+        //     lua_settable(L, tbl);
+        // }
 
-        lua_settop(L, tbl);
+        // lua_settop(L, tbl);
         return 1;
     }
 

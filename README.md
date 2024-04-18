@@ -16,7 +16,7 @@ Pandaria 5.4.8 docker [(Thanks diff3)](https://github.com/diff3): https://github
 + Processor with SSE2(AMD64 CPU architecture) support
 + MySQL = 5.7 / 8.0-8.1
 + CMake ≥ 3.27.2 
-+ OpenSSL = 1.1.1 / 3.0-3.1.1 (3.2.0 not supported)
++ OpenSSL = 1.1.1 / 3.0-3.1.1 (3.2.0 not supported) (MySQL >= 8.0.33)
 + Boost ≥ 1.74.0_msvc 14.2 x64
 + Windows SDK version 10.0.22621
 + MS Visual Studio (Community) ≥ 16.4 (2019) (Desktop) (Not previews) 
@@ -34,6 +34,7 @@ Read file [THANKS](THANKS.md)
 [![windows-build](https://github.com/Legends-of-Azeroth/Legends-of-Azeroth-Pandaria-5.4.8/actions/workflows/windows-build.yml/badge.svg?branch=master)](https://github.com/Legends-of-Azeroth/Legends-of-Azeroth-Pandaria-5.4.8/actions/workflows/windows-build.yml)
 [![linux-gcc-build](https://github.com/Legends-of-Azeroth/Legends-of-Azeroth-Pandaria-5.4.8/actions/workflows/linux_gcc.yml/badge.svg?branch=master)](https://github.com/Legends-of-Azeroth/Legends-of-Azeroth-Pandaria-5.4.8/actions/workflows/linux_gcc.yml)
 [![linux-clang-build](https://github.com/Legends-of-Azeroth/Legends-of-Azeroth-Pandaria-5.4.8/actions/workflows/linux_clang.yml/badge.svg?branch=master)](https://github.com/Legends-of-Azeroth/Legends-of-Azeroth-Pandaria-5.4.8/actions/workflows/linux_clang.yml)
+[![macos-arm-build](https://github.com/Legends-of-Azeroth/Legends-of-Azeroth-Pandaria-5.4.8/actions/workflows/macos-arm-build.yml/badge.svg?branch=master)](https://github.com/Legends-of-Azeroth/Legends-of-Azeroth-Pandaria-5.4.8/actions/workflows/macos-arm-build.yml)
 
 <a href="https://scan.coverity.com/projects/legends-of-azeroth-mop">
   <img alt="Coverity Scan Build Status"

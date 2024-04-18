@@ -2640,7 +2640,7 @@ GameObject* Player::GetGameObjectIfCanInteractWith(uint64 guid, GameobjectTypes 
 bool Player::IsUnderWater() const
 {
     return IsInWater() &&
-        GetPositionZ() < (GetBaseMap()->GetWaterLevel(GetPositionX(), GetPositionY()) - GetCollisionHeight(IsMounted()));
+        GetPositionZ() < (GetBaseMap()->GetWaterLevel(GetPositionX(), GetPositionY()) - GetCollisionHeight());
 }
 
 void Player::SetInWater(bool apply)
@@ -17002,8 +17002,7 @@ bool Player::SatisfyQuestStatus(Quest const* qInfo, bool msg)
 
 bool Player::SatisfyQuestConditions(Quest const* qInfo, bool msg)
 {
-    ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_ACCEPT, qInfo->GetQuestId());
-    if (!sConditionMgr->IsObjectMeetToConditions(this, conditions))
+    if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_QUEST_ACCEPT, qInfo->GetQuestId(), this))
     {
         if (msg)
         {
@@ -22509,8 +22508,7 @@ void Player::VehicleSpellInitialize()
             continue;
         }
 
-        ConditionList conditions = sConditionMgr->GetConditionsForVehicleSpell(vehicle->GetEntry(), spellId);
-        if (!sConditionMgr->IsObjectMeetToConditions(this, vehicle, conditions))
+        if (!sConditionMgr->IsObjectMeetingVehicleSpellConditions(vehicle->GetEntry(), spellId, this, vehicle))
         {
             TC_LOG_DEBUG("condition", "VehicleSpellInitialize: conditions not met for Vehicle entry %u spell %u", vehicle->ToCreature()->GetEntry(), spellId);
             data << uint16(0) << uint8(0) << uint8(i + 8);
@@ -26007,19 +26005,11 @@ void Player::UpdateForQuestWorldObjects()
             SpellClickInfoMapBounds clickPair = sObjectMgr->GetSpellClickInfoMapBounds(obj->GetEntry());
             for (SpellClickInfoContainer::const_iterator _itr = clickPair.first; _itr != clickPair.second; ++_itr)
             {
-                //! This code doesn't look right, but it was logically converted to condition system to do the exact
-                //! same thing it did before. It definitely needs to be overlooked for intended functionality.
-                ConditionList conds = sConditionMgr->GetConditionsForSpellClickEvent(obj->GetEntry(), _itr->second.spellId);
-                bool buildUpdateBlock = false;
-                for (ConditionList::const_iterator jtr = conds.begin(); jtr != conds.end() && !buildUpdateBlock; ++jtr)
-                    if ((*jtr)->ConditionType == CONDITION_QUESTREWARDED || (*jtr)->ConditionType == CONDITION_QUESTTAKEN)
-                        buildUpdateBlock = true;
-
-                if (buildUpdateBlock)
+                if (sConditionMgr->GetConditionsForSpellClickEvent(obj->GetEntry(), _itr->second.spellId))
                 {
-                    obj->BuildCreateUpdateBlockForPlayer(&udata, this);
+                    obj->BuildValuesUpdateBlockForPlayer(&udata, this);
                     break;
-                }
+                }                
             }
         }
     }
@@ -27971,14 +27961,10 @@ bool Player::CanSeeSpellClickOn(Creature const* c) const
     for (SpellClickInfoContainer::const_iterator itr = clickPair.first; itr != clickPair.second; ++itr)
     {
         if (!itr->second.IsFitToRequirements(this, c))
-            continue;
+            return false;
 
-        ConditionList conds = sConditionMgr->GetConditionsForSpellClickEvent(c->GetEntry(), itr->second.spellId);
-        ConditionSourceInfo info = ConditionSourceInfo(const_cast<Player*>(this), const_cast<Creature*>(c));
-        if (!sConditionMgr->IsObjectMeetToConditions(info, conds))
-            continue;
-
-        return true;
+        if (sConditionMgr->IsObjectMeetingSpellClickConditions(c->GetEntry(), itr->second.spellId, const_cast<Player*>(this), const_cast<Creature*>(c)))            
+            return true;
     }
 
     return false;
@@ -29255,39 +29241,6 @@ void Player::SendMovementSetCollisionHeight(float height)
     extra1.Data.floatData = 1;
     extra1.Data.floatData2 = height;
     Movement::PacketSender(this, NULL_OPCODE, NULL_OPCODE, SMSG_MOVE_UPDATE_COLLISION_HEIGHT, &extra1).Send();
-}
-
-float Player::GetCollisionHeight(bool mounted) const
-{
-    if (mounted)
-    {
-        CreatureDisplayInfoEntry const* mountDisplayInfo = sCreatureDisplayInfoStore.LookupEntry(GetUInt32Value(UNIT_FIELD_MOUNT_DISPLAY_ID));
-        if (!mountDisplayInfo)
-            return GetCollisionHeight(false);
-
-        CreatureModelDataEntry const* mountModelData = sCreatureModelDataStore.LookupEntry(mountDisplayInfo->ModelId);
-        if (!mountModelData)
-            return GetCollisionHeight(false);
-
-        CreatureDisplayInfoEntry const* displayInfo = sCreatureDisplayInfoStore.LookupEntry(GetNativeDisplayId());
-        ASSERT(displayInfo);
-        CreatureModelDataEntry const* modelData = sCreatureModelDataStore.LookupEntry(displayInfo->ModelId);
-        ASSERT(modelData);
-
-        float scaleMod = GetObjectScale(); // 99% sure about this
-
-        return displayInfo->scale * (mountDisplayInfo->scale * mountModelData->MountHeight + modelData->CollisionHeight * 0.5f);
-    }
-    else
-    {
-        //! Dismounting case - use basic default model data
-        CreatureDisplayInfoEntry const* displayInfo = sCreatureDisplayInfoStore.LookupEntry(GetNativeDisplayId());
-        ASSERT(displayInfo);
-        CreatureModelDataEntry const* modelData = sCreatureModelDataStore.LookupEntry(displayInfo->ModelId);
-        ASSERT(modelData);
-
-        return modelData->CollisionHeight;
-    }
 }
 
 void Player::SendApplyMovementForce(bool apply, Position const &source, float force /*= 0.0f*/)

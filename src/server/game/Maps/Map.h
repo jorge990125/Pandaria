@@ -54,6 +54,7 @@ class BattlegroundMap;
 class InstanceMap;
 class Transport;
 namespace Trinity { struct ObjectUpdater; }
+namespace VMAP { enum class ModelIgnoreFlags : uint32; }
 
 struct ScriptAction
 {
@@ -76,7 +77,7 @@ union u_map_magic
 struct map_fileheader
 {
     u_map_magic mapMagic;
-    u_map_magic versionMagic;
+    uint32 versionMagic;
     u_map_magic buildMagic;
     uint32 areaMapOffset;
     uint32 areaMapSize;
@@ -166,6 +167,7 @@ class GridMap
         uint16* m_uint16_V8;
         uint8* m_uint8_V8;
     };
+    G3D::Plane* _minHeightPlanes;
     int16* _maxHeight;
     int16* _minHeight;
     // Height level data
@@ -265,11 +267,11 @@ typedef std::map<uint32/*leaderDBGUID*/, CreatureGroup*> CreatureGroupHolderType
 
 typedef std::unordered_map<uint32 /*zoneId*/, ZoneDynamicInfo> ZoneDynamicInfoMap;
 
-class Map : public GridRefManager<NGridType>
+class TC_GAME_API Map : public GridRefManager<NGridType>
 {
     friend class MapReference;
     public:
-        Map(uint32 id, time_t, uint32 InstanceId, uint16 SpawnMode, Map* _parent = NULL);
+        Map(uint32 id, time_t, uint32 InstanceId, uint16 SpawnMode, Map* _parent = nullptr);
         virtual ~Map();
 
         MapEntry const* GetEntry() const { return i_mapEntry; }
@@ -343,13 +345,14 @@ class Map : public GridRefManager<NGridType>
 
         // some calls like isInWater should not use vmaps due to processor power
         // can return INVALID_HEIGHT if under z+2 z coord not found height
+        float GetGridHeight(float x, float y) const;
         float GetHeight(float x, float y, float z, bool checkVMap = true, float maxSearchDist = DEFAULT_HEIGHT_SEARCH) const;
         float GetMinHeight(float x, float y) const;
 
         ZLiquidStatus getLiquidStatus(float x, float y, float z, uint8 ReqLiquidType, LiquidData* data = 0, float collisionHeight = DEFAULT_UNIT_HEIGHT) const;
 
         uint32 GetAreaId(float x, float y, float z, bool* isOutdoors) const;
-        bool GetAreaInfo(float x, float y, float z, uint32& mogpflags, int32& adtId, int32& rootId, int32& groupId) const;
+        bool GetAreaInfo(uint32 phaseMask, float x, float y, float z, uint32& mogpflags, int32& adtId, int32& rootId, int32& groupId) const;
         uint32 GetAreaId(float x, float y, float z) const;
         uint32 GetZoneId(float x, float y, float z) const;
         void GetZoneAndAreaId(uint32& zoneid, uint32& areaid, float x, float y, float z) const;
@@ -473,7 +476,7 @@ class Map : public GridRefManager<NGridType>
 
         float GetWaterOrGroundLevel(uint32 phaseMask, float x, float y, float z, float* ground = NULL, bool swim = false, float collisionHeight = DEFAULT_UNIT_HEIGHT) const;
         float GetHeight(uint32 phasemask, float x, float y, float z, bool vmap = true, float maxSearchDist = DEFAULT_HEIGHT_SEARCH) const;
-        bool isInLineOfSight(float x1, float y1, float z1, float x2, float y2, float z2, uint32 phasemask) const;
+        bool isInLineOfSight(float x1, float y1, float z1, float x2, float y2, float z2, uint32 phasemask, VMAP::ModelIgnoreFlags ignoreFlags) const;
         void Balance() { _dynamicTree.balance(); }
         void RemoveGameObjectModel(const GameObjectModel& model) { _dynamicTree.remove(model); }
         void InsertGameObjectModel(const GameObjectModel& model) { _dynamicTree.insert(model); }

@@ -7,6 +7,12 @@
 #include "HookMgr.h"
 #include "LuaEngine.h"
 
+#include "GossipDef.h"
+#include "ObjectAccessor.h"
+#include "Player.h"
+#include "Spell.h"
+#include "SpellInfo.h"
+
 HookMgr* HookMgr::instance()
 {
     static HookMgr instance;

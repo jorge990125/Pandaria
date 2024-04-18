@@ -530,11 +530,11 @@ Position const KorothPath[][KorothPathLenght] =
     },
 };
 
-const std::string PlayerText[3] =
+const uint32 PlayerText[3] =
 {
-    "It's not safe here. Go to the Allens' basement.",
-    "Join the others inside the basement next door. Hurry!",
-    "Your mother's in the basement next door. Get to her now!",
+    36329,   //"It's not safe here.  Go to the Allens' basement.",
+    36331,   //"Join the others inside the basement next door. Hurry!",
+    36328    //"Your mother's in the basement next door. Get to her now!",
 };
 
 struct npc_gilneas_crow : public ScriptedAI
@@ -1609,8 +1609,12 @@ class npc_gilneas_children : public CreatureScript
                     if (Player* player = caster->ToPlayer())
                     {
                         activated = true;
-                        playerGUID = player->GetGUID();
-                        player->Say(PlayerText[_playerSayId], LANG_UNIVERSAL);
+                        BroadcastText const* bct = sObjectMgr->GetBroadcastText(PlayerText[_playerSayId]);
+                        LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
+                        std::string baseText = "";
+                        if (bct)
+                            baseText = bct->GetText(loc_idx, player->GetGender());
+                            player->Say(baseText, LANG_UNIVERSAL);
                         player->KilledMonsterCredit(me->GetEntry(), 0);
                         me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                         events.ScheduleEvent(EVENT_TALK_TO_PLAYER, 3s + 500ms);

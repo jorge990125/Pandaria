@@ -22,7 +22,9 @@
 #include "World.h"
 #include "CreatureAIImpl.h"
 
-int GuardAI::Permissible(Creature const* creature)
+GuardAI::GuardAI(Creature* creature) : ScriptedAI(creature) { }
+
+int32 GuardAI::Permissible(Creature const* creature)
 {
     if (creature->IsGuard())
         return PERMIT_BASE_SPECIAL;
@@ -30,7 +32,14 @@ int GuardAI::Permissible(Creature const* creature)
     return PERMIT_BASE_NO;
 }
 
-GuardAI::GuardAI(Creature* creature) : ScriptedAI(creature) { }
+void GuardAI::UpdateAI(uint32 /*diff*/)
+{
+    if (!UpdateVictim())
+        return;
+
+    DoMeleeAttackIfReady();
+}
+
 
 bool GuardAI::CanSeeAlways(WorldObject const* obj)
 {
@@ -68,6 +77,7 @@ void GuardAI::EnterEvadeMode()
 
 void GuardAI::JustDied(Unit* killer)
 {
-    if (Player* player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
-        me->SendZoneUnderAttackMessage(player);
+    if (killer)
+        if (Player* player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
+            me->SendZoneUnderAttackMessage(player);
 }

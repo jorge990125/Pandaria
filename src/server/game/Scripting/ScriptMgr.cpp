@@ -1288,7 +1288,7 @@ void ScriptMgr::OnAuctionExpire(AuctionHouseObject* ah, AuctionEntry* entry)
     FOREACH_SCRIPT(AuctionHouseScript)->OnAuctionExpire(ah, entry);
 }
 
-bool ScriptMgr::OnConditionCheck(Condition* condition, ConditionSourceInfo& sourceInfo)
+bool ScriptMgr::OnConditionCheck(const Condition* condition, ConditionSourceInfo& sourceInfo)
 {
     ASSERT(condition);
 #ifdef ELUNA

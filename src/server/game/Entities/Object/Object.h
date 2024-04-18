@@ -19,10 +19,11 @@
 #define SF_OBJECT_H
 
 #include "Common.h"
-#include "UpdateMask.h"
+#include "Map.h"
+#include "ModelIgnoreFlags.h"
 #include "ObjectDefines.h"
 #include "Position.h"
-#include "Map.h"
+#include "UpdateMask.h"
 #include <G3D/Quat.h>
 
 #include <set>
@@ -99,7 +100,7 @@ class ZoneScript;
 
 typedef std::unordered_map<Player*, UpdateData> UpdateDataMapType;
 
-class Object
+class TC_GAME_API Object
 {
     public:
         virtual ~Object();
@@ -205,18 +206,23 @@ class Object
         Creature* ToCreature() { if (GetTypeId() == TYPEID_UNIT) return reinterpret_cast<Creature*>(this); else return nullptr; }
         Creature const* ToCreature() const { if (GetTypeId() == TYPEID_UNIT) return reinterpret_cast<Creature const*>(this); else return nullptr; }
 
+        inline bool IsUnit() const { return isType(TYPEMASK_UNIT); }
         Unit* ToUnit() { if (isType(TYPEMASK_UNIT)) return reinterpret_cast<Unit*>(this); else return nullptr; }
         Unit const* ToUnit() const { if (isType(TYPEMASK_UNIT)) return reinterpret_cast<Unit const*>(this); else return nullptr; }
 
+        inline bool IsGameObject() const { return GetTypeId() == TYPEID_GAMEOBJECT; }
         GameObject* ToGameObject() { if (GetTypeId() == TYPEID_GAMEOBJECT) return reinterpret_cast<GameObject*>(this); else return nullptr; }
         GameObject const* ToGameObject() const { if (GetTypeId() == TYPEID_GAMEOBJECT) return reinterpret_cast<GameObject const*>(this); else return nullptr; }
 
+        inline bool IsCorpse() const { return GetTypeId() == TYPEID_CORPSE; }
         Corpse* ToCorpse() { if (GetTypeId() == TYPEID_CORPSE) return reinterpret_cast<Corpse*>(this); else return nullptr; }
         Corpse const* ToCorpse() const { if (GetTypeId() == TYPEID_CORPSE) return reinterpret_cast<Corpse const*>(this); else return nullptr; }
 
+        inline bool IsDynObject() const { return GetTypeId() == TYPEID_DYNAMICOBJECT; }
         DynamicObject* ToDynObject() { if (GetTypeId() == TYPEID_DYNAMICOBJECT) return reinterpret_cast<DynamicObject*>(this); else return nullptr; }
         DynamicObject const* ToDynObject() const { if (GetTypeId() == TYPEID_DYNAMICOBJECT) return reinterpret_cast<DynamicObject const*>(this); else return nullptr; }
 
+        inline bool IsAreaTrigger() const { return GetTypeId() == TYPEID_AREATRIGGER; }
         AreaTrigger* ToAreaTrigger() { if (GetTypeId() == TYPEID_AREATRIGGER) return reinterpret_cast<AreaTrigger*>(this); else return nullptr; }
         AreaTrigger const* ToAreaTrigger() const { if (GetTypeId() == TYPEID_AREATRIGGER) return reinterpret_cast<AreaTrigger const*>(this); else return nullptr; }
 
@@ -485,7 +491,7 @@ namespace CustomVisibility
     };
 };
 
-class WorldObject : public Object, public WorldLocation
+class TC_GAME_API WorldObject : public Object, public WorldLocation
 {
     protected:
         explicit WorldObject(bool isWorldObject); //note: here it means if it is in grid object list or world object list
@@ -518,6 +524,8 @@ class WorldObject : public Object, public WorldLocation
         void GetFirstCollisionPosition(Position &pos, float dist, float angle);
         void GetRandomNearPosition(Position &pos, float radius);
         void GetContactPoint(WorldObject const* obj, float &x, float &y, float &z, float distance2d = CONTACT_DISTANCE) const;
+
+        virtual float GetCombatReach() const { return 0.0f; } // overridden (only) in Unit
         void GetBlinkPosition(Position& pos, float dist, float angle);
         void MovePositionToFirstCollosionBySteps(Position& pos, float dist, float angle, float heightCheckInterval = 2.0f, bool allowInAir = false);
 
@@ -566,8 +574,10 @@ class WorldObject : public Object, public WorldLocation
         {
             return obj && IsInMap(obj) && InSamePhase(obj) && _IsWithinDist(obj, dist2compare, is3D);
         }
-        bool IsWithinLOS(float x, float y, float z) const;
-        bool IsWithinLOSInMap(WorldObject const* obj) const;
+        bool IsWithinLOS(float x, float y, float z, VMAP::ModelIgnoreFlags ignoreFlags = VMAP::ModelIgnoreFlags::Nothing) const;
+        bool IsWithinLOSInMap(WorldObject const* obj, VMAP::ModelIgnoreFlags ignoreFlags = VMAP::ModelIgnoreFlags::Nothing) const;
+        Position GetHitSpherePointFor(Position const& dest) const;
+        void GetHitSpherePointFor(Position const& dest, float& x, float& y, float& z) const;
         bool GetDistanceOrder(WorldObject const* obj1, WorldObject const* obj2, bool is3D = true) const;
         bool IsInRange(WorldObject const* obj, float minRange, float maxRange, bool is3D = true) const;
         bool IsInRange2d(float x, float y, float minRange, float maxRange) const;
@@ -710,6 +720,10 @@ class WorldObject : public Object, public WorldLocation
         virtual float GetStationaryY() const { return GetPositionY(); }
         virtual float GetStationaryZ() const { return GetPositionZ(); }
         virtual float GetStationaryO() const { return GetOrientation(); }
+
+        virtual float GetCollisionHeight() const { return 0.0f; }
+
+        float GetMapHeight(float x, float y, float z, bool vmap = true, float distanceToSearch = 50.0f) const; // DEFAULT_HEIGHT_SEARCH in map.h
 
         virtual uint16 GetAIAnimKitId() const { return 0; }
         virtual uint16 GetMovementAnimKitId() const { return 0; }

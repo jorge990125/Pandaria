@@ -955,7 +955,7 @@ class boss_commander_vojak : public CreatureScript
                 if (actionId == ACTION_ENGAGE_COMBAT)
                 {
                     moving = true;
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_UNK_6 | UNIT_FLAG_UNK_15);
+                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_UNK_6 | UNIT_FLAG_CAN_SWIM);
                     me->SetReactState(REACT_PASSIVE);
                     DoZoneInCombat(me);
 
@@ -1402,7 +1402,7 @@ class npc_mantid_tar_keg : public CreatureScript
                 DoCast(me, SPELL_KEG_INACTIVE, true);
             }
 
-            bool CanRespawn()
+            bool CanRespawn() override
             {
                 return instance->GetBossState(BOSS_VOJAK) == NOT_STARTED;
             }

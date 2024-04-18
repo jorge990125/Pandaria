@@ -302,6 +302,7 @@ class instance_shadopan_monastery : public InstanceMapScript
 
                             DoRespawnGameObject(instance->IsHeroic() ? taranZhuCacheH : taranZhuCache, 1 * DAY);
                         }
+                        case TO_BE_DECIDED:
                         break;
                     }
                     break;

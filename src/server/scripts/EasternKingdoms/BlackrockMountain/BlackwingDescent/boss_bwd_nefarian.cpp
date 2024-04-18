@@ -19,6 +19,7 @@
 #include "blackwing_descent.h"
 #include "MoveSplineInit.h"
 #include "VMapFactory.h"
+#include "VMapManager2.h"
 
 enum ScriptTexts
 {

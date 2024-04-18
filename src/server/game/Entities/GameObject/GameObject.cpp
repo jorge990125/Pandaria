@@ -263,7 +263,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMa
 
     SetDisplayId(goinfo->displayId);
 
-    m_model = GameObjectModel::Create(*this);
+    CreateModel();
     // GAMEOBJECT_FIELD_STATE_SPELL_VISUAL_ID, index at 0, 1, 2 and 3
     SetGoType(GameobjectTypes(goinfo->type));
     SetGoState(go_state);
@@ -1976,6 +1976,28 @@ void GameObject::UpdateModelPosition()
     }
 }
 
+class GameObjectModelOwnerImpl : public GameObjectModelOwnerBase
+{
+public:
+    explicit GameObjectModelOwnerImpl(GameObject* owner) : _owner(owner) { }
+
+    bool IsSpawned() const override { return _owner->isSpawned(); }
+    uint32 GetDisplayId() const override { return _owner->GetDisplayId(); }
+    uint32 GetPhaseMask() const override { return _owner->GetPhaseMask(); }
+    G3D::Vector3 GetPosition() const override { return G3D::Vector3(_owner->GetPositionX(), _owner->GetPositionY(), _owner->GetPositionZ()); }
+    float GetOrientation() const override { return _owner->GetOrientation(); }
+    float GetScale() const override { return _owner->GetObjectScale(); }
+    void DebugVisualizeCorner(G3D::Vector3 const& corner) const override { const_cast<GameObject*>(_owner)->SummonCreature(1, corner.x, corner.y, corner.z, 0, TEMPSUMMON_MANUAL_DESPAWN); }
+
+private:
+    GameObject* _owner;
+};
+
+void GameObject::CreateModel()
+{
+    m_model = GameObjectModel::Create(std::make_unique<GameObjectModelOwnerImpl>(this), sWorld->GetDataPath());
+}
+
 SpellInfo const* GameObject::GetSpellForLock(Player const* player) const
 {
     if (!player)
@@ -2463,7 +2485,7 @@ void GameObject::UpdateModel()
         if (GetMap()->ContainsGameObjectModel(*m_model))
             GetMap()->RemoveGameObjectModel(*m_model);
     delete m_model;
-    m_model = GameObjectModel::Create(*this);
+    CreateModel();
     if (m_model)
         GetMap()->InsertGameObjectModel(*m_model);
 }
@@ -2471,14 +2493,14 @@ void GameObject::UpdateModel()
 Player* GameObject::GetLootRecipient() const
 {
     if (!m_lootRecipient)
-        return NULL;
+        return nullptr;
     return ObjectAccessor::FindPlayer(m_lootRecipient);
 }
 
 Group* GameObject::GetLootRecipientGroup() const
 {
     if (!m_lootRecipientGroup)
-        return NULL;
+        return nullptr;
     return sGroupMgr->GetGroupByGUID(m_lootRecipientGroup);
 }
 

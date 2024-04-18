@@ -64,7 +64,7 @@ enum SCEquip
     EQUIP_UNEQUIP   = 0
 };
 
-class CreatureAI : public UnitAI
+class TC_GAME_API CreatureAI : public UnitAI
 {
     protected:
         Creature* const me;
@@ -141,14 +141,14 @@ class CreatureAI : public UnitAI
         // Called at waypoint reached or point movement finished
         virtual void MovementInform(uint32 /*type*/, uint32 /*id*/) { }
 
-        void OnCharmed(bool apply);
+        void OnCharmed(bool apply) override;
 
         // Called at reaching home after evade
         virtual void JustReachedHome() { }
 
-        void DoZoneInCombat(Creature* creature = NULL, float maxRangeToNearestTarget = 50.0f);
+        void DoZoneInCombat(Creature* creature = nullptr, float maxRangeToNearestTarget = 50.0f);
 
-        void DoAttackerAreaInCombat(Unit* attacker, float range, Unit* pUnit = NULL);
+        void DoAttackerAreaInCombat(Unit* attacker, float range, Unit* pUnit = nullptr);
         void DoAttackerGroupInCombat(Player* attacker);
 
         // Called at text emote receive from player
@@ -271,7 +271,7 @@ class VehicleAIBase
 
         void LoadConditions();
         void CheckConditions(uint32 const diff);
-        ConditionList conditions;
+        bool m_HasConditions;
         bool m_registered = false;
         uint32 m_ConditionsTimer = VEHICLE_CONDITION_CHECK_TIME;
 

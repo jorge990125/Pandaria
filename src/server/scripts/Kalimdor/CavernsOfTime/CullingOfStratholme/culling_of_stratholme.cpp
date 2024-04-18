@@ -1196,7 +1196,7 @@ class npc_arthas : public CreatureScript
                             case 87:
                                 if (Creature* pMalganis = Unit::GetCreature(*me, uiMalganisGUID))
                                 {
-                                    pMalganis->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_UNK_6 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_UNK_15);
+                                    pMalganis->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_UNK_6 | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_CAN_SWIM);
                                     pMalganis->SetReactState(REACT_AGGRESSIVE);
                                 }
                                 JumpToNextStep(1000);

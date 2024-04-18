@@ -495,14 +495,14 @@ Transport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/, Map*
                 entry = instance->GetGameObjectEntry(0, entry);
 
         if (!entry)
-            return NULL;
+            return nullptr;
     }
 
     TransportTemplate const* tInfo = GetTransportTemplate(entry);
     if (!tInfo)
     {
         TC_LOG_ERROR("sql.sql", "Transport %u will not be loaded, `transport_template` missing", entry);
-        return NULL;
+        return nullptr;
     }
 
     // create transport...
@@ -521,7 +521,7 @@ Transport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/, Map*
     if (!trans->Create(guidLow, entry, mapId, x, y, z, o, 255))
     {
         delete trans;
-        return NULL;
+        return nullptr;
     }
 
     if (MapEntry const* mapEntry = sMapStore.LookupEntry(mapId))
@@ -530,12 +530,12 @@ Transport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/, Map*
         {
             TC_LOG_ERROR("entities.transport", "Transport %u (name: %s) attempted creation in instance map (id: %u) but it is not an instanced transport!", entry, trans->GetName().c_str(), mapId);
             delete trans;
-            return NULL;
+            return nullptr;
         }
     }
 
     // use preset map for instances (need to know which instance)
-    trans->SetMap(map ? map : sMapMgr->CreateMap(mapId, NULL));
+    trans->SetMap(map ? map : sMapMgr->CreateMap(mapId, nullptr));
     if (map && map->IsDungeon())
         trans->m_zoneScript = map->ToInstanceMap()->GetInstanceScript();
 
@@ -606,7 +606,7 @@ void TransportMgr::CreateInstanceTransports(Map* map)
 TransportAnimationEntry const* TransportAnimation::GetAnimNode(uint32 time) const
 {
     if (Path.empty())
-        return NULL;
+        return nullptr;
 
     for (TransportPathContainer::const_reverse_iterator itr2 = Path.rbegin(); itr2 != Path.rend(); ++itr2)
         if (time >= itr2->first)

@@ -686,6 +686,7 @@ class boss_tsulong : public CreatureScript
 
                     while (uint32 eventId = events.ExecuteEvent())
                     {
+                        Position pos;
                         switch (eventId)
                         {
                             case EVENT_SWITCH_TO_NIGHT_PHASE:
@@ -698,7 +699,6 @@ class boss_tsulong : public CreatureScript
                                     pSunbeam->DisappearAndDie();
 
                                 Talk(EMOTE_SUNBEAM, me);
-                                Position pos;
                                 me->GetRandomNearPosition(pos, 30.0f);
                                 me->SummonCreature(SUNBEAM_DUMMY_ENTRY, pos);
 

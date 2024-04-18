@@ -352,7 +352,7 @@ struct SpellResearchData
     uint32 FragmentCount;
 };
 
-class Spell
+class TC_GAME_API Spell
 {
     friend void Unit::SetCurrentCastedSpell(Spell* pSpell);
     friend class SpellScript;
@@ -528,12 +528,12 @@ class Spell
 
         void SelectEffectTypeImplicitTargets(uint8 effIndex);
 
-        uint32 GetSearcherTypeMask(SpellTargetObjectTypes objType, ConditionList* condList);
+        uint32 GetSearcherTypeMask(SpellTargetObjectTypes objType, ConditionContainer* condList);
         template<class SEARCHER> void SearchTargets(SEARCHER& searcher, uint32 containerMask, Unit* referer, Position const* pos, float radius);
 
-        WorldObject* SearchNearbyTarget(float range, SpellImplicitTargetInfo const& targetType, ConditionList* condList = NULL);
-        void SearchAreaTargets(std::list<WorldObject*>& targets, float range, Position const* position, Unit* referer, SpellImplicitTargetInfo const& targetType, ConditionList* condList);
-        void SearchChainTargets(std::list<WorldObject*>& targets, uint32 chainTargets, WorldObject* target, SpellImplicitTargetInfo const& targetType, ConditionList* condList, bool isChainHeal);
+        WorldObject* SearchNearbyTarget(float range, SpellImplicitTargetInfo const& targetType, ConditionContainer* condList = NULL);
+        void SearchAreaTargets(std::list<WorldObject*>& targets, float range, Position const* position, Unit* referer, SpellImplicitTargetInfo const& targetType, ConditionContainer* condList);
+        void SearchChainTargets(std::list<WorldObject*>& targets, uint32 chainTargets, WorldObject* target, SpellImplicitTargetInfo const& targetType, ConditionContainer* condList, bool isChainHeal);
 
         GameObject* SearchSpellFocus();
 
@@ -957,10 +957,10 @@ namespace Trinity
         SpellTargetSelectionCategories _category;
         SpellTargetCheckTypes _targetSelectionType;
         ConditionSourceInfo* _condSrcInfo;
-        ConditionList* _condList;
+        ConditionContainer* _condList;
 
         WorldObjectSpellTargetCheck(Unit* caster, Unit* referer, SpellInfo const* spellInfo,
-            SpellTargetSelectionCategories category, SpellTargetCheckTypes selectionType, ConditionList* condList);
+            SpellTargetSelectionCategories category, SpellTargetCheckTypes selectionType, ConditionContainer* condList);
         ~WorldObjectSpellTargetCheck();
         bool operator()(WorldObject* target);
     };
@@ -970,7 +970,7 @@ namespace Trinity
         float _range;
         Unit const* _caster;
         WorldObjectSpellNearbyTargetCheck(float range, Unit* caster, SpellInfo const* spellInfo,
-            SpellTargetSelectionCategories category, SpellTargetCheckTypes selectionType, ConditionList* condList);
+            SpellTargetSelectionCategories category, SpellTargetCheckTypes selectionType, ConditionContainer* condList);
         bool operator()(WorldObject* target);
     };
 
@@ -979,7 +979,7 @@ namespace Trinity
         float _range;
         Position const* _position;
         WorldObjectSpellAreaTargetCheck(float range, Position const* position, Unit* caster,
-            Unit* referer, SpellInfo const* spellInfo, SpellTargetSelectionCategories category, SpellTargetCheckTypes selectionType, ConditionList* condList);
+            Unit* referer, SpellInfo const* spellInfo, SpellTargetSelectionCategories category, SpellTargetCheckTypes selectionType, ConditionContainer* condList);
         bool operator()(WorldObject* target);
     };
 
@@ -987,7 +987,7 @@ namespace Trinity
     {
         float _coneAngle, _coneOffset;
         WorldObjectSpellConeTargetCheck(float coneAngle, float coneOffset, float range, Unit* caster,
-            SpellInfo const* spellInfo, SpellTargetSelectionCategories category, SpellTargetCheckTypes selectionType, ConditionList* condList);
+            SpellInfo const* spellInfo, SpellTargetSelectionCategories category, SpellTargetCheckTypes selectionType, ConditionContainer* condList);
         bool operator()(WorldObject* target);
     };
 

@@ -57,11 +57,11 @@
 #include "OutdoorPvPMgr.h"
 #include "TemporarySummon.h"
 #include "WaypointMovementGenerator.h"
-#include "VMapFactory.h"
 #include "MMapFactory.h"
 #include "GameEventMgr.h"
-#include "PoolMgr.h"
+#include "GitRevision.h"
 #include "GridNotifiersImpl.h"
+#include "PoolMgr.h"
 #include "CellImpl.h"
 #include "InstanceSaveMgr.h"
 #include "Util.h"
@@ -94,6 +94,8 @@
 #include "ServiceMgr.h"
 #include "WordFilterMgr.h"
 #include "Realm.h"
+#include "VMapFactory.h"
+#include "VMapManager2.h"
 #include <boost/asio/ip/address.hpp>
 #ifdef ELUNA
 #include "LuaEngine.h"
@@ -312,14 +314,11 @@ void World::AddSession_(WorldSession* s)
         return;
     }
 
+    s->InitializeSession();
     s->SendDanceStudioCreateResult();
-    s->SendAuthResponse(AUTH_OK, false);
     s->SendFeatureSystemStatusGlueScreen();
-    s->SendAddonsInfo();
-    s->SendClientCacheVersion(sWorld->getIntConfig(CONFIG_CLIENTCACHE_VERSION));
     sBattlePayMgr->SendBattlePayDistributionList(s);
     s->SendDispalyPromotionOpcode();
-    s->SendTutorialsData();
     s->SendTimezoneInformation();
 
     UpdateMaxSessionCounters();
@@ -373,7 +372,7 @@ void World::AddQueuedPlayer(WorldSession* sess)
     m_QueuedPlayer.push_back(sess);
 
     // The 1st SMSG_AUTH_RESPONSE needs to contain other info too.
-    sess->SendAuthResponse(AUTH_WAIT_QUEUE, true, GetQueuePos(sess));
+    sess->SendAuthResponse(AUTH_OK, true, GetQueuePos(sess));
 }
 
 bool World::RemoveQueuedPlayer(WorldSession* sess)
@@ -410,14 +409,10 @@ bool World::RemoveQueuedPlayer(WorldSession* sess)
     if ((!m_playerLimit || sessions < m_playerLimit) && !m_QueuedPlayer.empty())
     {
         WorldSession* pop_sess = m_QueuedPlayer.front();
+        pop_sess->InitializeSession();
         pop_sess->SetInQueue(false);
         pop_sess->ResetTimeOutTime(false);
-        pop_sess->SendAuthWaitQue(0);
-        pop_sess->SendAddonsInfo();
-
-        pop_sess->SendClientCacheVersion(sWorld->getIntConfig(CONFIG_CLIENTCACHE_VERSION));
         pop_sess->SendAccountDataTimes(GLOBAL_CACHE_MASK);
-        pop_sess->SendTutorialsData();
         pop_sess->SendTimezoneInformation();
 
         m_QueuedPlayer.pop_front();
@@ -1239,11 +1234,10 @@ void World::LoadConfigSettings(bool reload)
     }
 
     m_bool_configs[CONFIG_ENABLE_MMAPS] = sConfigMgr->GetBoolDefault("mmap.enablePathFinding", false);
-    m_bool_configs[CONFIG_MMAP_ALLOW_REUSE_OF_PREVIOUS_PATH_SEGMENTS] = sConfigMgr->GetBoolDefault("mmap.AllowReuseOfPreviousPathSegments", true);
 
     TC_LOG_INFO("server.loading", "WORLD: MMap data directory is: %smmaps", m_dataPath.c_str());
 
-    m_bool_configs[CONFIG_VMAP_INDOOR_CHECK] = sConfigMgr->GetBoolDefault("vmap.enableIndoorCheck", 0);
+    m_bool_configs[CONFIG_VMAP_INDOOR_CHECK] = sConfigMgr->GetBoolDefault("vmap.enableIndoorCheck", true);
     bool enableIndoor = sConfigMgr->GetBoolDefault("vmap.enableIndoorCheck", true);
     bool enableLOS = sConfigMgr->GetBoolDefault("vmap.enableLOS", true);
     bool enableHeight = sConfigMgr->GetBoolDefault("vmap.enableHeight", true);
@@ -1671,8 +1665,6 @@ void World::LoadRates(bool loading)
     }
 }
 
-extern void LoadGameObjectModelList();
-
 /// Initialize the World
 void World::SetInitialWorldSettings()
 {
@@ -1684,6 +1676,11 @@ void World::SetInitialWorldSettings()
 
     ///- Initialize detour memory management
     dtAllocSetCustom(dtCustomAlloc, dtCustomFree);
+
+    ///- Initialize VMapManager function pointers (to untangle game/collision circular deps)
+    VMAP::VMapManager2* vmmgr2 = VMAP::VMapFactory::createOrGetVMapManager();
+    vmmgr2->GetLiquidFlagsPtr = &GetLiquidFlags;
+    vmmgr2->IsVMAPDisabledForPtr = &DisableMgr::IsVMAPDisabledFor;
 
     ///- Initialize config settings
     LoadConfigSettings();
@@ -1747,6 +1744,16 @@ void World::SetInitialWorldSettings()
     // Load IP Location Database
     sIPLocation->Load();
 
+    std::vector<uint32> mapIds;
+    for (uint32 mapId = 0; mapId < sMapStore.GetNumRows(); mapId++)
+        if (sMapStore.LookupEntry(mapId))
+            mapIds.push_back(mapId);
+
+    vmmgr2->InitializeThreadUnsafe(mapIds);
+
+    MMAP::MMapManager* mmmgr = MMAP::MMapFactory::createOrGetMMapManager();
+    mmmgr->InitializeThreadUnsafe(mapIds);    
+
     TC_LOG_INFO("server.loading", "Loading SpellInfo store...");
     sSpellMgr->LoadSpellInfoStore();
 
@@ -1760,7 +1767,7 @@ void World::SetInitialWorldSettings()
     sSpellMgr->LoadSpellInfoCustomAttributes();
 
     TC_LOG_INFO("server.loading", "Loading GameObject models...");
-    LoadGameObjectModelList();
+    LoadGameObjectModelList(m_dataPath);
 
     TC_LOG_INFO("server.loading", "Loading Script Names...");
     sObjectMgr->LoadScriptNames();
@@ -2225,7 +2232,7 @@ void World::SetInitialWorldSettings()
     m_startTime = m_gameTime;
 
     LoginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, uptime, revision) VALUES(%u, %u, 0, '%s')",
-                            realm.Id.Realm, uint32(m_startTime), _FULLVERSION);       // One-time query
+                            realm.Id.Realm, uint32(m_startTime), GitRevision::GetFullVersion());       // One-time query
 
     m_timers[WUPDATE_WEATHERS].SetInterval(1*IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE*IN_MILLISECONDS);
@@ -3253,9 +3260,9 @@ void World::SendServerMessage(ServerMessageType type, const char *text, Player* 
 void World::UpdateSessions(uint32 diff)
 {
     ///- Add new sessions
-    WorldSession* sess = NULL;
+    WorldSession* sess = nullptr;
     while (addSessQueue.next(sess))
-        AddSession_ (sess);
+        AddSession_(sess);
 
     ///- Then send an update signal to remaining ones
     for (SessionMap::iterator itr = m_sessions.begin(), next; itr != m_sessions.end(); itr = next)
@@ -3364,8 +3371,6 @@ void World::UpdateRealmCharCount(uint32 accountId)
     CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_COUNT);
     stmt->setUInt32(0, accountId);
     _queryProcessor.AddCallback(CharacterDatabase.AsyncQuery(stmt).WithPreparedCallback(std::bind(&World::_UpdateRealmCharCount, this, std::placeholders::_1)));
-    // PreparedQueryResultFuture result = CharacterDatabase.AsyncQuery(stmt);
-    // m_realmCharCallbacks.insert(result);
 }
 
 void World::_UpdateRealmCharCount(PreparedQueryResult resultCharCount)

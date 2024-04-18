@@ -2489,6 +2489,88 @@ class spell_q31112_ping_bunny: public SpellScriptLoader
         }
 };
 
+enum Quest_The_Hunter_And_The_Prince
+{
+    SPELL_ILLIDAN_KILL_CREDIT      = 61748
+};
+
+// 61752 - Illidan Kill Credit Master
+class spell_q13400_illidan_kill_master : public SpellScript
+{
+    PrepareSpellScript(spell_q13400_illidan_kill_master);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_ILLIDAN_KILL_CREDIT });
+    }
+
+    void HandleDummy(SpellEffIndex /*effIndex*/)
+    {
+        Unit* caster = GetCaster();
+        if (caster->IsVehicle())
+            if (Unit* passenger = caster->GetVehicleKit()->GetPassenger(0))
+                 passenger->CastSpell(passenger, SPELL_ILLIDAN_KILL_CREDIT, true);
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_q13400_illidan_kill_master::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+    }
+};
+
+enum RelicOfTheEarthenRing
+{
+    SPELL_TOTEM_OF_THE_EARTHEN_RING = 66747
+};
+
+// 66744 - Make Player Destroy Totems
+class spell_q14100_q14111_make_player_destroy_totems : public SpellScript
+{
+    PrepareSpellScript(spell_q14100_q14111_make_player_destroy_totems);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_TOTEM_OF_THE_EARTHEN_RING });
+    }
+
+    void HandleScriptEffect(SpellEffIndex /*effIndex*/)
+    {
+        if (Player* player = GetHitPlayer())
+            player->CastSpell(player, SPELL_TOTEM_OF_THE_EARTHEN_RING, TRIGGERED_FULL_MASK); // ignore reagent cost, consumed by quest
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_q14100_q14111_make_player_destroy_totems::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+    }
+};
+
+enum Recall_Eye_of_Acherus
+{
+    THE_EYE_OF_ACHERUS = 51852
+};
+
+// 52694 - Recall Eye of Acherus
+class spell_q12641_recall_eye_of_acherus : public SpellScript
+{
+    PrepareSpellScript(spell_q12641_recall_eye_of_acherus);
+
+    void HandleDummy(SpellEffIndex /*effIndex*/)
+    {
+        if (Player* player = GetCaster()->GetCharmerOrOwner()->ToPlayer())
+        {
+            player->StopCastingCharm();
+            player->StopCastingBindSight();
+            player->RemoveAura(THE_EYE_OF_ACHERUS);
+        }
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_q12641_recall_eye_of_acherus::HandleDummy, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+    }
+};
+
 void AddSC_quest_spell_scripts()
 {
     new spell_q55_sacred_cleansing();
@@ -2550,4 +2632,8 @@ void AddSC_quest_spell_scripts()
     new aura_script<spell_cooking_for_kunzen_bonfire>("spell_cooking_for_kunzen_bonfire");
     new spell_q30050_resuscitate();
     new spell_q31112_ping_bunny();
+    new spell_script<spell_q13400_illidan_kill_master>("spell_q13400_illidan_kill_master");
+    new spell_script<spell_q14100_q14111_make_player_destroy_totems>("spell_q14100_q14111_make_player_destroy_totems");
+    new spell_script<spell_q12641_recall_eye_of_acherus>("spell_q12641_recall_eye_of_acherus");
+
 }

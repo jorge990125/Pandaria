@@ -31,6 +31,17 @@ bool _SpellScript::_Validate(SpellInfo const* entry)
     return true;
 }
 
+bool _SpellScript::_ValidateSpellInfo(uint32 spellId)
+{
+    if (!sSpellMgr->GetSpellInfo(spellId))
+    {
+        TC_LOG_ERROR("scripts.spells", "_SpellScript::ValidateSpellInfo: Spell {} does not exist.", spellId);
+        return false;
+    }
+
+    return true;
+}
+
 void _SpellScript::_Register()
 {
     m_currentScriptState = SPELL_SCRIPT_STATE_REGISTRATION;
@@ -291,6 +302,12 @@ void SpellScript::DestinationTargetSelectHandler::Call(SpellScript* spellScript,
 {
     (spellScript->*DestinationTargetSelectHandlerScript)(target);
 }
+
+SpellScript::SpellScript(): m_spell(nullptr), m_hitPreventEffectMask(0), m_hitPreventDefaultEffectMask(0)
+{
+}
+
+SpellScript::~SpellScript() = default;
 
 bool SpellScript::_Validate(SpellInfo const* entry)
 {
@@ -1318,7 +1335,7 @@ Unit* AuraScript::GetTarget() const
             TC_LOG_ERROR("scripts", "Script: `%s` Spell: `%u` AuraScript::GetTarget called in a hook in which the call won't have effect!", m_scriptName->c_str(), m_scriptSpellId);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 AuraApplication const* AuraScript::GetTargetApplication() const

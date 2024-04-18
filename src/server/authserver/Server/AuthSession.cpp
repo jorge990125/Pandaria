@@ -20,10 +20,10 @@
 #include "AuthCodes.h"
 #include "Config.h"
 #include "CryptoGenerics.h"
+#include "CryptoHash.h"
 #include "CryptoRandom.h"
 #include "DatabaseEnv.h"
 #include "Errors.h"
-#include "CryptoHash.h"
 #include "IPLocation.h"
 #include "Log.h"
 #include "RealmList.h"
@@ -36,7 +36,6 @@
 #include <openssl/crypto.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
-#include "SHA1.h"
 
 #define ChunkSize 2048
 
@@ -358,12 +357,13 @@ void AuthSession::SetVSFields(const std::string& rI, const std::string& login)
 
     std::reverse(mDigest, mDigest + SHA_DIGEST_LENGTH);
 
-    SHA1Hash sha;
+    Trinity::Crypto::SHA1 sha;
     sha.UpdateData(s.AsByteArray(), s.GetNumBytes());
     sha.UpdateData(mDigest, SHA_DIGEST_LENGTH);
     sha.Finalize();
+
     BigNumber x;
-    x.SetBinary(sha.GetDigest(), sha.GetLength());
+    x.SetBinary(sha.GetDigest(), SHA_DIGEST_LENGTH);
     v = g.ModExp(x, N);
 
     _accountInfo.v = std::string(v.AsHexStr());

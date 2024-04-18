@@ -25,8 +25,11 @@
 class ByteBuffer;
 class WorldObject;
 
-struct Position
+struct TC_GAME_API Position
 {
+    Position(float x = 0, float y = 0, float z = 0, float o = 0)
+        : m_positionX(x), m_positionY(y), m_positionZ(z), m_orientation(NormalizeOrientation(o)) { }
+
     struct PositionXYZStreamer
     {
         explicit PositionXYZStreamer(Position& pos) : m_pos(&pos) { }
@@ -96,24 +99,39 @@ struct Position
 
     bool IsPositionValid() const;
 
-    float GetExactDist2dSq(float x, float y) const
-        { float dx = m_positionX - x; float dy = m_positionY - y; return dx*dx + dy*dy; }
-    float GetExactDist2d(const float x, const float y) const
-        { return sqrt(GetExactDist2dSq(x, y)); }
-    float GetExactDist2dSq(Position const* pos) const
-        { float dx = m_positionX - pos->m_positionX; float dy = m_positionY - pos->m_positionY; return dx*dx + dy*dy; }
-    float GetExactDist2d(Position const* pos) const
-        { return sqrt(GetExactDist2dSq(pos)); }
-    float GetExactDistSq(float x, float y, float z) const
-        { float dz = m_positionZ - z; return GetExactDist2dSq(x, y) + dz*dz; }
-    float GetExactDist(float x, float y, float z) const
-        { return sqrt(GetExactDistSq(x, y, z)); }
-    float GetExactDistSq(Position const* pos) const
-        { float dx = m_positionX - pos->m_positionX; float dy = m_positionY - pos->m_positionY; float dz = m_positionZ - pos->m_positionZ; return dx*dx + dy*dy + dz*dz; }
-    float GetExactDist(Position const* pos) const
-        { return sqrt(GetExactDistSq(pos)); }
+    float GetExactDist2dSq(float x, float y) const { float dx = m_positionX - x; float dy = m_positionY - y; return dx*dx + dy*dy; }
+    float GetExactDist2d(const float x, const float y) const { return std::sqrt(GetExactDist2dSq(x, y)); }
+    float GetExactDist2dSq(Position const* pos) const 
+    { 
+        float dx = m_positionX - pos->m_positionX; 
+        float dy = m_positionY - pos->m_positionY; 
+        return dx*dx + dy*dy; 
+    }
+    float GetExactDist2d(Position const* pos) const { return std::sqrt(GetExactDist2dSq(pos)); }
+
+    float GetExactDistSq(float x, float y, float z) const 
+    { 
+        float dz = m_positionZ - z; 
+        return GetExactDist2dSq(x, y) + dz*dz; 
+    }
+    float GetExactDistSq(Position const& pos) const { return GetExactDistSq(pos.m_positionX, pos.m_positionY, pos.m_positionZ); }
+    float GetExactDistSq(Position const* pos) const { return GetExactDistSq(*pos); }
+
+    float GetExactDist(float x, float y, float z) const { return std::sqrt(GetExactDistSq(x, y, z)); }
+    float GetExactDist(Position const& pos) const { return GetExactDist(pos.m_positionX, pos.m_positionY, pos.m_positionZ); }
+    float GetExactDist(Position const* pos) const { return GetExactDist(*pos); }
 
     void GetPositionOffsetTo(Position const & endPos, Position & retOffset) const;
+
+    float GetAbsoluteAngle(float x, float y) const
+    {
+        float dx = x - m_positionX;
+        float dy = y - m_positionY;
+        return NormalizeOrientation(std::atan2(dy, dx));
+    }
+    float GetAbsoluteAngle(Position const& pos) const { return GetAbsoluteAngle(pos.m_positionX, pos.m_positionY); }
+    float GetAbsoluteAngle(Position const* pos) const { return GetAbsoluteAngle(*pos); }
+    float ToAbsoluteAngle(float relAngle) const { return NormalizeOrientation(relAngle + m_orientation); }
 
     float GetAngle(Position const* pos) const;
     float GetAngle(float x, float y) const;

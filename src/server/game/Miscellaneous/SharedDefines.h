@@ -25,6 +25,9 @@
 #define MAX_CREATURE_BASE_HP 5
 #define MAX_CREATURE_BASE_DAMAGE 5
 
+float const GROUND_HEIGHT_TOLERANCE = 0.05f; // Extra tolerance to z position to check if it is in air or on ground.
+constexpr float Z_OFFSET_FIND_HEIGHT = 1.5f;
+
 enum SpellEffIndex
 {
     EFFECT_0 = 0,
@@ -4440,35 +4443,6 @@ enum PartyResult
     ERR_PARTY_LFG_BOOT_DUNGEON_COMPLETE = 28,
     ERR_PARTY_LFG_BOOT_LOOT_ROLLS       = 29,
     ERR_PARTY_LFG_TELEPORT_IN_COMBAT    = 30
-};
-
-const uint32 MMAP_MAGIC = 0x4d4d4150; // 'MMAP'
-#define MMAP_VERSION 7
-
-struct MmapTileHeader
-{
-    uint32 mmapMagic;
-    uint32 dtVersion;
-    uint32 mmapVersion;
-    uint32 size;
-    bool usesLiquids : 1;
-
-    MmapTileHeader() : mmapMagic(MMAP_MAGIC), dtVersion(DT_NAVMESH_VERSION),
-        mmapVersion(MMAP_VERSION), size(0), usesLiquids(true) { }
-};
-
-enum NavTerrain
-{
-    NAV_EMPTY   = 0x00,
-    NAV_GROUND  = 0x01,
-    NAV_MAGMA   = 0x02,
-    NAV_SLIME   = 0x04,
-    NAV_WATER   = 0x08,
-    NAV_UNUSED1 = 0x10,
-    NAV_UNUSED2 = 0x20,
-    NAV_UNUSED3 = 0x40,
-    NAV_UNUSED4 = 0x80
-    // we only have 8 bits
 };
 
 enum DiminishingLevels

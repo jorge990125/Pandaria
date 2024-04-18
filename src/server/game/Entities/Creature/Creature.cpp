@@ -233,7 +233,7 @@ void Creature::SearchFormation()
 
     CreatureGroupInfoType::iterator frmdata = sFormationMgr->CreatureGroupMap.find(lowguid);
     if (frmdata != sFormationMgr->CreatureGroupMap.end())
-        sFormationMgr->AddCreatureToGroup(frmdata->second->leaderGUID, this);
+        sFormationMgr->AddCreatureToGroup(frmdata->second.leaderGUID, this);
 }
 
 void Creature::PlayMusic(uint32 MusicID)
@@ -2764,6 +2764,15 @@ void Creature::UpdateMovementFlags(bool force)
         SetFall(false);
 
     SetSwim(CanSwim() && IsInWater());
+}
+
+bool Creature::CanEnterWater() const
+{
+    if (CanSwim())
+        return true;
+
+    //return GetMovementTemplate().IsSwimAllowed();
+    return false; // todo
 }
 
 void Creature::SetFlying(bool enable)

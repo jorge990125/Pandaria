@@ -530,17 +530,9 @@ Aura* Aura::Create(SpellInfo const* spellproto, uint32 effMask, WorldObject* own
         if (!owner->IsInWorld() || ((Unit*)owner)->IsDuringRemoveFromWorld())
             // owner not in world so don't allow to own not self casted single target auras
             if (casterGUID != owner->GetGUID() && spellproto->IsSingleTarget())
-                return NULL;
+                return nullptr;
 
-    if (caster && caster->FindMap() != owner->FindMap())
-    {
-        TC_LOG_ERROR("shitlog", "Aura::Create caster->FindMap() != owner->FindMap() main thread: %u, aura: %u, caster: " UI64FMTD " (entry: %u), owner: " UI64FMTD " (entry: %u)\n",
-            CurrentMap ? 0 : 1, spellproto->Id, caster->GetGUID(), caster->GetEntry(), owner->GetGUID(), owner->GetEntry());
-        if (CurrentMap) // Not main thread, it's 146% unsafe
-            return nullptr;
-    }
-
-    Aura* aura = NULL;
+    Aura* aura = nullptr;
     switch (owner->GetTypeId())
     {
         case TYPEID_UNIT:
@@ -552,11 +544,11 @@ Aura* Aura::Create(SpellInfo const* spellproto, uint32 effMask, WorldObject* own
             break;
         default:
             ASSERT(false);
-            return NULL;
+            return nullptr;
     }
     // aura can be removed in Unit::_AddAura call
     if (aura->IsRemoved())
-        return NULL;
+        return nullptr;
     return aura;
 }
 
@@ -2140,9 +2132,7 @@ bool Aura::IsProcTriggeredOnEvent(AuraApplication* aurApp, ProcEventInfo& eventI
         return false;
 
     // do checks using conditions table
-    ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_SPELL_PROC, GetId());
-    ConditionSourceInfo condInfo = ConditionSourceInfo(eventInfo.GetActor(), eventInfo.GetActionTarget());
-    if (!sConditionMgr->IsObjectMeetToConditions(condInfo, conditions))
+    if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_SPELL_PROC, GetId(), eventInfo.GetActor(), eventInfo.GetActionTarget()))    
         return false;
 
     // AuraScript Hook
@@ -2754,7 +2744,7 @@ void UnitAura::FillTargetMap(std::map<Unit*, uint32> & targets, Unit* caster)
         if (!HasEffect(effIndex))
             continue;
 
-        ConditionList* conditions = nullptr;
+        ConditionContainer* conditions = nullptr;
         bool area = false;
 
         UnitList targetList;
@@ -2878,7 +2868,7 @@ void DynObjAura::FillTargetMap(std::map<Unit*, uint32> & targets, Unit* /*caster
         if (!HasEffect(effIndex))
             continue;
 
-        ConditionList* conditions = m_spellInfo->Effects[effIndex].ImplicitTargetConditions;
+        ConditionContainer* conditions = m_spellInfo->Effects[effIndex].ImplicitTargetConditions;
         if (conditions && conditions->empty())
             conditions = nullptr;
 

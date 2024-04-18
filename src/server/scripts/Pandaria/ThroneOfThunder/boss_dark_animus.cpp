@@ -1661,7 +1661,7 @@ class cond_anima_transfusion : public ConditionScript
     public:
         cond_anima_transfusion() : ConditionScript("cond_anima_transfusion") { }
     
-        bool OnConditionCheck(Condition* cond, ConditionSourceInfo& source) override
+        bool OnConditionCheck(const Condition* cond, ConditionSourceInfo& source) override
         {
             if (source.mConditionTargets[0] && source.mConditionTargets[1])
                 if (Creature* caster = source.mConditionTargets[1]->ToCreature())

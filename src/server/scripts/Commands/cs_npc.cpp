@@ -1,5 +1,5 @@
 /*
-* This file is part of the Pandaria 5.4.8 Project. See THANKS file for Copyright information
+* This file is part of the Legends of Azeroth Pandaria Project. See THANKS file for Copyright information
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -128,8 +128,8 @@ EnumName<UnitFlags> const unitFlags[MAX_UNIT_FLAGS] =
     CREATE_NAMED_ENUM(UNIT_FLAG_PET_IN_COMBAT),
     CREATE_NAMED_ENUM(UNIT_FLAG_PVP),
     CREATE_NAMED_ENUM(UNIT_FLAG_SILENCED),
-    CREATE_NAMED_ENUM(UNIT_FLAG_UNK_14),
-    CREATE_NAMED_ENUM(UNIT_FLAG_UNK_15),
+    CREATE_NAMED_ENUM(UNIT_FLAG_CANNOT_SWIM),
+    CREATE_NAMED_ENUM(UNIT_FLAG_CAN_SWIM),
     CREATE_NAMED_ENUM(UNIT_FLAG_UNK_16),
     CREATE_NAMED_ENUM(UNIT_FLAG_PACIFIED),
     CREATE_NAMED_ENUM(UNIT_FLAG_STUNNED),
@@ -1491,13 +1491,12 @@ public:
             return false;
 
         Player* chr = handler->GetSession()->GetPlayer();
-        FormationInfo* group_member;
+        FormationInfo group_member;
 
-        group_member                 = new FormationInfo;
-        group_member->follow_angle   = (creature->GetAngle(chr) - chr->GetOrientation()) * 180 / M_PI;
-        group_member->follow_dist    = sqrtf(pow(chr->GetPositionX() - creature->GetPositionX(), int(2))+pow(chr->GetPositionY() - creature->GetPositionY(), int(2)));
-        group_member->leaderGUID     = leaderGUID;
-        group_member->groupAI        = 0;
+        group_member.follow_angle   = (creature->GetAngle(chr) - chr->GetOrientation()) * 180 / M_PI;
+        group_member.follow_dist    = sqrtf(pow(chr->GetPositionX() - creature->GetPositionX(), int(2))+pow(chr->GetPositionY() - creature->GetPositionY(), int(2)));
+        group_member.leaderGUID     = leaderGUID;
+        group_member.groupAI        = 0;
 
         sFormationMgr->CreatureGroupMap[lowguid] = group_member;
         creature->SearchFormation();
@@ -1506,9 +1505,9 @@ public:
 
         stmt->setUInt32(0, leaderGUID);
         stmt->setUInt32(1, lowguid);
-        stmt->setFloat(2, group_member->follow_dist);
-        stmt->setFloat(3, group_member->follow_angle);
-        stmt->setUInt32(4, uint32(group_member->groupAI));
+        stmt->setFloat(2, group_member.follow_dist);
+        stmt->setFloat(3, group_member.follow_angle);
+        stmt->setUInt32(4, uint32(group_member.groupAI));
 
         WorldDatabase.Execute(stmt);
 

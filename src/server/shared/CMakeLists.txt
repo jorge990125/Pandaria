@@ -1,4 +1,4 @@
-# This file is part of the Pandaria 5.4.8 Project. See THANKS file for Copyright information
+# This file is part of the Legends of Azeroth Pandaria Project. See THANKS file for Copyright information
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -51,53 +51,35 @@ set(shared_STAT_SRCS
   ${sources_localdir}
 )
 
-include_directories(
-  PUBLIC
-    ${CMAKE_BINARY_DIR}
-    ${OPENSSL_INCLUDE_DIR} 
-    ${Boost_INCLUDE_DIRS}  
-  PRIVATE
-    ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour
-    ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour/Include
-    ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Recast
-    ${CMAKE_SOURCE_DIR}/dep/SFMT
-    ${CMAKE_SOURCE_DIR}/dep/fmt/include
-    ${CMAKE_SOURCE_DIR}/dep/utf8cpp
-    ${CMAKE_SOURCE_DIR}/src/server
-    ${CMAKE_SOURCE_DIR}/src/common
-    ${CMAKE_SOURCE_DIR}/src/common/Asio
-    ${CMAKE_SOURCE_DIR}/src/common/Debugging
-    ${CMAKE_SOURCE_DIR}/src/common/Logging
-    ${CMAKE_SOURCE_DIR}/src/common/Threading
-    ${CMAKE_SOURCE_DIR}/src/common/Utilities
-    ${CMAKE_SOURCE_DIR}/src/server/database
-    ${CMAKE_SOURCE_DIR}/src/server/database/Database
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/DataStores
-    ${CMAKE_CURRENT_SOURCE_DIR}/Dynamic
-    ${CMAKE_CURRENT_SOURCE_DIR}/Networking
-    ${CMAKE_CURRENT_SOURCE_DIR}/Packets
-    ${CMAKE_CURRENT_SOURCE_DIR}/Threading
-    ${CMAKE_CURRENT_SOURCE_DIR}/Utilities  
-)
-
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  include_directories(
-    PRIVATE
-      ${CMAKE_SOURCE_DIR}/dep/acelite
-  )
-endif()
-
 add_library(shared STATIC
   ${shared_STAT_SRCS}
 )
 
+target_include_directories(shared
+  PUBLIC
+    ${CMAKE_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/DataStores
+    ${CMAKE_CURRENT_SOURCE_DIR}/Dynamic
+    ${CMAKE_CURRENT_SOURCE_DIR}/Dynamic/LinkedReference
+    ${CMAKE_CURRENT_SOURCE_DIR}/Networking
+    ${CMAKE_CURRENT_SOURCE_DIR}/Packets
+    ${CMAKE_CURRENT_SOURCE_DIR}/Realms
+    ${CMAKE_CURRENT_SOURCE_DIR}/Threading
+    ${CMAKE_CURRENT_SOURCE_DIR}/Utilities      
+    boost
+  PRIVATE
+    common
+    database
+    ${CMAKE_SOURCE_DIR}/src/server/database
+    ${CMAKE_SOURCE_DIR}/src/server/database/Database
+)
+
 target_link_libraries(shared
   PRIVATE
-    sfmt
-    fmt
     common
-    ${OPENSSL_LIBRARIES}
+  PUBLIC
+    database
 )
 
 

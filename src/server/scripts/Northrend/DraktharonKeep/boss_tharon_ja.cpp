@@ -276,7 +276,7 @@ class cond_draktharon_keep_drakkari_infighting : public ConditionScript
     public:
         cond_draktharon_keep_drakkari_infighting() : ConditionScript("cond_draktharon_keep_drakkari_infighting") { }
 
-        bool OnConditionCheck(Condition* cond, ConditionSourceInfo& source) override
+        bool OnConditionCheck(const Condition* cond, ConditionSourceInfo& source) override
         {
             if (source.mConditionTargets[1])
                 if (Unit* unit = source.mConditionTargets[1]->ToUnit())

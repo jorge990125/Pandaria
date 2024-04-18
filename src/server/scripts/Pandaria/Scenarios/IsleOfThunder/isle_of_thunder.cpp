@@ -6665,7 +6665,7 @@ class cond_mark_of_taoshi : public ConditionScript
     public:
         cond_mark_of_taoshi() : ConditionScript("cond_mark_of_taoshi") { }
     
-        bool OnConditionCheck(Condition* cond, ConditionSourceInfo& source) override
+        bool OnConditionCheck(const Condition* cond, ConditionSourceInfo& source) override
         {
             return source.mConditionTargets[0] && source.mConditionTargets[0]->ToCreature() && source.mConditionTargets[0]->ToCreature()->HasAura(SPELL_MARK_OF_TAOSHI);
         }

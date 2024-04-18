@@ -1464,7 +1464,7 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
     }
 
     TC_LOG_DEBUG("achievement", "UpdateAchievementCriteria: %s, %s (%u), " UI64FMTD ", " UI64FMTD ", " UI64FMTD,
-        GetLogNameForGuid(GetGUID()), AchievementGlobalMgr::GetCriteriaTypeString(type), type, miscValue1, miscValue2, miscValue3);
+        GetLogNameForGuid(referencePlayer->GetGUID()), AchievementGlobalMgr::GetCriteriaTypeString(type), type, miscValue1, miscValue2, miscValue3);
 
     // Lua_GetGuildLevelEnabled() is checked in achievement UI to display guild tab
     if (m_type == AchievementType::Guild && !sWorld->getBoolConfig(CONFIG_GUILD_LEVELING_ENABLED))

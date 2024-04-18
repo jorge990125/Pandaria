@@ -95,7 +95,7 @@ public:
             { "creature_loot_template",         SEC_ADMINISTRATOR,  true,   &HandleReloadLootTemplatesCreatureCommand,      },
             { "creature_onkill_reputation",     SEC_ADMINISTRATOR,  true,   &HandleReloadOnKillReputationCommand,           },
             { "creature_queststarter",          SEC_ADMINISTRATOR,  true,   &HandleReloadCreatureQuestStarterCommand,       },
-            { "creature_scaling",              SEC_ADMINISTRATOR,  true,   &HandleReloadCreatureScallingCommand,           },
+            { "creature_scaling",               SEC_ADMINISTRATOR,  true,   &HandleReloadCreatureScallingCommand,           },
             { "creature_summon_groups",         SEC_ADMINISTRATOR,  true,   &HandleReloadCreatureSummonGroupsCommand,       },
             { "creature_template",              SEC_ADMINISTRATOR,  true,   &HandleReloadCreatureTemplateCommand,           },
             { "disables",                       SEC_ADMINISTRATOR,  true,   &HandleReloadDisablesCommand,                   },
@@ -115,9 +115,9 @@ public:
             { "item_loot_template",             SEC_ADMINISTRATOR,  true,   &HandleReloadLootTemplatesItemCommand,          },
             { "item_template_locale",           SEC_ADMINISTRATOR,  true,   &HandleReloadLocalesItemCommand,                },
             { "lfg_dungeon_rewards",            SEC_ADMINISTRATOR,  true,   &HandleReloadLfgRewardsCommand,                 },
-            { "locales_achievement_reward",     SEC_ADMINISTRATOR,  true,   &HandleReloadLocalesAchievementRewardCommand,   },
-            { "gossip_menu_option_locale",      SEC_ADMINISTRATOR,  true,   &HandleReloadLocalesCreatureCommand,            },
-            { "locales_gossip_menu_option",     SEC_ADMINISTRATOR,  true,   &HandleReloadLocalesGossipMenuOptionCommand,    },
+            { "achievement_reward_locale",      SEC_ADMINISTRATOR,  true,   &HandleReloadLocalesAchievementRewardCommand,   },
+            { "creature_template_locale",       SEC_ADMINISTRATOR,  true,   &HandleReloadLocalesCreatureCommand,            },
+            { "gossip_menu_option_locale",      SEC_ADMINISTRATOR,  true,   &HandleReloadLocalesGossipMenuOptionCommand,    },
             { "quest_template_locale",          SEC_ADMINISTRATOR,  true,   &HandleReloadLocalesQuestCommand,               },
             { "mail_level_reward",              SEC_ADMINISTRATOR,  true,   &HandleReloadMailLevelRewardCommand,            },
             { "mail_loot_template",             SEC_ADMINISTRATOR,  true,   &HandleReloadLootTemplatesMailCommand,          },
@@ -168,7 +168,7 @@ public:
             { "creature_loot_currency",         SEC_ADMINISTRATOR,  true,   &HandleReloadCreatureLootCurrency,              },
             { "gocollision",                    SEC_ADMINISTRATOR,  true,   &HandleReloadGOCollisionCommand,                },
             { "battlepay",                      SEC_ADMINISTRATOR,  true,   &HandleReloadBattlePayCommand,                  },
-            { "bad_word",                     SEC_ADMINISTRATOR, true,  &HandleReloadBadWordCommand,                   },
+            { "bad_word",                       SEC_ADMINISTRATOR,  true,   &HandleReloadBadWordCommand,                    },
         };
         static std::vector<ChatCommand> commandTable =
         {

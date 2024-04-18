@@ -1886,12 +1886,12 @@ void Item::AddToUpdate()
         return;
     }
 
-    if (owner->FindMap() != CurrentMap && CurrentMap)
-    {
-        TC_LOG_ERROR("shitlog", "Item::AddToUpdate - invalid map, m_currMap ID %u, CurrentMap ID: %u. Object type: %u, entry: %u, GUID: %u, owner: %u (InWorld: %u).\nStack trace:\n%s",
-            owner->FindMap()->GetId(), CurrentMap->GetId(), uint32(GetTypeId()), GetEntry(), GetGUIDLow(), GUID_LOPART(GetOwnerGUID()), owner->IsInWorld());
-        return;
-    }
+    // if (owner->FindMap() != CurrentMap && CurrentMap)
+    // {
+    //     TC_LOG_ERROR("shitlog", "Item::AddToUpdate - invalid map, m_currMap ID %u, CurrentMap ID: %u. Object type: %u, entry: %u, GUID: %u, owner: %u (InWorld: %u).\nStack trace:\n%s",
+    //         owner->FindMap()->GetId(), CurrentMap->GetId(), uint32(GetTypeId()), GetEntry(), GetGUIDLow(), GUID_LOPART(GetOwnerGUID()), owner->IsInWorld());
+    //     return;
+    // }
 
     owner->FindMap()->AddUpdateObject(this);
     m_objectUpdated = true;
@@ -1914,12 +1914,12 @@ void Item::RemoveFromUpdate()
         return;
     }
 
-    if (owner->FindMap() != CurrentMap && CurrentMap)
-    {
-        TC_LOG_ERROR("shitlog", "Item::RemoveFromUpdate - invalid map, m_currMap ID %u, CurrentMap ID: %u. Object type: %u, entry: %u, GUID: %u, owner: %u (InWorld: %u).\nStack trace:\n",
-            owner->FindMap()->GetId(), CurrentMap->GetId(), uint32(GetTypeId()), GetEntry(), GetGUIDLow(), GUID_LOPART(GetOwnerGUID()), owner->IsInWorld());
-        return;
-    }
+    // if (owner->FindMap() != CurrentMap && CurrentMap)
+    // {
+    //     TC_LOG_ERROR("shitlog", "Item::RemoveFromUpdate - invalid map, m_currMap ID %u, CurrentMap ID: %u. Object type: %u, entry: %u, GUID: %u, owner: %u (InWorld: %u).\nStack trace:\n",
+    //         owner->FindMap()->GetId(), CurrentMap->GetId(), uint32(GetTypeId()), GetEntry(), GetGUIDLow(), GUID_LOPART(GetOwnerGUID()), owner->IsInWorld());
+    //     return;
+    // }
 
     owner->FindMap()->RemoveUpdateObject(this);
     m_objectUpdated = false;

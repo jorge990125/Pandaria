@@ -78,12 +78,12 @@ bool TargetedMovementGeneratorMedium<T, D>::_setTargetLocation(T* owner, bool up
 
     float x, y, z;
 
-    Transport* currentTransport = owner->GetTransport();
-    uint64 currentTransportGUID = currentTransport ? currentTransport->GetGUID() : 0;
-    uint64 pathTransportGUID = i_path ? i_path->GetTransportGUID() : 0;
-    Transport* pathTransport = pathTransportGUID ? (pathTransportGUID == currentTransportGUID ? currentTransport : owner->GetMap()->GetTransport(pathTransportGUID)) : nullptr;
+    // Transport* currentTransport = owner->GetTransport();
+    // uint64 currentTransportGUID = currentTransport ? currentTransport->GetGUID() : 0;
+    // uint64 pathTransportGUID = i_path ? i_path->GetTransportGUID() : 0;
+    // Transport* pathTransport = pathTransportGUID ? (pathTransportGUID == currentTransportGUID ? currentTransport : owner->GetMap()->GetTransport(pathTransportGUID)) : nullptr;
 
-    if (updateDestination || !i_path || pathTransportGUID && !pathTransport)
+    if (updateDestination || !i_path ) // || pathTransportGUID && !pathTransport todo
     {
         if (!i_offset)
         {
@@ -152,8 +152,8 @@ bool TargetedMovementGeneratorMedium<T, D>::_setTargetLocation(T* owner, bool up
     {
         // the destination has not changed, we just need to refresh the path (usually speed change)
         G3D::Vector3 end { i_path->GetEndPosition() };
-        if (pathTransport)
-            pathTransport->CalculatePassengerPosition(end.x, end.y, end.z);
+        // if (pathTransport)
+        //     pathTransport->CalculatePassengerPosition(end.x, end.y, end.z);
 
         x = end.x;
         y = end.y;
@@ -162,8 +162,8 @@ bool TargetedMovementGeneratorMedium<T, D>::_setTargetLocation(T* owner, bool up
 
     if (!i_path)
         i_path = new PathGenerator(owner);
-    else if (pathTransportGUID != currentTransportGUID)
-        i_path->UpdateNavMesh();
+    // else if (pathTransportGUID != currentTransportGUID)
+    //     i_path->UpdateNavMesh();
 
     if (owner->HasUnitState(UNIT_STATE_FOLLOW))
     {
@@ -305,42 +305,42 @@ bool TargetedMovementGeneratorMedium<T, D>::DoUpdate(T* owner, uint32 time_diff)
         }
     }
 
-    // Enter/exit transport if the target enters/exits transport
-    bool transportChanged = false;
-    Transport* myTransport = owner->GetTransport();
-    Transport* targetTransport = i_target->GetTransport();
+    // // Enter/exit transport if the target enters/exits transport
+    // bool transportChanged = false;
+    // Transport* myTransport = owner->GetTransport();
+    // Transport* targetTransport = i_target->GetTransport();
 
-    if (myTransport != targetTransport)
-    {
-        // Don't allow static spawns to step off transports
-        if (myTransport && myTransport->GetStaticPassengers().find(owner) != myTransport->GetStaticPassengers().end())
-        {
-            if (!owner->IsStopped())
-                owner->StopMoving();
+    // if (myTransport != targetTransport)
+    // {
+    //     // Don't allow static spawns to step off transports
+    //     if (myTransport && myTransport->GetStaticPassengers().find(owner) != myTransport->GetStaticPassengers().end())
+    //     {
+    //         if (!owner->IsStopped())
+    //             owner->StopMoving();
 
-            return true;
-        }
+    //         return true;
+    //     }
 
-        if (myTransport)
-        {
-            myTransport->RemovePassenger(owner);
-            owner->setActive(false, ActiveFlags::OnTransport);
-        }
+    //     if (myTransport)
+    //     {
+    //         myTransport->RemovePassenger(owner);
+    //         owner->setActive(false, ActiveFlags::OnTransport);
+    //     }
 
-        if (targetTransport)
-            if (owner->AddToTransportIfNeeded(targetTransport, false, 10.0f))
-                owner->setActive(true, ActiveFlags::OnTransport);
+    //     if (targetTransport)
+    //         if (owner->AddToTransportIfNeeded(targetTransport, false, 10.0f))
+    //             owner->setActive(true, ActiveFlags::OnTransport);
 
-        targetMoved = true;
-        transportChanged = true;
-    }
+    //     targetMoved = true;
+    //     transportChanged = true;
+    // }
 
     if (i_recalculateTravel || targetMoved)
     {
         bool splineStarted = _setTargetLocation(owner, targetMoved);
 
-        if (!splineStarted && transportChanged)
-            owner->SendMovementFlagUpdate();
+        // if (!splineStarted && transportChanged)
+        //     owner->SendMovementFlagUpdate();
     }
 
     if (owner->movespline->Finalized())
@@ -373,9 +373,9 @@ G3D::Vector3 TargetedMovementGeneratorMedium<T, D>::GetDestination(T* owner) con
     {
         G3D::Vector3 dest{ owner->movespline->FinalDestination() };
 
-        if (owner->movespline->onTransport)
-            if (TransportBase* transport = owner->GetDirectTransport())
-                transport->CalculatePassengerPosition(dest.x, dest.y, dest.z);
+        // if (owner->movespline->onTransport)
+        //     if (TransportBase* transport = owner->GetDirectTransport())
+        //         transport->CalculatePassengerPosition(dest.x, dest.y, dest.z);
 
         return dest;
     }

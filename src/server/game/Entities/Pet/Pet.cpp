@@ -95,12 +95,6 @@ void Pet::RemoveFromWorld()
     ///- Remove the pet from the accessor
     if (IsInWorld())
     {
-        if (IsTemporary())
-        {
-            ASSERT(!CurrentMap || FindMap() == GetOwner()->FindMap());
-            GetOwner()->SetMinion(this, false);
-            GetOwner()->RemoveSummon(this);
-        }
         ///- Don't call the function for Creature, normal mobs + totems go in a different storage
         Unit::RemoveFromWorld();
         sObjectAccessor->RemoveObject(this);

@@ -6269,7 +6269,7 @@ class cond_gamon_event : public ConditionScript
     public:
         cond_gamon_event() : ConditionScript("cond_gamon_event") { }
 
-        bool OnConditionCheck(Condition* cond, ConditionSourceInfo& source) override
+        bool OnConditionCheck(const Condition* cond, ConditionSourceInfo& source) override
         {
             if (source.mConditionTargets[0] && source.mConditionTargets[1])
                 if (Creature* caster = source.mConditionTargets[1]->ToCreature())

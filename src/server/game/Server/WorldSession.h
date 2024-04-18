@@ -166,6 +166,13 @@ enum AccountFlags
     ACC_FLAG_VALOR_CAP_REACHED   = 0x00000004,
 };
 
+enum TutorialsFlag : uint8
+{
+    TUTORIALS_FLAG_NONE                           = 0x00,
+    TUTORIALS_FLAG_CHANGED                        = 0x01,
+    TUTORIALS_FLAG_LOADED_FROM_DB                 = 0x02
+};
+
 //class to deal with packet processing
 //allows to determine if next packet is safe to be processed
 class PacketFilter
@@ -286,6 +293,9 @@ class TC_GAME_API WorldSession
         void SendAuthResponse(uint8 code, bool queued, uint32 queuePos = 0);
         void SendClientCacheVersion(uint32 version);
 
+        void InitializeSession();
+        void InitializeSessionCallback(CharacterDatabaseQueryHolder const& realmHolder);
+
         void SendFeatureSystemStatusGlueScreen();
         void SendDanceStudioCreateResult();
         void SendDispalyPromotionOpcode();
@@ -380,7 +390,7 @@ class TC_GAME_API WorldSession
         void LoadGlobalAccountData();
         void LoadAccountData(PreparedQueryResult result, uint32 mask);
 
-        void LoadTutorialsData();
+        void LoadTutorialsData(PreparedQueryResult result);
         void SendTutorialsData();
         void SaveTutorialsData(CharacterDatabaseTransaction trans);
         uint32 GetTutorialInt(uint8 index) const { return m_Tutorials[index]; }
@@ -389,7 +399,7 @@ class TC_GAME_API WorldSession
             if (m_Tutorials[index] != value)
             {
                 m_Tutorials[index] = value;
-                m_TutorialsChanged = true;
+                m_TutorialsChanged |= TUTORIALS_FLAG_CHANGED;
             }
         }
         //used with item_page table
@@ -1140,6 +1150,18 @@ class TC_GAME_API WorldSession
         // chat
 
         bool ChannelCheck(std::string channel);
+
+        union ConnectToKey
+        {
+            struct
+            {
+                uint64 AccountId : 32;
+                uint64 ConnectionType : 1;
+                uint64 Key : 31;
+            } Fields;
+
+            uint64 Raw;
+        };
 
     public:
         QueryCallbackProcessor& GetQueryProcessor() { return _queryProcessor; }

@@ -101,6 +101,7 @@ public:
 
     void SendPacket(WorldPacket const& packet);
 
+    void SetWorldSession(WorldSession* session);
     void SetSendBufferSize(std::size_t sendBufferSize) { _sendBufferSize = sendBufferSize; }
 
 protected:
@@ -119,6 +120,7 @@ protected:
 
 private:
     void CheckIpCallback(PreparedQueryResult result);
+    void InitializeHandler(boost::system::error_code error, std::size_t transferedBytes);
 
     /// writes network.opcode log
     /// accessing WorldSession is not threadsafe, only do it when holding _worldSessionLock
@@ -134,6 +136,8 @@ private:
     void HandleAuthSession(WorldPacket& recvPacket);
     void HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSession, PreparedQueryResult result);
     void LoadSessionPermissionsCallback(PreparedQueryResult result);
+    void HandleAuthContinuedSession(WorldPacket& recvPacket);
+    void HandleAuthContinuedSessionCallback(WorldSession::ConnectToKey key, PreparedQueryResult result);
     void SendAuthResponseError(uint8 code);
 
     bool HandlePing(WorldPacket& recvPacket);
@@ -152,8 +156,6 @@ private:
     MessageBuffer _packetBuffer;
     MPSCQueue<EncryptablePacket, &EncryptablePacket::SocketQueueLink> _bufferQueue;
     std::size_t _sendBufferSize;
-
-    bool _initialized;
 
     z_stream* _compressionStream;
 

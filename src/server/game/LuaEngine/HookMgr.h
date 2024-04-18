@@ -360,7 +360,7 @@ struct HookMgr
     void OnSuccessful(AuctionHouseObject* ah);
     void OnExpire(AuctionHouseObject* ah);
     /* Condition */
-    bool OnConditionCheck(Condition* condition, ConditionSourceInfo& sourceInfo) { return false; }; // TODO ?
+    bool OnConditionCheck(const Condition* condition, ConditionSourceInfo& sourceInfo) { return false; }; // TODO ?
     /* Transport */
     void OnAddPassenger(Transport* transport, Player* player);
     void OnAddCreaturePassenger(Transport* transport, Creature* creature);
@@ -409,5 +409,7 @@ public:
         return sHookMgr->GetAI(gameObject);
     }
 };
+
+void AddElunaScripts();
 
 #endif

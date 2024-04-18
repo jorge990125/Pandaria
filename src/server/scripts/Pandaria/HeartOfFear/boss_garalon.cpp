@@ -396,7 +396,7 @@ class boss_garalon : public CreatureScript
                 }
             }
 
-            void DamageTaken(Unit*, uint32& damage)
+            void DamageTaken(Unit*, uint32& damage) override
             {
                 // Only for debug purposes
                 if (damage >= me->GetHealth())

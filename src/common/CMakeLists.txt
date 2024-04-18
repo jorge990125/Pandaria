@@ -13,6 +13,7 @@ if( USE_COREPCH )
 endif()
 
 file(GLOB_RECURSE sources_Asio Asio/*.cpp Asio/*.h)
+file(GLOB_RECURSE sources_Collision Collision/*.cpp Collision/*.h Collision/Management/*.cpp Collision/Management/*.h Collision/Maps/*.cpp Collision/Maps/*.h Collision/Models/*.cpp Collision/Models/*.h)
 file(GLOB_RECURSE sources_Configuration Configuration/*.cpp Configuration/*.h)
 file(GLOB_RECURSE sources_Cryptography Cryptography/*.cpp Cryptography/*.h Cryptography/Authentication/*.cpp Cryptography/Authentication/*.h)
 file(GLOB_RECURSE sources_Hacks Hacks/*.cpp Hacks/*.h)
@@ -24,6 +25,7 @@ file(GLOB sources_localdir *.cpp *.h)
 
 source_group(CMake FILES CMakeLists.txt)
 source_group(Asio FILES ${sources_Asio})
+source_group(Collision FILES ${sources_Collision})
 source_group(Configuration FILES ${sources_Configuration})
 source_group(Cryptography FILES ${sources_Cryptography})
 source_group(Hacks FILES ${sources_Hacks})
@@ -44,6 +46,7 @@ endif()
 set(common_STAT_SRCS
   ${common_STAT_SRCS}
   ${sources_Asio}
+  ${sources_Collision}
   ${sources_Configuration}
   ${sources_Cryptography}
   ${sources_Debugging}
@@ -55,10 +58,22 @@ set(common_STAT_SRCS
   ${sources_localdir}
 )
 
-include_directories(
+add_library(common STATIC
+  ${common_STAT_SRCS}
+)
+
+target_include_directories(common
   PUBLIC
+    openssl
+    boost
+    fmt
+    utf8cpp
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/Asio
+    ${CMAKE_CURRENT_SOURCE_DIR}/Collision
+    ${CMAKE_CURRENT_SOURCE_DIR}/Collision/Management
+    ${CMAKE_CURRENT_SOURCE_DIR}/Collision/Maps
+    ${CMAKE_CURRENT_SOURCE_DIR}/Collision/Models
     ${CMAKE_CURRENT_SOURCE_DIR}/Configuration
     ${CMAKE_CURRENT_SOURCE_DIR}/Cryptography
     ${CMAKE_CURRENT_SOURCE_DIR}/Cryptography/Authentication  
@@ -66,28 +81,28 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/Hacks
     ${CMAKE_CURRENT_SOURCE_DIR}/IPLocation
     ${CMAKE_CURRENT_SOURCE_DIR}/Logging
+    ${CMAKE_CURRENT_SOURCE_DIR}/Threading
     ${CMAKE_CURRENT_SOURCE_DIR}/Utilities
     ${CMAKE_BINARY_DIR}
-    ${OPENSSL_INCLUDE_DIR} 
-    ${Boost_INCLUDE_DIRS} 
-    ${CMAKE_SOURCE_DIR}/dep/fmt/include 
   PRIVATE
-    ${CMAKE_SOURCE_DIR}/dep/SFMT
+    sfmt
     ${CMAKE_SOURCE_DIR}/dep/utf8cpp
-)
-
-add_library(common STATIC
-  ${common_STAT_SRCS}
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 target_link_libraries(common
-  PRIVATE
+  PUBLIC
     sfmt
     fmt
-    ${OPENSSL_LIBRARIES}
-    ${Boost_LIBRARIES}
+    openssl
+    boost
+    g3dlib
+    Detour
+    utf8cpp
+    jemalloc    
 )
 
+add_dependencies(common revision.h)
 
 # Generate precompiled header
 if (USE_COREPCH)

@@ -477,6 +477,7 @@ public:
             int dunLevel = CalculateDungeonLevel(map, player);
             int numInGroup = GetNumInGroup(player);
             uint32 classBalance = GetClassBalance(player);
+            TC_LOG_DEBUG("solocraft", "solocraft player guid = %lu, difficulty=%f, dunLevel=%d, numInGroup=%d, classBalance=%lu", player->GetGUIDLow(), difficulty, dunLevel, numInGroup, classBalance);
             ApplyBuffs(player, map, difficulty, dunLevel, numInGroup, classBalance);
         }
     }
@@ -487,7 +488,7 @@ protected:
     SolocraftConfig solocraftConfig;   
     bool noXPGainFlag = false; // if noXPGainFlag before solocraft setting
 
-    int CalculateDifficulty(Map* map, Player* /*player*/)
+    float CalculateDifficulty(Map* map, Player* /*player*/)
     {
         if (map)
         {
@@ -577,7 +578,7 @@ protected:
 
     void ApplyBuffs(Player* player, Map* map, float difficulty, int dunLevel, int numInGroup, int classBalance)
     {
-        if (difficulty != 0)
+        if (difficulty > 0)
         {
 
             int SpellPowerBonus = 0;
@@ -602,7 +603,7 @@ protected:
                     }
                 }
 
-                QueryResult result = CharacterDatabase.PQuery("SELECT `GUID`, `Difficulty`, `GroupSize`, `SpellPower`, `Stats` FROM `custom_solocraft_character_stats` WHERE GUID = %u", player->GetGUID());
+                QueryResult result = CharacterDatabase.PQuery("SELECT `guid`, `Difficulty`, `GroupSize`, `SpellPower`, `Stats` FROM `custom_solocraft_character_stats` WHERE `guid` = %lu", player->GetGUIDLow());
 
                 for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
                 {
@@ -656,7 +657,7 @@ protected:
                     // |cffFF0000[SoloCraft]|r |cffFF8000 %s entered %s - |cffFF0000BE ADVISED - You have been debuffed by offset: %0.2f with a Class Balance Weight: %i. |cffFF8000A group member already inside has the dungeon's full buff offset. No Spellpower buff will be applied to spell casters. ALL group members must exit the dungeon and re-enter to receive a balanced offset.
                 }
 
-                CharacterDatabase.PExecute("REPLACE INTO `custom_solocraft_character_stats` (`GUID`, `Difficulty`, `GroupSize`, `SpellPower`, `Stats`) VALUES (%u, %f, %u, %i, %f)", player->GetGUID(), difficulty, numInGroup, SpellPowerBonus, solocraftConfig.SoloCraftStatsMult);
+                CharacterDatabase.PExecute("REPLACE INTO `custom_solocraft_character_stats` (`guid`, `Difficulty`, `GroupSize`, `SpellPower`, `Stats`) VALUES (%lu, %f, %u, %i, %f)", player->GetGUIDLow(), difficulty, numInGroup, SpellPowerBonus, solocraftConfig.SoloCraftStatsMult);
             }
             else
             {
@@ -683,7 +684,7 @@ protected:
             {
                 if (itr->guid != player->GetGUID())
                 {
-                    QueryResult result = CharacterDatabase.PQuery("SELECT `GUID`, `Difficulty`, `GroupSize` FROM `custom_solocraft_character_stats` WHERE GUID = %u", itr->guid);
+                    QueryResult result = CharacterDatabase.PQuery("SELECT `guid`, `Difficulty`, `GroupSize` FROM `custom_solocraft_character_stats` WHERE `guid` = %lu", itr->guid);
 
                     if (result)
                     {
@@ -701,7 +702,7 @@ protected:
 
     void ClearBuffs(Player* player, Map* map)
     {
-        QueryResult result = CharacterDatabase.PQuery("SELECT `GUID`, `Difficulty`, `GroupSize`, `SpellPower`, `Stats` FROM `custom_solocraft_character_stats` WHERE GUID = %u", player->GetGUID());
+        QueryResult result = CharacterDatabase.PQuery("SELECT `guid`, `Difficulty`, `GroupSize`, `SpellPower`, `Stats` FROM `custom_solocraft_character_stats` WHERE `guid` = %lu", player->GetGUIDLow());
 
         if (result)
         {
@@ -726,7 +727,7 @@ protected:
                 player->RemoveFlag(PLAYER_FIELD_PLAYER_FLAGS, PLAYER_FLAGS_NO_XP_GAIN);
             }
 
-            CharacterDatabase.PExecute("DELETE FROM `custom_solocraft_character_stats` WHERE GUID = %u", player->GetGUID());
+            CharacterDatabase.PExecute("DELETE FROM `custom_solocraft_character_stats` WHERE `guid` = %lu", player->GetGUIDLow());
         }
     }
 };

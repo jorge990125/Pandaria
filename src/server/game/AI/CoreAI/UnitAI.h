@@ -191,7 +191,7 @@ struct NonTankSpecTargetSelector
         uint32 _spellId;
 };
 
-class UnitAI
+class TC_GAME_API UnitAI
 {
     protected:
         Unit* const me;
