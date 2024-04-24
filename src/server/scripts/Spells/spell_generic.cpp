@@ -262,7 +262,7 @@ class spell_spawn_blood_pool : public SpellScript
     {
         Unit* caster = GetCaster();
         LiquidData liquidStatus;
-        ZLiquidStatus status = caster->GetMap()->getLiquidStatus(caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ(), MAP_ALL_LIQUIDS, &liquidStatus);
+        ZLiquidStatus status = caster->GetMap()->GetLiquidStatus(caster->GetPhaseMask(), caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ(), MAP_ALL_LIQUIDS, &liquidStatus);
 
         Position summonPos = caster->GetPosition();
         summonPos.m_positionZ = liquidStatus.level;

@@ -126,7 +126,7 @@ struct map_liquidHeader
     float  liquidLevel;
 };
 
-enum ZLiquidStatus
+enum ZLiquidStatus: uint32
 {
     LIQUID_MAP_NO_WATER     = 0x00000000,
     LIQUID_MAP_ABOVE_WATER  = 0x00000001,
@@ -154,7 +154,27 @@ struct LiquidData
     float  depth_level;
 };
 
-class GridMap
+struct PositionFullTerrainStatus
+{
+    struct AreaInfo
+    {
+        AreaInfo(int32 _adtId, int32 _rootId, int32 _groupId, uint32 _flags) : adtId(_adtId), rootId(_rootId), groupId(_groupId), mogpFlags(_flags) { }
+        int32 const adtId;
+        int32 const rootId;
+        int32 const groupId;
+        uint32 const mogpFlags;
+    };
+
+    PositionFullTerrainStatus() : areaId(0), floorZ(0.0f), outdoors(true), liquidStatus(LIQUID_MAP_NO_WATER) { }
+    uint32 areaId;
+    float floorZ;
+    bool outdoors;
+    ZLiquidStatus liquidStatus;
+    Optional<AreaInfo> areaInfo;
+    Optional<LiquidData> liquidInfo;
+};
+
+class TC_GAME_API GridMap
 {
     uint32  _flags;
     union{
@@ -168,8 +188,6 @@ class GridMap
         uint8* m_uint8_V8;
     };
     G3D::Plane* _minHeightPlanes;
-    int16* _maxHeight;
-    int16* _minHeight;
     // Height level data
     float _gridHeight;
     float _gridIntHeightMultiplier;
@@ -195,6 +213,7 @@ class GridMap
     bool loadHeightData(FILE* in, uint32 offset, uint32 size);
     bool loadLiquidData(FILE* in, uint32 offset, uint32 size);
     bool loadHolesData(FILE *in, uint32 offset, uint32 size);
+    bool isHole(int row, int col) const;
 
     // Get height functions and pointers
     typedef float (GridMap::*GetHeightPtr) (float x, float y) const;
@@ -203,7 +222,6 @@ class GridMap
     float getHeightFromUint16(float x, float y) const;
     float getHeightFromUint8(float x, float y) const;
     float getHeightFromFlat(float x, float y) const;
-    bool  isHole(float x, float y) const;
 
 public:
     GridMap();
@@ -215,8 +233,7 @@ public:
     float getHeight(float x, float y) const {return (this->*_gridGetHeight)(x, y);}
     float getMinHeight(float x, float y) const;
     float getLiquidLevel(float x, float y) const;
-    uint8 getTerrainType(float x, float y) const;
-    ZLiquidStatus getLiquidStatus(float x, float y, float z, uint8 ReqLiquidType, LiquidData* data = 0, float collisionHeight = DEFAULT_UNIT_HEIGHT);
+    ZLiquidStatus GetLiquidStatus(float x, float y, float z, uint8 ReqLiquidType, LiquidData* data = 0, float collisionHeight = 2.03128f); // DEFAULT_COLLISION_HEIGHT in Object.h
 };
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push, N), also any gcc version not support it at some platform
@@ -291,6 +308,7 @@ class TC_GAME_API Map : public GridRefManager<NGridType>
 
         virtual bool AddPlayerToMap(Player*);
         virtual void RemovePlayerFromMap(Player*, bool);
+
         template<class T> bool AddToMap(T *);
         template<class T> void RemoveFromMap(T *, bool);
 
@@ -349,7 +367,8 @@ class TC_GAME_API Map : public GridRefManager<NGridType>
         float GetHeight(float x, float y, float z, bool checkVMap = true, float maxSearchDist = DEFAULT_HEIGHT_SEARCH) const;
         float GetMinHeight(float x, float y) const;
 
-        ZLiquidStatus getLiquidStatus(float x, float y, float z, uint8 ReqLiquidType, LiquidData* data = 0, float collisionHeight = DEFAULT_UNIT_HEIGHT) const;
+        void GetFullTerrainStatusForPosition(uint32 phaseMask, float x, float y, float z, PositionFullTerrainStatus& data, uint8 reqLiquidType, float collisionHeight) const;
+        ZLiquidStatus GetLiquidStatus(uint32 phaseMask, float x, float y, float z, uint8 ReqLiquidType, LiquidData* data = nullptr, float collisionHeight = 2.03128f) const; // DEFAULT_COLLISION_HEIGHT in Object.h
 
         uint32 GetAreaId(float x, float y, float z, bool* isOutdoors) const;
         bool GetAreaInfo(uint32 phaseMask, float x, float y, float z, uint32& mogpflags, int32& adtId, int32& rootId, int32& groupId) const;
@@ -359,10 +378,9 @@ class TC_GAME_API Map : public GridRefManager<NGridType>
 
         bool IsOutdoors(float x, float y, float z) const;
 
-        uint8 GetTerrainType(float x, float y) const;
         float GetWaterLevel(float x, float y) const;
-        bool IsInWater(float x, float y, float z, LiquidData* data = 0, float collisionHeight = DEFAULT_UNIT_HEIGHT) const;
-        bool IsUnderWater(float x, float y, float z, float collisionHeight = DEFAULT_UNIT_HEIGHT) const;
+        bool IsInWater(uint32 phaseMask, float x, float y, float z, LiquidData* data = nullptr) const;
+        bool IsUnderWater(uint32 phaseMask, float x, float y, float z) const;
 
         void MoveAllCreaturesInMoveList();
         void MoveAllGameObjectsInMoveList();
@@ -596,7 +614,7 @@ class TC_GAME_API Map : public GridRefManager<NGridType>
 
         NGridType* getNGrid(uint32 x, uint32 y) const
         {
-            ASSERT(x < MAX_NUMBER_OF_GRIDS && y < MAX_NUMBER_OF_GRIDS);
+            ASSERT(x < MAX_NUMBER_OF_GRIDS && y < MAX_NUMBER_OF_GRIDS, "x = %u, y = %u", x, y);
             return i_grids[x][y];
         }
 

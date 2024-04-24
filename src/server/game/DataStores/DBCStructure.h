@@ -559,20 +559,20 @@ struct AreaTableEntry
 {
     uint32  ID;                                             // 0
     uint32  mapid;                                          // 1
-    uint32  zone;                                           // 2 if 0 then it's zone, else it's zone id of this area
+    uint32  ParentAreaID;                                   // 2 if 0 then it's zone, else it's zone id of this area
     uint32  exploreFlag;                                    // 3,
-    uint32  flags;                                          // 5,
+    uint32  Flags;                                          // 5,
     //uint32 unk1;                                          // 6, Pandaria
     //uint32 soundPreferences;                              // 7,
     //uint32 SoundPreferencesUnderwater;                    // 8,
     //uint32 SoundAmbience;                                 // 9,
-    //DbcStr   areaName2;                                    // 10, without whitespaces
+    //DbcStr   areaName2;                                   // 10, without whitespaces
     //uint32 ZoneMusic;                                     // 11,
     //uint32 ZoneIntroMusicTable;                           // 12
     int32   area_level;                                     // 13
     DbcStr  area_name;                                      // 14
     uint32  team;                                           // 15
-    uint32  LiquidTypeOverride[4];                          // 16-19 liquid override by type
+    uint32  LiquidTypeID[4];                                // 16-19 liquid override by type
     float   MaxDepth;                                       // 20,
     float   AmbientMultiplier;                              // 21 client only?
     uint32  LightId;                                        // 22
@@ -589,7 +589,7 @@ struct AreaTableEntry
     {
         if (mapid == 609)
             return true;
-        return (flags & AREA_FLAG_SANCTUARY);
+        return (Flags & AREA_FLAG_SANCTUARY);
     }
 };
 
@@ -1720,7 +1720,7 @@ struct LiquidTypeEntry
     uint32 Id;
     //DbcStr Name;
     //uint32 Flags;
-    uint32 Type;
+    uint32 SoundBank;
     //uint32 SoundId;
     uint32 SpellId;
     //float MaxDarkenDepth;

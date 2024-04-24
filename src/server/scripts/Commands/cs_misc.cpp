@@ -449,7 +449,7 @@ public:
 
         LiquidData liquidStatus;
         float collisionHeight = object->GetTypeId() == TYPEID_PLAYER ? object->ToPlayer()->GetCollisionHeight() : DEFAULT_UNIT_HEIGHT;
-        ZLiquidStatus status = map->getLiquidStatus(object->GetPositionX(), object->GetPositionY(), object->GetPositionZ(), MAP_ALL_LIQUIDS, &liquidStatus, collisionHeight);
+        ZLiquidStatus status = map->GetLiquidStatus(object->GetPhaseMask(), object->GetPositionX(), object->GetPositionY(), object->GetPositionZ(), MAP_ALL_LIQUIDS, &liquidStatus, collisionHeight);
 
         if (status)
             handler->PSendSysMessage(LANG_LIQUID_STATUS, liquidStatus.level, liquidStatus.depth_level, liquidStatus.entry, liquidStatus.type_flags, status);
@@ -1169,7 +1169,7 @@ public:
         uint32 zoneId = player->GetZoneId();
 
         AreaTableEntry const* areaEntry = sAreaTableStore.LookupEntry(zoneId);
-        if (!areaEntry || areaEntry->zone !=0)
+        if (!areaEntry || areaEntry->ParentAreaID !=0)
         {
             handler->PSendSysMessage(LANG_COMMAND_GRAVEYARDWRONGZONE, graveyardId, zoneId);
             handler->SetSentErrorMessage(true);
@@ -2030,7 +2030,7 @@ public:
         {
             areaName = area->area_name[handler->GetSessionDbcLocale()];
 
-            AreaTableEntry const* zone = sAreaTableStore.LookupEntry(area->zone);
+            AreaTableEntry const* zone = sAreaTableStore.LookupEntry(area->ParentAreaID);
             if (zone)
                 zoneName = zone->area_name[handler->GetSessionDbcLocale()];
         }
@@ -2075,10 +2075,6 @@ public:
             if (totalmail >= 1)
                handler->PSendSysMessage(LANG_PINFO_CHR_MAILS, rmailint, totalmail);
         }
-
-        // Output XXII. LANG_PINFO_CHAR_HWID
-        if (handler->GetSession()->GetSecurity() >= SEC_GAMEMASTER)
-            handler->PSendSysMessage(LANG_PINFO_CHAR_HWID, HWID.c_str());
 
         return true;
     }

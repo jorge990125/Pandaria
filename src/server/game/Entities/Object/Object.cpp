@@ -1356,8 +1356,8 @@ void MovementInfo::OutDebug()
 
 WorldObject::WorldObject(bool isWorldObject): Object(), WorldLocation(),
 m_name(""), m_isActive(false), m_isWorldObject(isWorldObject), m_zoneScript(nullptr),
-m_transport(nullptr), m_currMap(nullptr), m_InstanceId(0),
-m_phaseMask(PHASEMASK_NORMAL), m_explicitSeerGuid(),
+m_transport(nullptr), m_outdoors(false), m_liquidStatus(LIQUID_MAP_NO_WATER),
+m_currMap(nullptr), m_InstanceId(0), m_phaseMask(PHASEMASK_NORMAL), m_explicitSeerGuid(),
 m_stealthVisibilityUpdateTimer(STEALTH_VISIBILITY_UPDATE_TIMER)
 {
     m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GHOST, GHOST_VISIBILITY_ALIVE | GHOST_VISIBILITY_GHOST);
@@ -1454,6 +1454,17 @@ void WorldObject::_Create(uint32 guidlow, HighGuid guidhigh, uint32 phaseMask)
 //     //GetMap()->GetZoneAndAreaId(GetPhaseMask(), m_zoneId, m_areaId, GetPositionX(), GetPositionY(), GetPositionZ());
 //     GetMap()->GetZoneAndAreaId(GetZoneId(), GetAreaId(), m_positionX, m_positionY, m_positionZ);
 // }
+
+void WorldObject::ProcessPositionDataChanged(PositionFullTerrainStatus const& data)
+{
+    m_zoneId = m_areaId = data.areaId;
+    if (AreaTableEntry const* area = sAreaTableStore.LookupEntry(m_areaId))
+        if (area->ParentAreaID)
+            m_zoneId = area->ParentAreaID;
+    m_outdoors = data.outdoors;
+    m_staticFloorZ = data.floorZ;
+    m_liquidStatus = data.liquidStatus;
+}
 
 void WorldObject::RemoveFromWorld()
 {
@@ -3131,7 +3142,7 @@ static float NormalizeZforCollision(WorldObject* obj, float x, float y, float z)
                 return z;
         }
         LiquidData liquid_status;
-        ZLiquidStatus res = obj->GetMap()->getLiquidStatus(x, y, z, MAP_ALL_LIQUIDS, &liquid_status);
+        ZLiquidStatus res = obj->GetMap()->GetLiquidStatus(obj->GetPhaseMask(), x, y, z, MAP_ALL_LIQUIDS, &liquid_status);
         if (res && liquid_status.level > helper) // water must be above ground
         {
             if (liquid_status.level > z) // z is underwater
@@ -3216,7 +3227,7 @@ void WorldObject::MovePositionToFirstCollosionBySteps(Position& pos, float dist,
     // Snap to ground...
     destz = NormalizeZforCollision(this, destx, desty, destz);
     // ...unless underwater
-    bool swimming = m_movementInfo.flags & MOVEMENTFLAG_SWIMMING && GetMap()->IsInWater(destx, desty, lastGroundPos.m_positionZ);
+    bool swimming = m_movementInfo.flags & MOVEMENTFLAG_SWIMMING && GetMap()->IsInWater(GetPhaseMask(), destx, desty, lastGroundPos.m_positionZ);
     if (allowInAir)
         swimming = true;
     if (swimming && destz < lastGroundPos.m_positionZ)
@@ -3240,7 +3251,7 @@ void WorldObject::MovePositionToFirstCollosionBySteps(Position& pos, float dist,
         if (heightDifference > distanceDifference * HeightCheckThresholdMultiplier)
             break;
         // Maintain at least the initial height when underwater
-        swimming = (m_movementInfo.flags & MOVEMENTFLAG_SWIMMING && GetMap()->IsInWater(destx, desty, lastGroundPos.m_positionZ));
+        swimming = (m_movementInfo.flags & MOVEMENTFLAG_SWIMMING && GetMap()->IsInWater(GetPhaseMask(), destx, desty, lastGroundPos.m_positionZ));
         if (!swimming && allowInAir)
             swimming = true;
         if (swimming)

@@ -3674,12 +3674,12 @@ bool Unit::isInAccessiblePlaceFor(Creature const* c) const
 
 bool Unit::IsInWater() const
 {
-    return GetBaseMap()->IsInWater(GetPositionX(), GetPositionY(), GetPositionZ(), NULL);
+    return GetLiquidStatus() & (LIQUID_MAP_IN_WATER | LIQUID_MAP_UNDER_WATER);
 }
 
 bool Unit::IsUnderWater() const
 {
-    return GetBaseMap()->IsUnderWater(GetPositionX(), GetPositionY(), GetPositionZ(), NULL);
+    return GetLiquidStatus() & LIQUID_MAP_UNDER_WATER;
 }
 
 void Unit::UpdateUnderwaterState(Map* m, float x, float y, float z)
@@ -3688,7 +3688,7 @@ void Unit::UpdateUnderwaterState(Map* m, float x, float y, float z)
         return;
 
     LiquidData liquid_status;
-    ZLiquidStatus res = m->getLiquidStatus(x, y, z, MAP_ALL_LIQUIDS, &liquid_status);
+    ZLiquidStatus res = m->GetLiquidStatus(GetPhaseMask(), x, y, z, MAP_ALL_LIQUIDS, &liquid_status);
     if (!res)
     {
         if (_lastLiquid && _lastLiquid->SpellId)
@@ -11549,9 +11549,9 @@ MountCapabilityEntry const* Unit::GetMountCapability(uint32 mountType) const
         AreaTableEntry const* zone = sAreaTableStore.LookupEntry(topZoneId);
         if (!zone)
             break;
-        if (zone->zone == 0)
+        if (zone->ParentAreaID == 0)
             break;
-        topZoneId = zone->zone;
+        topZoneId = zone->ParentAreaID;
     }
 
     uint32 ridingSkill = 5000;
@@ -11575,7 +11575,7 @@ MountCapabilityEntry const* Unit::GetMountCapability(uint32 mountType) const
             {
                 float x, y, z;
                 GetPosition(x, y, z);
-                ok = GetMap()->getLiquidStatus(x, y, z, MAP_ALL_LIQUIDS) & (LIQUID_MAP_WATER_WALK | LIQUID_MAP_IN_WATER | LIQUID_MAP_UNDER_WATER);
+                ok = GetMap()->GetLiquidStatus(GetPhaseMask(), x, y, z, MAP_ALL_LIQUIDS) & (LIQUID_MAP_WATER_WALK | LIQUID_MAP_IN_WATER | LIQUID_MAP_UNDER_WATER);
             }
             if (!ok)
                 continue;

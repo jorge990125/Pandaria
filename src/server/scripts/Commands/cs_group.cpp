@@ -354,7 +354,7 @@ public:
                 AreaTableEntry const* area = sAreaTableStore.LookupEntry(p->GetAreaId());
                 if (area)
                 {
-                    AreaTableEntry const* zone = sAreaTableStore.LookupEntry(area->zone);
+                    AreaTableEntry const* zone = sAreaTableStore.LookupEntry(area->ParentAreaID);
                     if (zone)
                         zoneName = zone->area_name[locale];
                 }

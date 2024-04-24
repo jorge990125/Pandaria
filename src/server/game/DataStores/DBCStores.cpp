@@ -1201,7 +1201,7 @@ dbc::TalentTabs dbc::GetClassSpecializations(uint8 classId)
 uint32 GetLiquidFlags(uint32 liquidType)
 {
     if (LiquidTypeEntry const* liq = sLiquidTypeStore.LookupEntry(liquidType))
-        return 1 << liq->Type;
+        return 1 << liq->SoundBank;
 
     return 0;
 }

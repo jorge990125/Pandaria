@@ -22,6 +22,7 @@
 #include "Map.h"
 #include "ModelIgnoreFlags.h"
 #include "ObjectDefines.h"
+#include "Optional.h"
 #include "Position.h"
 #include "UpdateMask.h"
 #include <G3D/Quat.h>
@@ -97,6 +98,10 @@ class UpdateData;
 class WorldObject;
 class WorldPacket;
 class ZoneScript;
+struct FactionTemplateEntry;
+struct PositionFullTerrainStatus;
+struct QuaternionData;
+enum ZLiquidStatus : uint32;
 
 typedef std::unordered_map<Player*, UpdateData> UpdateDataMapType;
 
@@ -547,6 +552,9 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         uint32 GetAreaId() const;
         void GetZoneAndAreaId(uint32& zoneid, uint32& areaid) const;
 
+        bool IsOutdoors() const { return m_outdoors; }
+        ZLiquidStatus GetLiquidStatus() const { return m_liquidStatus; }
+
         InstanceScript* GetInstanceScript();
 
         std::string const& GetName() const { return m_name; }
@@ -674,6 +682,8 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         void DestroyForNearbyPlayers();
         virtual void UpdateObjectVisibility(bool forced = true);
         void UpdateStealthVisibility(uint32 diff);
+        void UpdatePositionData();
+        
         void BuildUpdate(UpdateDataMapType&);
 
         bool isActiveObject() const { return m_isActive; }
@@ -751,6 +761,13 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
 
         // transports
         Transport* m_transport;
+
+        virtual void ProcessPositionDataChanged(PositionFullTerrainStatus const& data);
+        uint32 m_zoneId;
+        uint32 m_areaId;
+        float m_staticFloorZ;
+        bool m_outdoors;
+        ZLiquidStatus m_liquidStatus;
 
         //these functions are used mostly for Relocate() and Corpse/Player specific stuff...
         //use them ONLY in LoadFromDB()/Create() funcs and nowhere else!

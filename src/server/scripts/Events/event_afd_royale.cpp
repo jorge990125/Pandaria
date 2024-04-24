@@ -172,7 +172,7 @@ class Game
             m_spawnedCreatures.reserve(100);
 
             AreaTableEntry* area = const_cast<AreaTableEntry*>(sAreaTableStore.LookupEntry(268));
-            area->flags |= AREA_FLAG_ARENA;
+            area->Flags |= AREA_FLAG_ARENA;
 
             GetConfig(CONFIG_MIN_PLAYERS)           = 10;
             GetConfig(CONFIG_GAME_DURATION)         = 8 * MINUTE * IN_MILLISECONDS;

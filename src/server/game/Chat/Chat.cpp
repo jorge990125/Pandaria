@@ -346,7 +346,7 @@ bool ChatHandler::ExecuteCommandInTable(std::vector<ChatCommand> const& table, c
                 if (AreaTableEntry const* area = sAreaTableStore.LookupEntry(areaId))
                 {
                     areaName = area->area_name[sObjectMgr->GetDBCLocaleIndex()];
-                    if (AreaTableEntry const* zone = sAreaTableStore.LookupEntry(area->zone))
+                    if (AreaTableEntry const* zone = sAreaTableStore.LookupEntry(area->ParentAreaID))
                         zoneName = zone->area_name[sObjectMgr->GetDBCLocaleIndex()];
                 }
 
