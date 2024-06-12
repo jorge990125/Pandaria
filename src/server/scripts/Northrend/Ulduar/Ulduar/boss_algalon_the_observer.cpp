@@ -324,8 +324,8 @@ class boss_algalon_the_observer : public CreatureScript
                 _Reset();
                 me->SetReactState(REACT_PASSIVE);
                 me->SetCanDualWield(true);
-                me->SetBaseWeaponDamage(OFF_ATTACK, MINDAMAGE, me->GetCreatureTemplate()->mindmg);
-                me->SetBaseWeaponDamage(OFF_ATTACK, MAXDAMAGE, me->GetCreatureTemplate()->maxdmg);
+                // me->SetBaseWeaponDamage(OFF_ATTACK, MINDAMAGE, me->GetCreatureTemplate()->mindmg);
+                // me->SetBaseWeaponDamage(OFF_ATTACK, MAXDAMAGE, me->GetCreatureTemplate()->maxdmg);
                 me->UpdateDamagePhysical(OFF_ATTACK);
                 _phaseTwo = false;
                 _fightWon = false;
@@ -415,7 +415,7 @@ class boss_algalon_the_observer : public CreatureScript
                 return type == DATA_HAS_FED_ON_TEARS ? _fedOnTears : 1;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (_fightWon)
                     return;
@@ -428,7 +428,7 @@ class boss_algalon_the_observer : public CreatureScript
                 if (!_firstPull)
                 {
                     Talk(SAY_ALGALON_AGGRO);
-                    _EnterCombat();
+                    _JustEngagedWith();
                     introDelay = 8000;
                     summons.DespawnEntry(NPC_AZEROTH);
                 }
@@ -981,8 +981,8 @@ class npc_black_hole : public CreatureScript
         {
             npc_black_holeAI(Creature* creature) : CreatureAI(creature) { }
 
-            void MoveInLineOfSight(Unit* /*who*/) { }
-            void AttackStart(Unit* /*who*/) { }
+            void MoveInLineOfSight(Unit* /*who*/) override { }
+            void AttackStart(Unit* /*who*/) override { }
             void UpdateAI(uint32 /*diff*/) override { }
 
             void SpellHitTarget(Unit* target, SpellInfo const* spell) override
@@ -1385,7 +1385,7 @@ class spell_algalon_big_bang : public SpellScriptLoader
         {
             PrepareSpellScript(spell_algalon_big_bang_SpellScript);
 
-            bool Load()
+            bool Load() override
             {
                 _targetCount = 0;
                 return true;

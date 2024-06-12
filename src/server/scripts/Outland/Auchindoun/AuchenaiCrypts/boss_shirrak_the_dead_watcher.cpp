@@ -79,7 +79,7 @@ public:
             FocusedTargetGUID = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         { }
 
         void JustSummoned(Creature* summoned) override
@@ -184,7 +184,7 @@ public:
             fiery1 = fiery2 = true;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         { }
 
         void UpdateAI(uint32 diff) override

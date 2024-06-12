@@ -454,9 +454,9 @@ class boss_hoptallus : public CreatureScript
                     nibbler->AI()->DoAction(0);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 Talk(TALK_AGGRO);
 
@@ -563,7 +563,7 @@ class npc_hammer_bopper : public CreatureScript
                 me->RemoveAurasDueToSpell(SPELL_HAMMER_COSMETIC_1);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->GetMotionMaster()->Clear();
                 events.Reset();
@@ -663,7 +663,7 @@ class npc_explosive_hopper : public CreatureScript
                 cosmeticEvents.ScheduleEvent(EVENT_CHECK_POS, 5 * IN_MILLISECONDS);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->GetMotionMaster()->Clear();
                 cosmeticEvents.Reset();
@@ -895,7 +895,7 @@ class npc_sb_hopling : public CreatureScript
                 events.ScheduleEvent(EVENT_CHECK_POS, 5 * IN_MILLISECONDS);
             }
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
                 me->GetMotionMaster()->Clear();
                 events.Reset();

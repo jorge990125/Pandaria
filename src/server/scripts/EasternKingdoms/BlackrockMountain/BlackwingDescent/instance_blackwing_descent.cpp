@@ -124,7 +124,7 @@ class instance_blackwing_descent : public InstanceMapScript
                 }
             }
 
-            void OnGameObjectCreate(GameObject *go)
+            void OnGameObjectCreate(GameObject *go) override
             {
                 switch (go->GetEntry())
                 {

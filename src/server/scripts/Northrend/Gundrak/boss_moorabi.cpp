@@ -77,8 +77,8 @@ class boss_moorabi : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_LESS_RABI, 1);
 
                 me->SetCanDualWield(true);
-                me->SetBaseWeaponDamage(OFF_ATTACK, MINDAMAGE, me->GetCreatureTemplate()->mindmg);
-                me->SetBaseWeaponDamage(OFF_ATTACK, MAXDAMAGE, me->GetCreatureTemplate()->maxdmg);
+                // me->SetBaseWeaponDamage(OFF_ATTACK, MINDAMAGE, me->GetCreatureTemplate()->mindmg);
+                // me->SetBaseWeaponDamage(OFF_ATTACK, MAXDAMAGE, me->GetCreatureTemplate()->maxdmg);
                 me->UpdateDamagePhysical(OFF_ATTACK);
 
                 events.Reset();
@@ -91,7 +91,7 @@ class boss_moorabi : public CreatureScript
                     instance->SetData(DATA_MOORABI_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->InterruptNonMeleeSpells(false);
 
@@ -268,7 +268,7 @@ class npc_drakkari_inciter : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.Reset();
                 events.ScheduleEvent(EVENT_STRIKE, 500);
@@ -420,7 +420,7 @@ class npc_drakkari_earthshaker : public CreatureScript
         {
             npc_drakkari_earthshakerAI(Creature* creature) : ScriptedAI(creature) { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 sparring = who->GetTypeId() == TYPEID_UNIT && who->GetEntry() == NPC_DRAKKARI_EARTHSHAKER;
                 if (sparring)
@@ -512,7 +512,7 @@ class npc_drakkari_earthshaker : public CreatureScript
 
             void StopSparring()
             {
-                me->SetFaction(me->GetCreatureTemplate()->faction_A);
+                me->SetFaction(me->GetCreatureTemplate()->faction);
 
                 if (me->GetVictim() && me->GetVictim()->GetTypeId() == TYPEID_UNIT && me->GetVictim()->GetEntry() == NPC_DRAKKARI_EARTHSHAKER)
                 {

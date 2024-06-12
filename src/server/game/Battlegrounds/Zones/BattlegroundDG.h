@@ -298,25 +298,25 @@ class BattlegroundDG : public Battleground
 
         void Reset() override;
         bool SetupBattleground() override;
-        void StartingEventOpenDoors();
-        void StartingEventCloseDoors();
+        void StartingEventOpenDoors() override;
+        void StartingEventCloseDoors() override;
         void FillInitialWorldStates(WorldStateBuilder& builder) override;
-        void PostUpdateImpl(uint32 diff);
+        void PostUpdateImpl(uint32 diff) override;
         void HandleAreaTrigger(Player* player, uint32 trigger) override;
-        bool CanSeeSpellClick(Player const* player, Unit const* clicked) /*override*/;
+        bool CanSeeSpellClick(Player const* player, Unit const* clicked) override;
         void EventPlayerClickedOnFlag(Player* source, GameObject* target_obj) override;
         void EventPlayerClickedOnFlag(Player* source, Unit* target) override;
-        void UpdatePlayerScore(Player* source, uint32 type, uint32 value, bool doAddHonor = true);
+        void UpdatePlayerScore(Player* source, uint32 type, uint32 value, bool doAddHonor = true) override;
         void AddPlayer(Player* player) override;
-        void RemovePlayer(Player* player, uint64 guid, uint32 team);
-        WorldSafeLocsEntry const* GetClosestGraveYard(Player* player);
-        void HandleKillPlayer(Player* player, Player* killer);
-        void EventPlayerDroppedFlag(Player* player);
+        void RemovePlayer(Player* player, uint64 guid, uint32 team) override;
+        WorldSafeLocsEntry const* GetClosestGraveYard(Player* player) override;
+        void HandleKillPlayer(Player* player, Player* killer) override;
+        void EventPlayerDroppedFlag(Player* player) override;
 
     private:
         uint8 GetFlagState(uint32 team)             { return m_flagState[GetTeamIndexByTeamId(team)]; };
 
-        uint64 GetFlagPickerGUID(int32 team) const
+        uint64 GetFlagPickerGUID(int32 team) const override
         {
             if (team != TEAM_ALLIANCE && team != TEAM_HORDE)
                 return 0;

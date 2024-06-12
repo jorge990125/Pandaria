@@ -150,9 +150,9 @@ class boss_drahga_shadowburner : public CreatureScript
                 summons.Despawn(summon);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -315,7 +315,7 @@ class npc_drahga_valiona : public CreatureScript
                 summons.Despawn(summon);
             }
 
-            void EnterCombat(Unit* /*who*/)
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_VALIONAS_FLAME, urand(10000, 15000));
                 events.ScheduleEvent(EVENT_SHREDDING_SWIPE, urand(8000, 10000));

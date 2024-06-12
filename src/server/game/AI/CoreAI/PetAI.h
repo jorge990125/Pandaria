@@ -28,27 +28,26 @@ class Spell;
 class PetAI : public CreatureAI
 {
     public:
+        static int Permissible(Creature const* creature);
 
         explicit PetAI(Creature* c);
         ~PetAI();
 
-        void UpdateAI(uint32);
-        static int Permissible(const Creature*);
-
+        void UpdateAI(uint32) override;
         void KilledUnit(Unit* /*victim*/) override;
-        void AttackStart(Unit* target);
-        void MovementInform(uint32 moveType, uint32 data);
-        void OwnerAttackedBy(Unit* attacker);
-        void OwnerAttacked(Unit* target);
-        void AttackedBy(Unit* attacker);
-        void ReceiveEmote(Player* player, uint32 textEmote);
+        void AttackStart(Unit* target) override;
+        void MovementInform(uint32 moveType, uint32 data) override;
+        void OwnerAttackedBy(Unit* attacker) override;
+        void OwnerAttacked(Unit* target) override;
+        void AttackedBy(Unit* attacker) override;
+        void ReceiveEmote(Player* player, uint32 textEmote) override;
 
         // The following aren't used by the PetAI but need to be defined to override
         //  default CreatureAI functions which interfere with the PetAI
         //
-        void MoveInLineOfSight(Unit* /*who*/) { } // CreatureAI interferes with returning pets
+        void MoveInLineOfSight(Unit* /*who*/) override { } // CreatureAI interferes with returning pets
         void MoveInLineOfSight_Safe(Unit* /*who*/) { } // CreatureAI interferes with returning pets
-        void EnterEvadeMode() { } // For fleeing, pets don't use this type of Evade mechanic
+        void EnterEvadeMode() override { } // For fleeing, pets don't use this type of Evade mechanic
 
         void SpellRequiresMovement(Unit* target, Spell* spell) override;
         void OnPetCommand(CommandStates) override;

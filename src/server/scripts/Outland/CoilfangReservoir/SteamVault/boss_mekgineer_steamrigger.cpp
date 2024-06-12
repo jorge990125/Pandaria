@@ -105,7 +105,7 @@ class boss_mekgineer_steamrigger : public CreatureScript
                 Talk(SAY_SLAY);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_SHRINK, 20 * IN_MILLISECONDS);
@@ -211,7 +211,7 @@ class npc_steamrigger_mechanic : public CreatureScript
                 //react only if attacked
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void UpdateAI(uint32 diff) override
             {

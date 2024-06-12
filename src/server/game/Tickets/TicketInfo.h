@@ -141,7 +141,7 @@ public:
     void AppendResponse(std::string const& response) { _response += response; }
     void SetEscalatedStatus(GMTicketEscalationStatus escalatedStatus) { _escalatedStatus = escalatedStatus; }
     void SetViewed() { _viewed = true; }
-    void SetUnassigned();
+    void SetUnassigned() override;
     void SetChatLog(std::list<uint32> time, std::string const& log);
     void SetCompleted() { _completed = true; }
     void SetMessage(std::string const& message);

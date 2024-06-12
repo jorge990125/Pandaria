@@ -208,9 +208,9 @@ class boss_gormok : public CreatureScript
                 me->DespawnOrUnsummon();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 me->SetInCombatWithZone();
                 instance->SetData(TYPE_NORTHREND_BEASTS, GORMOK_IN_PROGRESS);
 
@@ -318,7 +318,7 @@ class npc_snobold_vassal : public CreatureScript
                 ScriptedAI::EnterEvadeMode();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 _targetGUID = who->GetGUID();
                 me->TauntApply(who);
@@ -550,9 +550,9 @@ struct boss_jormungarAI : public BossAI
                 instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
-        _EnterCombat();
+        _JustEngagedWith();
         me->SetInCombatWithZone();
         if (instance)
             instance->SetData(TYPE_NORTHREND_BEASTS, SNAKES_IN_PROGRESS);
@@ -953,9 +953,9 @@ class boss_icehowl : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 if (instance)
                     instance->SetData(TYPE_NORTHREND_BEASTS, ICEHOWL_IN_PROGRESS);
             }

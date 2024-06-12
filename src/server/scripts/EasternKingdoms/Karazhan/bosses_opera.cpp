@@ -175,7 +175,7 @@ class boss_dorothee : public CreatureScript
                 TitoDied = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
                 Talk(SAY_DOROTHEE_AGGRO);
@@ -277,7 +277,7 @@ class npc_tito : public CreatureScript
                 YipTimer = 10000;
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void JustDied(Unit* /*killer*/) override
             {
@@ -366,7 +366,7 @@ class boss_strawman : public CreatureScript
                 ScriptedAI::MoveInLineOfSight(who);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
                 Talk(SAY_STRAWMAN_AGGRO);
@@ -473,7 +473,7 @@ class boss_tinhead : public CreatureScript
                 RustCount   = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
                 Talk(SAY_TINHEAD_AGGRO);
@@ -601,7 +601,7 @@ class boss_roar : public CreatureScript
                 ScriptedAI::AttackStart(who);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
                 Talk(SAY_ROAR_AGGRO);
@@ -702,7 +702,7 @@ class boss_crone : public CreatureScript
                 me->DespawnOrUnsummon();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
                 Talk(SAY_CRONE_AGGRO);
@@ -773,7 +773,7 @@ class npc_cyclone : public CreatureScript
                 MoveTimer = 1000;
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void MoveInLineOfSight(Unit* /*who*/) override { }
 
@@ -881,7 +881,7 @@ class boss_bigbadwolf : public CreatureScript
                 IsChasing  = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
                 Talk(SAY_WOLF_AGGRO);
@@ -1105,7 +1105,7 @@ class boss_julianne : public CreatureScript
                 RomuloDead = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
             }
@@ -1276,7 +1276,7 @@ class boss_romulo : public CreatureScript
                 TC_LOG_ERROR("scripts", "TSCR: boss_romuloAI: DamageTaken reach end of code, that should not happen.");
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
                 Talk(SAY_ROMULO_AGGRO);

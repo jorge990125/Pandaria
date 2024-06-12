@@ -134,7 +134,7 @@ class boss_ionar : public CreatureScript
                     instance->SetData(TYPE_IONAR, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 

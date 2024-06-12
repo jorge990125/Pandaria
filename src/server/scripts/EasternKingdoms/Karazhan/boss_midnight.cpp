@@ -81,7 +81,7 @@ class boss_attumen : public CreatureScript
                 ResetTimer = 2000;
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void KilledUnit(Unit* /*victim*/) override
             {
@@ -133,7 +133,7 @@ class boss_midnight : public CreatureScript
                 me->SetVisible(true);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void KilledUnit(Unit* /*victim*/) override
             {

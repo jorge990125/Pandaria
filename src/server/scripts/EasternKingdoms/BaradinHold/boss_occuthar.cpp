@@ -84,7 +84,7 @@ class boss_occuthar : public CreatureScript
                 _JustReachedHome();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BERSERK, 300000);
                 events.ScheduleEvent(EVENT_EYE_OF_OCCUTHAR, 59000);

@@ -343,7 +343,7 @@ public:
             me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void UpdateAI(uint32 diff) override
         {
@@ -460,7 +460,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)override { }
+        void JustEngagedWith(Unit* /*who*/)override { }
 
         void ReceiveEmote(Player* player, uint32 emote) override
         {
@@ -689,7 +689,7 @@ public:
 
         void UpdateAI(uint32 diff) override;
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
     };
 
     bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest) override
@@ -755,7 +755,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)override { }
+        void JustEngagedWith(Unit* /*who*/)override { }
 
         void SpellHit(Unit* caster, SpellInfo const* spell) override
         {
@@ -938,7 +938,7 @@ public:
             me->SetHealth(me->CountPctFromMaxHealth(70));
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void SpellHit(Unit* caster, SpellInfo const* spell) override
         {
@@ -1126,7 +1126,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
         }
 
@@ -1524,7 +1524,7 @@ public:
         npc_steam_tonkAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() override { }
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void OnPossess(bool apply)
         {
@@ -1571,7 +1571,7 @@ public:
             ExplosionTimer = 3000;
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
         void AttackStart(Unit* /*who*/) override { }
         void MoveInLineOfSight(Unit* /*who*/) override { }
 
@@ -2452,7 +2452,7 @@ public:
                 me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void DoAction(int32 /*param*/) override
         {
@@ -2519,7 +2519,7 @@ struct npc_stone_statue : public ScriptedAI
     void EnterEvadeMode() override { }
     bool CanAIAttack(Unit const* /*who*/) const override { return false; }
     void AttackStart(Unit* /*who*/) override { }
-    void EnterCombat(Unit* /*who*/) override { }
+    void JustEngagedWith(Unit* /*who*/) override { }
     void UpdateAI(uint32 /*diff*/) override { }
 };
 
@@ -2547,7 +2547,7 @@ struct npc_sky_lantern : public ScriptedAI
     void EnterEvadeMode() override { }
     bool CanAIAttack(Unit const* /*who*/) const override { return false; }
     void AttackStart(Unit* /*who*/) override { }
-    void EnterCombat(Unit* /*who*/) override { }
+    void JustEngagedWith(Unit* /*who*/) override { }
     void UpdateAI(uint32 /*diff*/) override { }
 };
 
@@ -2712,7 +2712,7 @@ struct npc_anatomical_dummy : public ScriptedAI
 {
     npc_anatomical_dummy(Creature* creature) : ScriptedAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         talk_timer = 5000;
     }
@@ -3232,7 +3232,7 @@ struct npc_rogue_rare_npc : public ScriptedAI
         me->setRegeneratingHealth(true);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         Talk(0);
         me->setRegeneratingHealth(false);

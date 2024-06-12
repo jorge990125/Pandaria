@@ -189,7 +189,7 @@ class boss_master_snowdrift : public CreatureScript
                 targetGUID = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (!aggroDone)
                 {
@@ -208,7 +208,7 @@ class boss_master_snowdrift : public CreatureScript
                     me->m_Events.Schedule(delay += 2500, 10, [this]()
                     {
                         if (me->IsInCombat())
-                            _EnterCombat();
+                            _JustEngagedWith();
                     });
                 }
             }
@@ -1010,7 +1010,7 @@ class npc_snowdrift_miniboss : public CreatureScript
             InstanceScript* instance;       
             bool stillInFight;
 
-            void PassengerBoarded(Unit* who, int8 seatId, bool apply)
+            void PassengerBoarded(Unit* who, int8 seatId, bool apply) override
             {
                 if (who->GetTypeId() != TYPEID_UNIT)
                     return;

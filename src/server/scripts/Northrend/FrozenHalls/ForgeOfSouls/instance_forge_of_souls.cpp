@@ -131,7 +131,7 @@ class instance_forge_of_souls : public InstanceMapScript
                 return 0;
             }
 
-            void SetData(uint32 data, uint32 value)
+            void SetData(uint32 data, uint32 value) override
             {
                 switch (data)
                 {

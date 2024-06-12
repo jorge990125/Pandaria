@@ -107,7 +107,7 @@ class example_escort : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (HasEscortState(STATE_ESCORT_ESCORTING))
                 {

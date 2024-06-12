@@ -90,7 +90,7 @@ class boss_keristrasza : public CreatureScript
                     instance->SetData(DATA_KERISTRASZA_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 DoCastAOE(SPELL_INTENSE_COLD);
@@ -154,7 +154,7 @@ class boss_keristrasza : public CreatureScript
                 }
             }
 
-            void SetGUID(uint64 guid, int32 id /* = 0 */)
+            void SetGUID(uint64 guid, int32 id /* = 0 */) override
             {
                 if (id == DATA_INTENSE_COLD)
                     intenseColdList.push_back(guid);

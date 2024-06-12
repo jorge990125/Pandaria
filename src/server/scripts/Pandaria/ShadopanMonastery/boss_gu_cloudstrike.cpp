@@ -174,11 +174,11 @@ class boss_gu_cloudstrike : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (!azurePhase)
                 {
-                    _EnterCombat();
+                    _JustEngagedWith();
                     Talk(TALK_AGGRO);
                     if (instance)
                     {

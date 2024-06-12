@@ -208,7 +208,7 @@ class boss_amber_shaper_unsok : public CreatureScript
                     instance->SetBossState(DATA_UNSOK, FAIL);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_UNSOK, who->ToPlayer()))
                 {
@@ -217,7 +217,7 @@ class boss_amber_shaper_unsok : public CreatureScript
                     return;
                 }
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                 {

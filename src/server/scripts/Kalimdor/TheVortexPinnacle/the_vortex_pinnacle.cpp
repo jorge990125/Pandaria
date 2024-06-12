@@ -258,7 +258,7 @@ class npc_skyfall_star : public CreatureScript
                 me->SetDisableGravity(false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_ARCANE_BARRAGE, urand(1500, 5000));
                 me->GetMotionMaster()->MoveRandom(10.0f);
@@ -309,7 +309,7 @@ class npc_cloud_prince : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_TYPHOON, urand(5000, 7000));
                 events.ScheduleEvent(EVENT_STARFALL, urand(7000, 15000));
@@ -366,7 +366,7 @@ class npc_whipping_wind : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_WHW_LIGHTNING_BOLT, 2000);
             }
@@ -431,7 +431,7 @@ class npc_young_storm_dragon : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_HEALING_WELL);
                 events.ScheduleEvent(EVENT_CHILLING_BLAST, urand(12000, 15000));
@@ -483,7 +483,7 @@ class npc_armored_mistral : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_RISING_WINDS);
                 events.ScheduleEvent(EVENT_GALE_STRIKE, urand(2000, 4000));
@@ -541,7 +541,7 @@ class npc_empyrean_assassin : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_VAPOR_FORM, urand(15000, 20000));    
             }
@@ -592,7 +592,7 @@ class npc_executor_of_the_caliph : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_RALLY, urand(5000, 20000));
                 events.ScheduleEvent(EVENT_DEVASTATE, urand(2000, 8000));
@@ -653,7 +653,7 @@ class npc_gust_soldier : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 DoCast(who, SPELL_CHARGE);
                 events.ScheduleEvent(EVENT_AIR_NOVA, urand(5000, 15000));
@@ -729,7 +729,7 @@ struct npc_lurking_tempest : public ScriptedAI
             damage = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override 
+    void JustEngagedWith(Unit* /*who*/) override 
     {
         events.ScheduleEvent(EVENT_LIGHTNING_BOLT, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_LURK, 3 * IN_MILLISECONDS);
@@ -905,7 +905,7 @@ class npc_minister_of_air : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_LIGHTNING_LASH, urand(4000, 8000));
                 events.ScheduleEvent(EVENT_LIGHTNING_NOVA, urand(7000, 10000));
@@ -963,7 +963,7 @@ class npc_servant_of_asaad : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CRUSADER_STRIKE, urand(3000, 6000));
                 events.ScheduleEvent(EVENT_HAND_OF_PROTECTION, urand(10000, 15000));
@@ -1020,7 +1020,7 @@ class npc_temple_adept : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_HOLY_SMITE, urand(5000, 6000));
                 events.ScheduleEvent(EVENT_GREATER_HEAL, urand(5000, 6000));
@@ -1091,7 +1091,7 @@ class npc_turbulent_squall : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_ASPHYXIATE, urand(3000, 10000));
                 events.ScheduleEvent(EVENT_HURRICANE, urand(10000, 20000));
@@ -1154,7 +1154,7 @@ class npc_wild_vortex : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_WIND_SHOCK, urand(5000, 10000));
                 events.ScheduleEvent(EVENT_WV_LIGHTNING_BOLT, 3000);

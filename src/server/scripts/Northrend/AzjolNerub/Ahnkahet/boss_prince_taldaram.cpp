@@ -137,7 +137,7 @@ class boss_taldaram : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance)
                     instance->SetData(DATA_PRINCE_TALDARAM_EVENT, IN_PROGRESS);
@@ -396,9 +396,9 @@ class npc_taldaram_flamesphere : public CreatureScript
                 uiDespawnTimer = 10 * IN_MILLISECONDS;
             }
 
-            void EnterCombat(Unit* /*who*/) { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
-            void MoveInLineOfSight(Unit* /*who*/) { }
+            void MoveInLineOfSight(Unit* /*who*/) override { }
 
             void JustDied(Unit* /*killer*/) override
             {

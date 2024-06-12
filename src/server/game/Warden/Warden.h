@@ -148,7 +148,7 @@ class Warden
         virtual void InitializeModule() { }
         virtual void RequestHash() = 0;
         virtual void HandleHashResult(ByteBuffer &buff) = 0;
-        virtual void RequestData(WardenRequestContext* context = NULL) = 0;
+        virtual void RequestData(WardenRequestContext* context = nullptr) = 0;
         virtual void HandleData(ByteBuffer &buff) = 0;
 
         virtual bool GetEndSceneAddress(int32&) { return false; }
@@ -169,7 +169,7 @@ class Warden
         {
             WardenFailedCheckGroupRecord& record = _failedCheckGroups[group];
             ++record.Count;
-            record.LastFailTime = time(NULL);
+            record.LastFailTime = time(nullptr);
             if (!comment.empty())
                 record.Comments.insert(comment);
         }
@@ -179,7 +179,7 @@ class Warden
         static uint32 BuildChecksum(const uint8 *data, uint32 length);
 
         // If no check is passed, the default action from config is executed
-        std::string Penalty(WardenCheck* check = NULL);
+        std::string Penalty(WardenCheck* check = nullptr);
 
     private:
         void SendPacket(Opcodes opcode, void const *data, size_t dataSize);

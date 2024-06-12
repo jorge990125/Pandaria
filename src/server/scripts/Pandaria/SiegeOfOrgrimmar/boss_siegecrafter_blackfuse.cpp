@@ -341,9 +341,9 @@ class boss_siegecrafter_blackfuse : public CreatureScript
                         mySiegecrafter->AI()->Talk(TALK_SLAY);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 me->SetReactState(REACT_AGGRESSIVE);
                 DoCast(me, SPELL_ENERGIZING_DEFENSIVE_MATRIX); // remove players from conveyor on encounter combat
@@ -625,7 +625,7 @@ struct npc_automated_shredder : public ScriptedAI
         instance = me->GetInstanceScript();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DEATH_FROM_ABOVE, 19 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_OVERCHARGE, 6 * IN_MILLISECONDS);
@@ -2144,7 +2144,7 @@ struct npc_soo_shockwave_missle : public ScriptedAI
         }
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         // Required: visible for first inner circle
         scheduler
@@ -2997,7 +2997,7 @@ class spell_siegecrafter_magnetic_crush_push_saw : public SpellScript
 
     std::list<WorldObject*> m_targets;
 
-    bool Load()
+    bool Load() override
     {
         useCount = 0;
         step = 0.0f;
@@ -3062,7 +3062,7 @@ class spell_siegecrafter_magnetic_crush_pull_saw : public SpellScript
 
     std::list<WorldObject*> m_targets;
 
-    bool Load()
+    bool Load() override
     {
         useCount = 0;
         step = 0.0f;

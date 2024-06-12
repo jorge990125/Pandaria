@@ -312,7 +312,7 @@ struct HookMgr
     void OnLootStateChanged(GameObject* pGameObject, uint32 state, Unit* pUnit);
     void OnGameObjectStateChanged(GameObject* pGameObject, uint32 state);
     /* Player */
-    void OnPlayerEnterCombat(Player* pPlayer, Unit* pEnemy);
+    void OnPlayerJustEngagedWith(Player* pPlayer, Unit* pEnemy);
     void OnPlayerLeaveCombat(Player* pPlayer);
     void OnPVPKill(Player* pKiller, Player* pKilled);
     void OnCreatureKill(Player* pKiller, Creature* pKilled);

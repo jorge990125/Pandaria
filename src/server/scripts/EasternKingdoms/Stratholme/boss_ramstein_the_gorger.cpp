@@ -65,7 +65,7 @@ public:
             Knockout_Timer = 12000;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
         }
 

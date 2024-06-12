@@ -586,7 +586,7 @@ class boss_grubbis : public CreatureScript
                         creature->AI()->SetData(2, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
                 events.ScheduleEvent(EVENT_STRIKE, urand(7 * IN_MILLISECONDS, 11 * IN_MILLISECONDS));
             }

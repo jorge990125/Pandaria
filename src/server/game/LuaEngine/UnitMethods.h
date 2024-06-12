@@ -133,9 +133,9 @@ namespace LuaUnit
         return 1;
     }
 
-    int GetMountId(lua_State* L, Unit* unit)
+    int GetMountDisplayId(lua_State* L, Unit* unit)
     {
-        sEluna->Push(L, unit->GetMountID());
+        sEluna->Push(L, unit->GetMountDisplayId());
         return 1;
     }
 

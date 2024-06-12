@@ -154,7 +154,7 @@ class npc_blood_elf_council_voice_trigger : public CreatureScript
                     TC_LOG_ERROR("misc", ERROR_INST_DATA);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void AttackStart(Unit* /*who*/) override { }
             void MoveInLineOfSight(Unit* /*who*/) override { }
 
@@ -260,7 +260,7 @@ class npc_illidari_council : public CreatureScript
                 me->SetDisplayId(11686);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void AttackStart(Unit* /*who*/) override { }
             void MoveInLineOfSight(Unit* /*who*/) override { }
 
@@ -382,7 +382,7 @@ struct boss_illidari_councilAI : public ScriptedAI
     InstanceScript* instance;
     bool LoadedGUIDs;
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         if (instance)
         {

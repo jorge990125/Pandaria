@@ -586,7 +586,7 @@ struct npc_twilight_hurp_derp : public customCreatureAI
         scheduler.CancelAll();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler.CancelAll();
 
@@ -715,7 +715,7 @@ struct npc_twilight_faction_champions : public customCreatureAI
         scheduler.CancelAll();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler.CancelAll();
 
@@ -882,7 +882,7 @@ struct npc_twilight_calders_creation : public customCreatureAI
         summon->CastSpell(summon, SPELL_POISON_CLOUD_TRIGGERING, true);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler.CancelAll();
 
@@ -1055,7 +1055,7 @@ struct npc_twilight_lord_tulvan : public customCreatureAI
         secondEnrage = false;
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler.CancelAll();
 
@@ -1192,7 +1192,7 @@ struct npc_twilight_emberscar_devourer : public customCreatureAI
         hasEnrage = false;
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler.CancelAll();
 

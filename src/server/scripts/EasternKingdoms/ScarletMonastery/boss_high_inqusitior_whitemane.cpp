@@ -187,9 +187,9 @@ class boss_commander_durand : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 if (instance)
                 {
                     instance->SetData(BOSS_DURAND, IN_PROGRESS);
@@ -423,9 +423,9 @@ class boss_high_inqusitior_whitemane : public CreatureScript
                     me->GetMotionMaster()->MoveChase(vict);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 if (instance)
                 {
                     instance->SetData(BOSS_WHITEMANE, IN_PROGRESS);

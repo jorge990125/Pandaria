@@ -282,7 +282,7 @@ class instance_ulduar : public InstanceMapScript
                 builder.AppendState(uint32(WORLD_STATE_ALGALON_DESPAWN_TIMER), uint32(std::min<uint32>(_algalonTimer, 60)));
             }
 
-            void OnPlayerEnter(Player* player)
+            void OnPlayerEnter(Player* player) override
             {
                 if (!LeviathanGUID || !OrbitalSupportGUID)
                 {
@@ -631,7 +631,7 @@ class instance_ulduar : public InstanceMapScript
                 }
             }
 
-            void OnCreatureRemove(Creature* creature)
+            void OnCreatureRemove(Creature* creature) override
             {
                 switch (creature->GetEntry())
                 {
@@ -1656,7 +1656,7 @@ class instance_ulduar : public InstanceMapScript
                         go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_LOCKED);
             }
 
-            std::string GetSaveData()
+            std::string GetSaveData() override
             {
                 OUT_SAVE_INST_DATA;
 
@@ -1672,7 +1672,7 @@ class instance_ulduar : public InstanceMapScript
                 return saveStream.str();
             }
 
-            void Load(char const* strIn)
+            void Load(char const* strIn) override
             {
                 if (!strIn)
                 {
@@ -1749,7 +1749,7 @@ class instance_ulduar : public InstanceMapScript
                 OUT_LOAD_INST_DATA_COMPLETE;
             }
 
-            void Update(uint32 diff)
+            void Update(uint32 diff) override
             {
                 if (_events.Empty())
                     return;

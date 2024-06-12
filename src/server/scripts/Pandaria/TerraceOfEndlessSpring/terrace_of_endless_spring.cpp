@@ -146,7 +146,7 @@ class npc_apparition_of_fear : public CreatureScript
                     instance->SetData(INTRO_DONE, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveAurasDueToSpell(SPELL_CHANNELING_CORRUPTION);
 
@@ -304,7 +304,7 @@ class npc_apparition_of_terror : public CreatureScript
                     instance->SetData(INTRO_DONE, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveAurasDueToSpell(SPELL_CHANNELING_CORRUPTION);
 

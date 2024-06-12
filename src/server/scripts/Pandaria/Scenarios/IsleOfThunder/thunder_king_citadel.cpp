@@ -241,7 +241,7 @@ struct npc_thunder_king_treasure_zandalari_arcweaver : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ARCANE_BOLT, urand(3.5 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, urand(8 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
@@ -278,7 +278,7 @@ struct npc_thunder_king_treasure_sentry_beam_bunny : public ScriptedAI
     TaskScheduler scheduler;
     uint64 targetGUID;
 
-    void IsSummonedBy(Unit* summoner)
+    void IsSummonedBy(Unit* summoner) override
     {
         if (summoner->ToCreature())
             targetGUID = summoner->ToCreature()->AI()->GetGUID();
@@ -324,7 +324,7 @@ struct npc_god_hulk_gulkan : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_MIGHTY_STOMP, urand(10 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_MIGHTY_CRASH, 7.5 * IN_MILLISECONDS);
@@ -361,7 +361,7 @@ struct npc_zandalari_venomblade : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(who, SPELL_IMPALING_PULL, true);
         events.ScheduleEvent(EVENT_BATTLE_SHOUT, urand(10 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
@@ -473,7 +473,7 @@ struct npc_thunder_king_treasure_stone_watcher : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         me->SetReactState(REACT_AGGRESSIVE);
         me->RemoveAurasDueToSpell(SPELL_ETERNAL_SLUMBER);

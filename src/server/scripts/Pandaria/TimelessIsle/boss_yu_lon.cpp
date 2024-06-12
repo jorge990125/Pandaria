@@ -132,7 +132,7 @@ class boss_yu_lon : public CreatureScript
                 HandleDoor(me, GO_CELESTIAL_DOOR, true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 UpdateHealth(me);
                 death = false;

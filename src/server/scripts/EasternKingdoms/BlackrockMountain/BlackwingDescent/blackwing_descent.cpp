@@ -354,7 +354,7 @@ class npc_golem_sentry : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
 
                 std::list<Creature*> _golems;
@@ -552,7 +552,7 @@ class npc_drakonid_drudge : public CreatureScript
                         DoCast((*itr), SPELL_VENGEFUL_RAGE);            
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 std::list<Creature*> _drudges;
                 GetCreatureListWithEntryInGrid(_drudges, me, NPC_GOLEM_SENTRY, 200.0f);
@@ -632,7 +632,7 @@ class npc_drakonid_chainwielder : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_OVERHEAD_SMASH, urand(5000, 10000));
                 events.ScheduleEvent(EVENT_GRIEVOUS_WOUND, urand(8000, 10000));
@@ -708,7 +708,7 @@ class npc_maimgor: public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_MAIMGOR_BERSERK, urand(5000, 10000));
                 events.ScheduleEvent(EVENT_SHADOWFLAME, urand(8000, 12000));
@@ -787,7 +787,7 @@ class npc_ivoroc: public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHADOWFLAME, urand(8000, 12000));
                 events.ScheduleEvent(EVENT_CURSE_OF_MENDING, urand(5000, 10000));
@@ -857,7 +857,7 @@ class npc_pyreclaw: public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHADOWFLAME, urand(8000, 12000));
                 events.ScheduleEvent(EVENT_FLAME_BUFFET, urand(6000, 7000));
@@ -927,7 +927,7 @@ class npc_drakonid_slayer: public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_CLEAVE, urand(5000, 8000));
                 events.ScheduleEvent(EVENT_BLAST_WAVE, urand(10000, 15000));
@@ -1001,7 +1001,7 @@ class npc_drakeadon_mongrel: public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_FROST_BURN, urand(10000, 30000));
                 events.ScheduleEvent(EVENT_INSENERATE, urand(10000, 30000));
@@ -1127,7 +1127,7 @@ class npc_bd_spirit_of_dwarf: public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 switch (me->GetEntry())
                 {
@@ -1640,7 +1640,7 @@ class npc_blazing_bone_construct : public CreatureScript
                 me->DespawnOrUnsummon();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FIERY_SLASH, urand(8000, 12000));
             }

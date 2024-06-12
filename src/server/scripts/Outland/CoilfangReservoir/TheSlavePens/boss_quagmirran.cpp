@@ -54,9 +54,9 @@ class boss_quagmirran : public CreatureScript
                     instance->SetData(DATA_QUAGMIRRAN, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 events.ScheduleEvent(EVENT_CLEAVE, urand(9 * IN_MILLISECONDS, 18 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_UPPERCUT, urand(20 * IN_MILLISECONDS, 21 * IN_MILLISECONDS));

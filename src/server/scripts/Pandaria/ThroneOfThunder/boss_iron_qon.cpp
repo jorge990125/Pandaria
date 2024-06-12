@@ -240,15 +240,15 @@ class boss_iron_qon : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Talk(TALK_AGGRO);
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 for (auto&& itr : quelins)
                     if (Creature* quelin = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(itr) : 0))
-                        quelin->AI()->EnterCombat(who);
+                        quelin->AI()->JustEngagedWith(who);
 
                 if (GameObject* go = ObjectAccessor::GetGameObject(*me, instance ? instance->GetData64(GO_IRON_QON_SEWER_GATE) : 0))
                     go->SetGoState(GO_STATE_READY);
@@ -523,7 +523,7 @@ struct quelingBaseAI : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
         events.Reset();
         additionalEvents.Reset();
@@ -781,7 +781,7 @@ class npc_roshak : public CreatureScript
                 instance = me->GetInstanceScript();
             }
     
-            void EnterCombat(Unit* who) override 
+            void JustEngagedWith(Unit* who) override 
             {
                 if (inCombat)
                     return;
@@ -898,7 +898,7 @@ class npc_quetzal : public CreatureScript
                 instance = me->GetInstanceScript();
             }
     
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (inCombat)
                     return;
@@ -1066,7 +1066,7 @@ class npc_damren : public CreatureScript
                 instance = me->GetInstanceScript();
             }
     
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (inCombat)
                     return;

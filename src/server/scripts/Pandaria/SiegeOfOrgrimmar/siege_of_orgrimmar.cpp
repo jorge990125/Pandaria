@@ -407,7 +407,7 @@ struct npc_tormented_initiate : public customCreatureAI
         });
     }
 
-    uint64 GetLowestFriendGUID()
+    uint64 GetLowestFriendGUID() override
     {
         std::list<Creature*> tmpTargets;
         GetCreatureListWithEntryInGrid(tmpTargets, me, NPC_TORMENTED_INITIATE, 40.0f);
@@ -424,7 +424,7 @@ struct npc_tormented_initiate : public customCreatureAI
         return 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         // hacky yes, but not way without npc groups
         if (me->GetDBTableGUIDLow() == 559524 || me->GetDBTableGUIDLow() == 559550)
@@ -468,7 +468,7 @@ struct npc_fallen_pool_tender : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_INTRO);
         events.ScheduleEvent(EVENT_BUBLE_SHIELD, urand(1.5 * IN_MILLISECONDS, 2 * IN_MILLISECONDS));
@@ -507,7 +507,7 @@ struct npc_aqueous_defender : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_VORTEX, urand(4.5 * IN_MILLISECONDS, 7 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_RUSHING_WATERS, 11 * IN_MILLISECONDS);
@@ -866,7 +866,7 @@ struct npc_vanity : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SELF_ABSORBED, 9 * IN_MILLISECONDS);
     }
@@ -907,7 +907,7 @@ struct npc_fragment_of_pride : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_GROWING_PRIDE, urand(5.5 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
     }
@@ -942,7 +942,7 @@ struct npc_amalgamated_hubris : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHA_NOVA, 8.5 * IN_MILLISECONDS);
     }
@@ -986,7 +986,7 @@ struct npc_zeal : public customCreatureAI
             me->RemoveAurasDueToSpell(SPELL_VANITY);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (!hasVanityNotAlive)
             events.ScheduleEvent(EVENT_SELF_ABSORBED, 9 * IN_MILLISECONDS);
@@ -1052,7 +1052,7 @@ struct npc_lingering_corruption : public customCreatureAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->GetMotionMaster()->Clear();
         scheduler.CancelAll();
@@ -1231,7 +1231,7 @@ struct npc_dragonmaw_tidal_shaman : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_TIDAL_WAVE, 12 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_CHAIN_HEAL, 5.5 * IN_MILLISECONDS);
@@ -1292,7 +1292,7 @@ struct npc_dragonmaw_bonecrusher : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHATTERING_ROAR, 6 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_FRACTURE, 8 * IN_MILLISECONDS);
@@ -1329,7 +1329,7 @@ struct npc_dragonmaw_elite_grunt : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_THROW_AXE, urand(2.5 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
     }
@@ -1754,7 +1754,7 @@ struct npc_siege_of_orgrimmar_blind_blademaster : public customCreatureAI
             DoStartNoMovement(target);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->PrepareChanneledCast(me->GetOrientation());
         events.ScheduleEvent(EVENT_BLIND_STRIKE, 1.5 * IN_MILLISECONDS);
@@ -1825,7 +1825,7 @@ struct npc_siege_of_orgrimmar_korkron_dark_shaman : public customCreatureAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_LAVA_BURST, 1.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_ELECTRIFIED_GROUND, 10 * IN_MILLISECONDS);
@@ -1896,7 +1896,7 @@ struct npc_siege_of_orgrimmar_korkron_grunt_2 : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->RemoveAurasDueToSpell(SPELL_SIT);
         events.ScheduleEvent(EVENT_CLEAVE, urand(2.5 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
@@ -1932,7 +1932,7 @@ struct npc_siege_of_orgrimmar_overseeker_mojka : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(who, SPELL_CHARGE);
 
@@ -2020,7 +2020,7 @@ struct npc_overseer_komak : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override 
+    void JustEngagedWith(Unit* who) override 
     {
         DoCast(who, SPELL_CHARGE);
 
@@ -2104,7 +2104,7 @@ struct npc_siege_of_orgrimmar_mokvar_the_treasurer : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_COIN_TOSS, 1.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_BRIBE, 12 * IN_MILLISECONDS);
@@ -2259,7 +2259,7 @@ struct npc_siege_of_orgrimmar_korkron_shadowmage : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_MIND_SPIKE, 1.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_SHADOWFLAME, 11 * IN_MILLISECONDS);
@@ -2314,7 +2314,7 @@ struct npc_siege_of_orgrimmar_korkron_overseer : public customCreatureAI
         }
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(who, SPELL_CHARGE);
 
@@ -2363,7 +2363,7 @@ struct npc_siege_of_orgrimmar_korkron_dire_wolf : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_REND, 2.5 * IN_MILLISECONDS);
     }
@@ -2442,7 +2442,7 @@ struct npc_siege_of_orgrimmar_overlord_runthak : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_BONECRACKER, 3 * IN_MILLISECONDS);
     }
@@ -2496,7 +2496,7 @@ struct npc_siege_of_orgrimmar_hellscream_demolisher : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_HURL_BOULDER, urand(1.5 * IN_MILLISECONDS, 4.5 * IN_MILLISECONDS));
     }
@@ -2578,7 +2578,7 @@ struct npc_siege_of_orgrimmar_doomlord : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_CRIPPLE, urand(1.5 * IN_MILLISECONDS, 4.5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_SHADOW_BOLT_VOLLEY, 8.5 * IN_MILLISECONDS);
@@ -2631,7 +2631,7 @@ struct npc_siege_of_orgrimmar_korkron_blood_axe : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         // no way to subgroup this without regions
         if (me->GetDBTableGUIDLow() == 558870 || me->GetDBTableGUIDLow() == 558872 || me->GetDBTableGUIDLow() == 558863 || me->GetDBTableGUIDLow() == 558880
@@ -2746,7 +2746,7 @@ struct npc_siege_of_orgrimmar_korkron_gunner : public customCreatureAI
         }
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (me->GetHomePosition().GetPositionZ() > -224.0f) // stop patrol
         {
@@ -2827,7 +2827,7 @@ struct npc_siege_of_orgrimmar_korkron_dark_farseer : public customCreatureAI
         }
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_BALE_STRIKE, urand(1.5 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_UMBRAL_TEMPEST, urand(10 * IN_MILLISECONDS, 14 * IN_MILLISECONDS));
@@ -2920,7 +2920,7 @@ struct npc_siege_of_orgrimmar_korkron_dark_wolf : public customCreatureAI
         });
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         me->StopMoving();
         scheduler.CancelAll();
@@ -2964,7 +2964,7 @@ struct npc_siege_of_orgrimmar_hellscream_annihilator : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(me, SPELL_ANNIHILATION);
         events.ScheduleEvent(EVENT_SCORCHED_EARTH, urand(1.5 * IN_MILLISECONDS, 3 * IN_MILLISECONDS));
@@ -3000,7 +3000,7 @@ struct npc_siege_of_orgrimmar_korkron_skull_splitter : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         Talk(TALK_INTRO);
         DoCast(me, SPELL_BATTLE_BOUND);
@@ -3073,7 +3073,7 @@ struct npc_siege_of_orgrimmar_corrupted_skullsplitter : public customCreatureAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->SetFaction(1375);
         events.ScheduleEvent(EVENT_ARCING_BLAST, urand(6 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
@@ -3132,7 +3132,7 @@ struct npc_siege_of_orgrimmar_korkron_iron_scorpion : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SERRATED_CLEAVE, urand(2.5 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_ACID_SPRAY, 11 * IN_MILLISECONDS);
@@ -3169,7 +3169,7 @@ struct npc_siege_of_orgrimmar_arcweaver_reinforcements : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DETERIORATE, urand(2.5 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_INFUSION, 8 * IN_MILLISECONDS);
@@ -3206,7 +3206,7 @@ struct npc_siege_of_orgrimmar_brute_reinforcements : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SLOW_AND_STEADY, urand(2.5 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
     }
@@ -3242,7 +3242,7 @@ struct npc_siege_of_orgrimmar_storeroom_guard : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_CALL_REINFORCEMENTS);
         events.ScheduleEvent(EVENT_CALL_REINFORCEMENTS, 10 * IN_MILLISECONDS);
@@ -3314,7 +3314,7 @@ struct npc_korkron_iron_sentinel : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_STRENGTH_IN_NUMBERS);
     }
@@ -3372,7 +3372,7 @@ struct npc_siege_of_orgrimmar_korkron_gunner_rp_event : public customCreatureAI
         }
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FIRE_STORM, urand(8 * IN_MILLISECONDS, 16 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_MOLTEN_SLUG, 1.5 * IN_MILLISECONDS);
@@ -3413,7 +3413,7 @@ struct npc_war_master_kragg : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_OBLITERATE, 8 * IN_MILLISECONDS);
     }
@@ -3452,7 +3452,7 @@ struct npc_siege_of_orgrimmar_thresher_turret : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHREDDING_BLAST, urand(1.5 * IN_MILLISECONDS, 3 * IN_MILLISECONDS));
     }
@@ -3486,7 +3486,7 @@ struct npc_siege_of_orgrimmar_enraged_mushan_beast : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CRUSHING_SWIPE, 11 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_LACERATING_BEAT, 3.5 * IN_MILLISECONDS);
@@ -3633,7 +3633,7 @@ struct npc_siege_of_orgrimmar_aggron : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_OBLITERATING_STRIKE, 5.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_VIVISECTION, 10.5 * IN_MILLISECONDS);
@@ -3681,7 +3681,7 @@ struct npc_siege_of_orgrimmar_blackfuse_korkron_overseer : public customCreature
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_OBLITERATING_STRIKE, 7 * IN_MILLISECONDS);
     }
@@ -3729,7 +3729,7 @@ struct npc_siege_of_orgrimmar_blackfuse_sellsword : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ENVENOMED_SHADOWSTEP, urand(7.5 * IN_MILLISECONDS, 11 * IN_MILLISECONDS));
     }
@@ -3784,7 +3784,7 @@ struct npc_siege_of_orgrimmar_blackfuse_engineer : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ADRENALINE_BOMB, urand(11 * IN_MILLISECONDS, 20 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_HEALING_SPRAY, urand(5 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
@@ -3858,7 +3858,7 @@ struct npc_siege_of_orgrimmar_gorodan : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_INTRO);
         events.ScheduleEvent(EVENT_DRILLCHARGE, 5 * IN_MILLISECONDS);
@@ -3937,7 +3937,7 @@ struct npc_siege_of_orgrimmar_shanna_sparkfizz : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_LASER_BEAM, 2 * IN_MILLISECONDS);
     }
@@ -4034,7 +4034,7 @@ struct npc_klaxxi_srathik_amber_master : public customCreatureAI
         summons.DespawnAll();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_AMBER_BLAST, 1.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_RESONATING_AMBER, 8.5 * IN_MILLISECONDS);
@@ -4083,7 +4083,7 @@ struct npc_klaxxi_korthik_honor_guard : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FRENZIED_ASSAULT, 9 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_PIERCE, 5 * IN_MILLISECONDS);
@@ -4121,7 +4121,7 @@ struct npc_klaxxi_kovok : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_MIGHTY_CLEAVE, 3.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_GROUND_SLAM, 10 * IN_MILLISECONDS);
@@ -4161,7 +4161,7 @@ struct npc_klaxxi_grand_master_alchemist_kixen : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ALCHEMICAL_MASTERY, 2.5 * IN_MILLISECONDS);
     }
@@ -4476,7 +4476,7 @@ struct npc_siege_of_orgrimmar_harbinger_of_yshaarj : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->CallForHelp(15.0f);
         events.ScheduleEvent(EVENT_YSHAARJ_TOURCHED, urand(10 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
@@ -4534,7 +4534,7 @@ struct npc_siege_of_orgrimmar_korkron_reaper : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->CallForHelp(15.0f);
         events.ScheduleEvent(EVENT_REAPER, 6.5 * IN_MILLISECONDS);
@@ -4625,7 +4625,7 @@ struct npc_siege_of_orgrimmar_gamon : public customCreatureAI
         }
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         me->SetHomePosition(*me);
         Talk(urand(TALK_SPECIAL_7, TALK_SPECIAL_9));
@@ -4829,7 +4829,7 @@ struct npc_siege_of_orgrimmar_korkron_prisoners : public ScriptedAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         scheduler.CancelAll();
 
@@ -5629,7 +5629,7 @@ class spell_siege_of_orgrimmar_blood_of_yshaarj : public AuraScript
 {
     PrepareAuraScript(spell_siege_of_orgrimmar_blood_of_yshaarj);
 
-    bool Load()
+    bool Load() override
     {
         allowStack = true;
         return true;

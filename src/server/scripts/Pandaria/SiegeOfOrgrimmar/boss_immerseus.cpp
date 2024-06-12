@@ -243,7 +243,7 @@ class boss_immerseus : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_SEEPING_SHA, true);
                 events.ScheduleEvent(EVENT_SEEPING_SHA,       100);
@@ -261,7 +261,7 @@ class boss_immerseus : public CreatureScript
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 // Disable Pre-Event
                 if (Creature* oozeController = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(NPC_OOZE_CONTROLLER) : 0))

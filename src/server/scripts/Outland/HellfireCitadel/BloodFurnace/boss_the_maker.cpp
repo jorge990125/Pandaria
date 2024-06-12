@@ -78,7 +78,7 @@ class boss_the_maker : public CreatureScript
                 instance->HandleGameObject(instance->GetData64(DATA_DOOR2), true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 

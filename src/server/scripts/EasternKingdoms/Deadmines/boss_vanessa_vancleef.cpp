@@ -164,12 +164,12 @@ class boss_vanessa_vancleef : public CreatureScript
                 phase = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
                 // by default right now cuz poison phase doesn`t work...
                 me->GetMap()->SetWorldState(WORLDSTATE_VANCLEEF_VINDICATION, 1);
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                 {

@@ -1520,3 +1520,11 @@ void InstanceScript::UpdateDynamicHealth(uint64 single)
             updateHealth(guid);
     }
 }
+
+bool InstanceHasScript(WorldObject const* obj, char const* scriptName)
+{
+    if (InstanceMap* instance = obj->GetMap()->ToInstanceMap())
+        return instance->GetScriptName() == scriptName;
+
+    return false;
+}

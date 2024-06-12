@@ -670,7 +670,7 @@ class npc_zar_thik_supplicant : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_MASH_AND_GNASH, urand(4.5 * IN_MILLISECONDS, 14 * IN_MILLISECONDS));
             }
@@ -723,7 +723,7 @@ class npc_enslaved_bonesmasher : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_JAWBONE_SLAM, urand(7 * IN_MILLISECONDS, 28 * IN_MILLISECONDS));
 
@@ -788,7 +788,7 @@ class npc_set_thik_tempest : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_WIND_SLASH, urand(4 * IN_MILLISECONDS, 25 * IN_MILLISECONDS));
             }
@@ -840,7 +840,7 @@ class npc_set_thik_fanatic : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_GALE_FORCE_WINDS, urand(7 * IN_MILLISECONDS, 27 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_WINDBURST, urand(15 * IN_MILLISECONDS, 25 * IN_MILLISECONDS));
@@ -919,7 +919,7 @@ class npc_set_thik_zephyrian : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SUMMON_ZEPHYR, urand(4 * IN_MILLISECONDS, 25 * IN_MILLISECONDS));
             }
@@ -986,7 +986,7 @@ class npc_set_thik_gale_slicer : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SWIFT_STEP, urand(4 * IN_MILLISECONDS, 22 * IN_MILLISECONDS));
             }
@@ -1088,7 +1088,7 @@ class npc_instructor_kli_thak : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_WIND_STEP, 7000);
                 events.ScheduleEvent(EVENT_WIND_STEP_2, 15000);
@@ -1187,7 +1187,7 @@ class npc_instructor_tak_thok : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_OVERWHELMING_ASSAULT, 4000);
 
@@ -1285,7 +1285,7 @@ class npc_instructor_maltik : public CreatureScript
                 me->setRegeneratingHealth(true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setRegeneratingHealth(false);
                 events.ScheduleEvent(EVENT_UNSEEN_STRIKE, urand(18500, 21500));
@@ -1429,7 +1429,7 @@ class npc_instructor_zarik : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_TEMPEST_SLASH, urand(9500, 11000));
 
@@ -1580,7 +1580,7 @@ class npc_kor_thik_swarmer : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_UNDERWHELMING_ASSAULT, urand(4 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
             }
@@ -1634,7 +1634,7 @@ class npc_set_thik_gustwing : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_GUST, urand(3 * IN_MILLISECONDS, 20 * IN_MILLISECONDS));
             }
@@ -1770,7 +1770,7 @@ class npc_coagulated_amber : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->GetMotionMaster()->Clear();
                 events.ScheduleEvent(EVENT_BURST, 4000);
@@ -1866,7 +1866,7 @@ class npc_korthik_swarmguard : public CreatureScript
                 SetEquipmentSlots(false, MELJARAK_2H_WEAPON, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_CARAPASE, urand(10000, 19000));
                 events.ScheduleEvent(EVENT_SWARMGUARDS_AEGIS, urand(9000, 19000));
@@ -1938,7 +1938,7 @@ class npc_srathik_ambercaller : public CreatureScript
                 SetEquipmentSlots(false, ZARTHIK_2H_WEAPON, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->SetReactState(REACT_PASSIVE);
                 me->AttackStop();
@@ -1979,7 +1979,7 @@ class npc_korthik_fleshrender : public CreatureScript
                 SetEquipmentSlots(false, MELJARAK_2H_WEAPON, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_GRIEVOUS_WHIRL, urand(12000, 18000));
                 events.ScheduleEvent(EVENT_MORTAL_REND, urand(5000, 9000));
@@ -2050,7 +2050,7 @@ class npc_srathik_pool_tender : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!me->HasAura(SPELL_AMBER_EMANATION))
                     me->AddAura(SPELL_AMBER_EMANATION, me);
@@ -2134,7 +2134,7 @@ class npc_amber_ridden_mushan : public CreatureScript
                 return false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Position pos;
 
@@ -2220,7 +2220,7 @@ class npc_amber_searsting : public CreatureScript
                 targetGUID = 0;
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_BURNING_STING, urand(8000, 16000));
                 events.ScheduleEvent(EVENT_SEARING_SLASH, urand(5000, 9000));
@@ -2285,7 +2285,7 @@ class npc_korthik_warsinger : public CreatureScript
 
             void InitializeAI() override { SetEquipmentSlots(false, MELJARAK_2H_WEAPON, 0, EQUIP_NO_CHANGE); }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_FRENZIED_ASSAULT, urand(8000, 16000));
                 events.ScheduleEvent(EVENT_CRY_HAVOC, urand(5000, 9000));
@@ -2345,7 +2345,7 @@ class npc_zarthik_augurer : public CreatureScript
                 SetEquipmentSlots(false, ZARTHIK_2H_WEAPON, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_TOXIC_HIVEBOMB, urand(8000, 16000));
             }

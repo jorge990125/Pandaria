@@ -132,12 +132,12 @@ class boss_lilian_voss : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (!fict)
                     return;
 
-                _EnterCombat();
+                _JustEngagedWith();
                 //Talk(TALK_INTO);
                 if (instance)
                 {

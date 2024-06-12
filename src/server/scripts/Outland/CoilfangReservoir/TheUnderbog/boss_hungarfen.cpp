@@ -59,7 +59,7 @@ class boss_hungarfen : public CreatureScript
                 Root = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_MUSHROOM, 5 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_ACID_GEYSER, 10 * IN_MILLISECONDS);

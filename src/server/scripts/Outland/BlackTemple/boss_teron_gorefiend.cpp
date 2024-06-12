@@ -69,7 +69,7 @@ class npc_doom_blossom : public CreatureScript
                 TeronGUID = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void AttackStart(Unit* /*who*/) override { }
             void MoveInLineOfSight(Unit* /*who*/) override { }
 
@@ -140,7 +140,7 @@ class npc_shadowy_construct : public CreatureScript
                 CheckTeronTimer = 5000;
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void MoveInLineOfSight(Unit* who) override
             {
@@ -252,7 +252,7 @@ class boss_teron_gorefiend : public CreatureScript
                 Done = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void MoveInLineOfSight(Unit* who) override
             {

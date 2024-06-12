@@ -114,7 +114,7 @@ class boss_vizier_jinbak : public CreatureScript
                 BossAI::MoveInLineOfSight(who);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->InterruptNonMeleeSpells(true);
                 visualTimer = 0;
@@ -145,7 +145,7 @@ class boss_vizier_jinbak : public CreatureScript
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_SUMMON_GLOBULES, 10000);
                 events.ScheduleEvent(EVENT_DETONATE, 30000);
-                _EnterCombat();
+                _JustEngagedWith();
             }
 
             void JustSummoned(Creature* summon) override

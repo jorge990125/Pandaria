@@ -371,7 +371,7 @@ struct npc_seething_flashripper : public ScriptedAI
         targetGUID = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CORROSIVE_STING, urand(3.5 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_CLAW_ATTACK, 8.5 * IN_MILLISECONDS);
@@ -430,7 +430,7 @@ struct npc_korthik_timberhusk : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DOUBLE_BLADE_LUNGE, urand(4 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_TIMBERHUSK, 6 * IN_MILLISECONDS);
@@ -479,7 +479,7 @@ struct npc_rankbite_ancient : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_PROTECTIVE_SHELL, urand(12 * IN_MILLISECONDS, 18 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_RANK_BITE, urand(3.5 * IN_MILLISECONDS, 11.5 * IN_MILLISECONDS));
@@ -528,7 +528,7 @@ struct npc_deadtalker_crusher : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_GORED, 7.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_BLOOD_RAGE, 4.5 * IN_MILLISECONDS);
@@ -581,7 +581,7 @@ struct npc_longshadow_mushan : public ScriptedAI
         targetGUID = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SPITBALING, urand(8.5 * IN_MILLISECONDS, 18 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_BELLY_FLOP, 10 * IN_MILLISECONDS);
@@ -647,7 +647,7 @@ struct npc_seething_hatred : public ScriptedAI
         targetGUID = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_PURE_HATE, urand(3.5 * IN_MILLISECONDS, 7 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_CONSUMING_HATE, 10 * IN_MILLISECONDS);
@@ -714,7 +714,7 @@ struct npc_gnathus : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ARC_NOVA, 12 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_LIGHTNING_BREATH, urand(4.5 * IN_MILLISECONDS, 9 * IN_MILLISECONDS));
@@ -1160,7 +1160,7 @@ class npc_osul_mist_shaman : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_LIGHTNING_BOLT, urand(1500, 3000));
                 events.ScheduleEvent(EVENT_CAPACITOR_TOTEM, urand(4000, 6000));
@@ -1317,7 +1317,7 @@ class npc_suna_silentstrike : public CreatureScript
                 me->RemoveAura(SPELL_CONSUMED_BY_HATRED_2);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Talk(SAY_SUNA_AGGRO);
                 me->CastSpell(me, SPELL_CONSUMED_BY_HATRED_2);
@@ -1538,7 +1538,7 @@ struct npc_lon_the_bull : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(SAY_LONBULL_AGGRO);
 
@@ -1615,7 +1615,7 @@ struct npc_norlaxx : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(SAY_NORLAXX_AGGRO);
 
@@ -1690,7 +1690,7 @@ struct npc_siltriss_sharpener : public ScriptedAI
         events.ScheduleEvent(EVENT_VICIOUS_REND, 7000);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(SAY_SILTRISS_AGGRO);
     };
@@ -1762,7 +1762,7 @@ struct npc_yul_wildpaw : public ScriptedAI
     {
         events.Reset();
     }
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(SAY_YUL_AGGRO);
 

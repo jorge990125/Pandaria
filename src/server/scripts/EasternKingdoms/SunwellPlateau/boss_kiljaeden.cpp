@@ -603,7 +603,7 @@ class boss_kiljaeden : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance->GetData(DATA_KALECGOS_EVENT) != DONE || instance->GetData(DATA_BRUTALLUS_EVENT) != DONE || instance->GetData(DATA_FELMYST_EVENT) != DONE)
                 {
@@ -914,7 +914,7 @@ class npc_hand_of_the_deceiver : public CreatureScript
                 summon->SetLevel(me->GetLevel());
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance->GetData(DATA_KALECGOS_EVENT) != DONE || instance->GetData(DATA_BRUTALLUS_EVENT) != DONE || instance->GetData(DATA_FELMYST_EVENT) != DONE)
                 {
@@ -1227,7 +1227,7 @@ class npc_shield_orb : public CreatureScript
                 }
             }
 
-            void MovementInform(uint32 type, uint32 /*id*/)
+            void MovementInform(uint32 type, uint32 /*id*/) override
             {
                 if (type != POINT_MOTION_TYPE)
                     return;

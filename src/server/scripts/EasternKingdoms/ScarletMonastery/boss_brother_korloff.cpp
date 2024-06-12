@@ -154,9 +154,9 @@ class boss_brother_korloff : public CreatureScript
                     me->GetMap()->SetWorldState(WORLDSTATE_BURNING_MAN, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(TALK_AGGRO);
                 if (instance)
                 {
@@ -281,7 +281,7 @@ struct npc_trigger_scorched_flame : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override { }
+    void JustEngagedWith(Unit* /*who*/) override { }
 
     void JustDied(Unit* /*killer*/) override { }
 

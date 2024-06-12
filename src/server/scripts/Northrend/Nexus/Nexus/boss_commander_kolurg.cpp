@@ -104,7 +104,7 @@ class boss_commander_kolurg : public CreatureScript
                     creature->DespawnOrUnsummon();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 DoCast(me, SPELL_BATTLE_SHOUT);
@@ -203,7 +203,7 @@ class npc_horde_cleric : public CreatureScript
                 me->SetFaction(16);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveAllAuras();
             }
@@ -274,7 +274,7 @@ class npc_horde_ranger : public CreatureScript
                 me->SetFaction(16);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveAllAuras();
             }
@@ -357,7 +357,7 @@ class npc_horde_berserker : public CreatureScript
                 me->SetFaction(16);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveAllAuras();
             }

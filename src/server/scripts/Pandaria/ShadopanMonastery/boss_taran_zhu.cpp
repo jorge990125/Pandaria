@@ -108,9 +108,9 @@ class boss_taran_zhu : public CreatureScript
                 gripHatredCount = 0;
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(TALK_AGGRO);
                 if (instance)
                 {

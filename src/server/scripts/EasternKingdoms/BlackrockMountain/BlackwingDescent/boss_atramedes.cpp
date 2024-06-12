@@ -271,7 +271,7 @@ class boss_atramedes : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_MODULATION, urand(7000, 10000));
                 events.ScheduleEvent(EVENT_NEXT_SPELL, 5000);

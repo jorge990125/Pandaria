@@ -177,7 +177,7 @@ class npc_cfk_seething_sha : public CreatureScript
                 targetGUID = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BREATH_OF_HATE, urand(8 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
             }
@@ -297,7 +297,7 @@ class npc_cfk_jin_ironfist : public CreatureScript
                 HasEnrage = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_KILL_INITIATES, 7 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_FLYING_KICK, urand(9 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
@@ -559,7 +559,7 @@ class npc_cfk_crypt_guardian_hall : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(TALK_INTRO);
                 events.ScheduleEvent(EVENT_BLADESTORM, 6 * IN_MILLISECONDS);
@@ -656,7 +656,7 @@ class npc_cfk_crypt_guardian_vault : public CreatureScript
                 targetGUID = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_GUARD_STRIKE, urand(3 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
 
@@ -777,7 +777,7 @@ class npc_cfk_abomination_of_anger : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_FANCY_FOORWORK, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_DEATHFORCE_PREPARE, 15 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_BREATH_OF_HATE, urand(6 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
@@ -877,7 +877,7 @@ class npc_cfk_shadows_of_anger : public CreatureScript
                 me->RemoveAurasDueToSpell(SPELL_ANGER_SPAWN_GENERATOR);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_ANGER_SPAWN_GENERATOR);
             }
@@ -1273,7 +1273,7 @@ class spell_cfk_hate_periodic : public AuraScript
 {
     PrepareAuraScript(spell_cfk_hate_periodic);
 
-    bool Load()
+    bool Load() override
     {
         hasFirstTrigger = false;
         return true;

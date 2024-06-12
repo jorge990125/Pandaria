@@ -176,9 +176,9 @@ class boss_hazzarah : public CreatureScript
                 summonedAt33Pct = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(SAY_AGGRO);
 
                 events.ScheduleEvent(EVENT_EARTH_SHOCK, 8000);

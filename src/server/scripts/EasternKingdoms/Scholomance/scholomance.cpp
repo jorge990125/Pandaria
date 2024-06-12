@@ -223,7 +223,7 @@ class npc_boneweaver : public CreatureScript
 
             void DamageTaken(Unit* attacker, uint32& damage) override { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_BONE_SHARDS, 3000);
                 events.ScheduleEvent(EVENT_SUMMON_WOVEN_BONEGUARD, urand(8000, 9000));
@@ -293,7 +293,7 @@ class npc_scholomance_acolyte : public CreatureScript
                 me->SetReactState(REACT_DEFENSIVE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (me->HasAura(SPELL_VISUAL_STRANGULATE_EMOTE))
                     me->RemoveAura(SPELL_VISUAL_STRANGULATE_EMOTE);
@@ -350,7 +350,7 @@ class npc_scholomance_neophyte : public CreatureScript
 
             EventMap events;
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (me->HasAura(SPELL_VISUAL_STRANGULATE_EMOTE))
                     me->RemoveAura(SPELL_VISUAL_STRANGULATE_EMOTE);
@@ -422,7 +422,7 @@ class npc_scholomance_risen_guard : public CreatureScript
                 SetEquipmentSlots(false, RisenGuardSword, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_IMPALE, EVENT_IMPALE_INTERVAL);
                 events.ScheduleEvent(EVENT_UNHOLY_WEAPON, EVENT_UNHOLY_WEAPON_INTERVAL);
@@ -498,7 +498,7 @@ class npc_shatter_soul_fragment : public CreatureScript
                 me->DespawnOrUnsummon(8000);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Unit* target = me->GetVictim())
                     me->CastSpell(target, SPELL_SPIRIT_BARRAGE);
@@ -584,7 +584,7 @@ class npc_scholomance_candlestick_mage : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FLICKERING_FLAME, EVENT_FLICKERING_FLAME_INTERVAL);
                 events.ScheduleEvent(EVENT_SKIN_LIKE_WAX, EVENT_SKIN_LIKE_WAX_INTERVAL);
@@ -679,7 +679,7 @@ class npc_scholomance_krastinoc_carvers : public CreatureScript
                 me->CastSpell(me, SPELL_BOLIDING_BLOODTHIRST);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(TALK_KRAST_AGGRO);
             }
@@ -759,7 +759,7 @@ class npc_scholomance_flesh_horror : public CreatureScript
                 return true;
             }
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
                 Position pos;
 
@@ -831,7 +831,7 @@ class npc_scholomance_bored_student : public CreatureScript
 
             void Reset() override { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHADOW_NOVA, firebreathinterval);
                 events.ScheduleEvent(EVENT_FIRE_BREATH, shadowbreathinterval);
@@ -885,7 +885,7 @@ public:
 
             void Reset() override { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BRUTISH_FORCE, brutishforceinterval);
                 events.ScheduleEvent(EVENT_TOXIC_POTION, toxicinterval);
@@ -999,7 +999,7 @@ class npc_gandling_at_rattlegore : public CreatureScript
 
             void DamageTaken(Unit* attacker, uint32& damage) override { }
 
-            void EnterCombat(Unit* who) override { }
+            void JustEngagedWith(Unit* who) override { }
 
             void MovementInform(uint32 type, uint32 pointId) override
             {

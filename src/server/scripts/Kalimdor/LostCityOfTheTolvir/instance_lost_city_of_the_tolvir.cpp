@@ -166,7 +166,7 @@ class instance_lost_city_of_the_tolvir : public InstanceMapScript
                 return 0;
             }
 
-            void SetData64(uint32 type, uint64 data)
+            void SetData64(uint32 type, uint64 data) override
             {
                 switch (type)
                 {

@@ -83,7 +83,7 @@ class npc_garr : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_MAGMA_SHACKLES, 30000);
                 events.ScheduleEvent(EVENT_MASSIVE_ERUPTION, 32000);
@@ -160,7 +160,7 @@ class npc_garr_firesworn : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_IMMOLATE, urand(5000, 7000));
             }
@@ -611,7 +611,7 @@ class npc_baron_geddon : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_INFERNO, 18000);
             }
@@ -880,7 +880,7 @@ class spell_sethrias_roost_squad_aura : public SpellScriptLoader
 
             PrepareAuraScript(spell_sethrias_roost_squad_aura_AuraScript);
 
-            bool Validate(SpellInfo const* /*spellInfo*/)
+            bool Validate(SpellInfo const* /*spellInfo*/) override
             {
                 sethriasRoostSummonCreatures.clear();
                 for (uint32 i = 0; i < sizeof(sethriasRoostSummonSpells) / sizeof(sethriasRoostSummonSpells[0]); ++i)

@@ -197,13 +197,13 @@ class boss_palehoof : public CreatureScript
             //    }
             //}
 
-            //void EnterCombat(Unit* who) override
+            //void JustEngagedWith(Unit* who) override
             //{
             //    DoScriptText(SAY_AGGRO, me);
             //    SetInCombat();
             //}
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->GetMotionMaster()->MoveChase(who);
                 Talk(SAY_AGGRO);
@@ -380,7 +380,7 @@ class npc_ravenous_furbolg : public CreatureScript
                     }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->GetMotionMaster()->MoveChase(who);
             }
@@ -504,7 +504,7 @@ class npc_frenzied_worgen : public CreatureScript
                     }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->GetMotionMaster()->MoveChase(who);
             }
@@ -625,7 +625,7 @@ class npc_ferocious_rhino : public CreatureScript
                     }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->GetMotionMaster()->MoveChase(who);
             }
@@ -748,7 +748,7 @@ class npc_massive_jormungar : public CreatureScript
                     }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->GetMotionMaster()->MoveChase(who);
             }

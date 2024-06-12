@@ -74,7 +74,7 @@ struct npc_mageguard_dalaran : public ScriptedAI
 
     void Reset() override { }
 
-    void EnterCombat(Unit* /*who*/) override { }
+    void JustEngagedWith(Unit* /*who*/) override { }
 
     void AttackStart(Unit* /*who*/) override { }
 
@@ -140,7 +140,7 @@ struct npc_minigob_manabonk : public ScriptedAI
         me->setActive(true);
     }
 
-    void Reset()
+    void Reset() override
     {
         playerGuid = ObjectGuid();
         me->SetVisible(false);

@@ -366,7 +366,7 @@ class boss_freya : public CreatureScript
                 me->DespawnOrUnsummon(7.5*IN_MILLISECONDS);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(BOSS_FREYA, who->ToPlayer()))
                 {
@@ -375,7 +375,7 @@ class boss_freya : public CreatureScript
                     return;
                 }
 
-                _EnterCombat();
+                _JustEngagedWith();
                 DoZoneInCombat();
 
                 _elderCount = 0;
@@ -754,7 +754,7 @@ class boss_freya : public CreatureScript
                 }
             }
 
-            void SetGUID(uint64 guid, int32 id)
+            void SetGUID(uint64 guid, int32 id) override
             {
                 switch (id)
                 {
@@ -883,9 +883,9 @@ class boss_elder_brightleaf : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 if (!me->HasAura(SPELL_DRAINED_OF_POWER))
                     Talk(SAY_BRIGHTLEAF_AGGRO);
             }
@@ -1010,9 +1010,9 @@ class boss_elder_stonebark : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 if (!me->HasAura(SPELL_DRAINED_OF_POWER))
                     Talk(SAY_STONEBARK_AGGRO);
             }
@@ -1138,9 +1138,9 @@ class boss_elder_ironbranch : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 if (!me->HasAura(SPELL_DRAINED_OF_POWER))
                     Talk(SAY_IRONBRANCH_AGGRO);
             }
@@ -1666,7 +1666,7 @@ class npc_ancient_conservator : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 DoCast(who, SPELL_CONSERVATOR_GRIP);
             }
@@ -1931,7 +1931,7 @@ class npc_unstable_sun_beam : public CreatureScript
                 SetCombatMovement(false);
             }
             
-            void MoveInLineOfSight(Unit* target)
+            void MoveInLineOfSight(Unit* target) override
             {
                 if (target && target->GetTypeId() == TYPEID_UNIT)
                 {

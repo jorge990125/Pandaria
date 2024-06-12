@@ -43,13 +43,13 @@ class instance_ramparts : public InstanceMapScript
                 vazrudenHeraldGUID = 0;
             }
 
-            void OnPlayerEnter(Player* player)
+            void OnPlayerEnter(Player* player) override
             {
                 if (!teamInInstance)
                     teamInInstance = player->GetTeam();
             }
 
-            void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature) override
             {
                 if (!teamInInstance)
                 {

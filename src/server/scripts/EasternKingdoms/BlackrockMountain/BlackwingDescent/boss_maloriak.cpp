@@ -209,7 +209,7 @@ class boss_maloriak : public CreatureScript
                 instance->SetData(DATA_MALORIAK_ABERRATIONS, 18);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 instance->DoResetAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, ACHIEVEMENT_CRITERIA_CONDITION_NO_SPELL_HIT, SPELL_CLEAR_ACHIEVEMENT);
                 instance->DoResetAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, ACHIEVEMENT_CRITERIA_CONDITION_NO_SPELL_HIT, SPELL_CLEAR_ACHIEVEMENT);
@@ -823,7 +823,7 @@ class npc_prime_subject : public CreatureScript
                 DoCast(SPELL_GROWN_CATALYST);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 //events.ScheduleEvent(EVENT_FIXATE, 5000);
                 events.ScheduleEvent(EVENT_REND, 12000);
@@ -874,7 +874,7 @@ class npc_vile_swill : public CreatureScript
 
             void Reset() override { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_DARK_SLUDGE, urand(5000, 10000));
             }

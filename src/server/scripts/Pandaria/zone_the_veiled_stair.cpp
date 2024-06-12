@@ -780,7 +780,7 @@ struct npc_darkhatched_soulbleeder : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHADOWBOLT, urand(3.5 * IN_MILLISECONDS, 5.5 * IN_MILLISECONDS));
     }
@@ -820,7 +820,7 @@ struct npc_leechfingers : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHADOWBOLT, urand(3.5 * IN_MILLISECONDS, 5.5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_LEECHING_FINGERS, 8 * IN_MILLISECONDS);
@@ -870,7 +870,7 @@ struct npc_hatescale_spitter : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHOT, 2 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_ACID_SPIT, urand(3.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
@@ -926,7 +926,7 @@ struct npc_hatescale_ironface : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_RUSHING_CHARGE, 0.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_FLURRY, 10 * IN_MILLISECONDS);
@@ -1593,7 +1593,7 @@ struct npc_wrathion_xuen_challenge : public customCreatureAI
         summons.DespawnAll();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_BLINDSIDE, true);
         events.ScheduleEvent(EVENT_ARC, urand(1.5 * IN_MILLISECONDS, 3 * IN_MILLISECONDS));
@@ -2104,7 +2104,7 @@ struct npc_willy_wilder : public ScriptedAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_VIOLET_AND_BLUEBERRIES, urand(4 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
     }

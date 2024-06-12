@@ -244,7 +244,7 @@ class boss_warmaster_blackhorn: public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_DECK_DEFENDER, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 uiWave = 0;
                 drakeDied = 0;
@@ -1378,7 +1378,7 @@ class npc_warmaster_blackhorn_skyfire: public CreatureScript
                         }
             }
 
-            void JustDied(Unit* /*owner*/)
+            void JustDied(Unit* /*owner*/) override
             {
                 if (Creature* pSwayze = me->FindNearestCreature(NPC_SKY_CAPTAIN_SWAYZE, 200.0f))
                     pSwayze->AI()->DoAction(ACTION_END_BATTLE);
@@ -1386,7 +1386,7 @@ class npc_warmaster_blackhorn_skyfire: public CreatureScript
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
             }

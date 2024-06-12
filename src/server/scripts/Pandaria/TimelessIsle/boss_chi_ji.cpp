@@ -112,7 +112,7 @@ class boss_chi_ji : public CreatureScript
                 HandleDoor(me, GO_CELESTIAL_DOOR, true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 UpdateHealth(me);
                 me->SetWalk(false);

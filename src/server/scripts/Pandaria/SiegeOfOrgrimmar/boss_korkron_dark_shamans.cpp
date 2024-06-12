@@ -192,7 +192,7 @@ class boss_earthbreaker_haromm : public CreatureScript
                     instance->SetBossState(DATA_KORKRON_DARK_SHAMANS, FAIL);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(TALK_AGGRO);
 
@@ -203,7 +203,7 @@ class boss_earthbreaker_haromm : public CreatureScript
                         kardris->AI()->Talk(TALK_AGGRO);
                 });
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 me->SetReactState(REACT_AGGRESSIVE);
 
@@ -593,7 +593,7 @@ class boss_wavebinder_kardris : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->setActive(true, ActiveFlags::InCombat);
                 DoZoneInCombat();
@@ -822,7 +822,7 @@ struct npc_dark_shamans_wolf : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         if (Creature* haromm = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_KORKRON_DARK_SHAMANS)))
             DoZoneInCombat(haromm, 200.0f);

@@ -194,9 +194,9 @@ class boss_high_prophet_barim : public CreatureScript
                 DespawnCreatures(NPC_SOUL_FRAGMENT);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -484,7 +484,7 @@ class npc_blaze_of_the_heavens : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.SetPhase(PHASE_BLAZE);
                 me->CastSpell(me, SPELL_BLAZE_OF_THE_HEAVENS_PERIODIC, false);

@@ -124,7 +124,7 @@ class npc_crystalspawn_giant : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_QUAKE, 5000 + rand()%5000);
             }
@@ -176,7 +176,7 @@ public:
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FELL_FIREBALL, 1000);
             }
@@ -251,7 +251,7 @@ class npc_sc_millhouse_manastorm : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_MILL_FEAR, 10000);
                 events.ScheduleEvent(EVENT_FROSTBOLT_VOLLEY, 7000 + rand()%10000);

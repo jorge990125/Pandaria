@@ -49,7 +49,6 @@ template <typename... Args>
 static void AlmostAssert(char const* filter, Args... args)
 {
     auto str = Format(filter, args...);
-    TC_LOG_ERROR("lfg %s", str.c_str());
 }
 
 namespace lfg

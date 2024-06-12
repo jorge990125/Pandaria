@@ -167,7 +167,7 @@ class boss_echo_of_sylvanas : public CreatureScript
                                 DoCast(player, SPELL_ARCHIVED_SYLVANAS, true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_UNHOLY_SHOT, urand(5000, 20000));
@@ -522,7 +522,7 @@ class npc_echo_of_sylvanas_risen_ghoul : public CreatureScript
                 me->DespawnOrUnsummon(500);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_SEEPING_SHADOWS_DUMMY, true);
                 if (Creature* ghoulVisual = me->FindNearestCreature(NPC_GHOUL_VISUAL, 10))

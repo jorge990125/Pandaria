@@ -121,7 +121,7 @@ class boss_mother_shahraz : public CreatureScript
                 Enraged = false;
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance || !instance->CheckRequiredBosses(DATA_MOTHER_SHAHRAZ_EVENT, who->ToPlayer()))
                 {

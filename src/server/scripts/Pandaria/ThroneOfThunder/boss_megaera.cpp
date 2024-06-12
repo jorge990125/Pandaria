@@ -370,7 +370,7 @@ class boss_megaera : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 // Just Berserk scheduled here, the other events are handled by the specific heads / through happenings (ex. a head dies -> Rampage, etc).
                 events.ScheduleEvent(EVENT_BERSERK, (IsHeroic() ? TIMER_BERSERK_H : TIMER_BERSERK));
@@ -401,7 +401,7 @@ class boss_megaera : public CreatureScript
                     instance->SetBossState(DATA_MEGAERA, IN_PROGRESS);
                 }
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 scheduler
                     .Schedule(Milliseconds(IsHeroic() ? TIMER_BERSERK_H : TIMER_BERSERK), [this](TaskContext context)
@@ -926,7 +926,7 @@ class npc_flaming_head_megaera : public CreatureScript
         {
             npc_flaming_head_megaeraAI(Creature* creature) : megaeraHeadsBaseAI(creature) { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (me->GetDBTableGUIDLow())
                     DoCast(me, SPELL_CONCEALING_FOG, true);
@@ -1024,7 +1024,7 @@ class npc_frozen_head_megaera : public CreatureScript
         {
             npc_frozen_head_megaeraAI(Creature* creature) : megaeraHeadsBaseAI(creature) { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CHECK_MEGAERAS_RAGE, 18900);
                 events.ScheduleEvent(EVENT_TORRENT_OF_ICE, me->GetDBTableGUIDLow() ? urand(14000, 23000) : urand(32000, 43000));
@@ -1135,7 +1135,7 @@ class npc_venomous_head_megaera : public CreatureScript
         {
             npc_venomous_head_megaeraAI(Creature* creature) : megaeraHeadsBaseAI(creature) { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CHECK_MEGAERAS_RAGE, 19800);
                 events.ScheduleEvent(EVENT_ACID_RAIN, me->GetDBTableGUIDLow() ? urand(12000, 17000) : urand(32000, 43000));
@@ -1226,7 +1226,7 @@ class npc_arcane_head_megaera : public CreatureScript
         {
             npc_arcane_head_megaeraAI(Creature* creature) : megaeraHeadsBaseAI(creature) { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (me->GetDBTableGUIDLow())
                     DoCast(me, SPELL_CONCEALING_FOG, true);
@@ -1772,6 +1772,8 @@ class correctSummonerPredicate
             {
                 return target->ToCreature()->GetOwnerGUID() != uiGuid;
             }
+            
+            return false;
         }
 };
 

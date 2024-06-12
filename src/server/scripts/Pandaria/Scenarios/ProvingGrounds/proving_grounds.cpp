@@ -262,7 +262,7 @@ struct npc_proving_grounds_illusionary_guardian : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_guardian(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(1), [this](TaskContext context)
@@ -283,7 +283,7 @@ struct npc_proving_grounds_illusionary_amber_weaver : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_amber_weaver(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(2), [this](TaskContext context)
@@ -309,7 +309,7 @@ struct npc_proving_grounds_illusionary_mystic : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_mystic(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(7), [this](TaskContext context)
@@ -363,7 +363,7 @@ struct npc_proving_grounds_illusionary_banana_tosser : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_banana_tosser(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(2), [this](TaskContext context)
@@ -394,7 +394,7 @@ struct npc_proving_grounds_illusionary_banshe : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_banshe(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(2), [this](TaskContext context)
@@ -439,7 +439,7 @@ struct npc_proving_grounds_illusionary_sha : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_sha(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(me, SPELL_PROTECTION_SHIELD);
     }
@@ -455,7 +455,7 @@ struct npc_proving_grounds_illusionary_forager : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_forager(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(3), Seconds(7), [this](TaskContext context)
@@ -486,7 +486,7 @@ struct npc_proving_grounds_illusionary_flamecaller : public provingGroundsAI
         SetCombatMovement(false);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(3), [this](TaskContext context)
@@ -521,7 +521,7 @@ struct npc_proving_grounds_illusionary_wind_guard : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_wind_guard(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(5), [this](TaskContext context)
@@ -558,7 +558,7 @@ struct npc_proving_grounds_illusionary_ambusher : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_ambusher(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(3), [this](TaskContext context)
@@ -584,7 +584,7 @@ struct npc_proving_grounds_illusionary_conqueror : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_conqueror(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(5), [this](TaskContext context)
@@ -628,7 +628,7 @@ struct npc_proving_grounds_illusionary_hive_singer : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_hive_singer(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(2), [this](TaskContext context)
@@ -664,7 +664,7 @@ struct npc_proving_grounds_illusionary_flamecaller_healer : public provingGround
 {
     npc_proving_grounds_illusionary_flamecaller_healer(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(3), [this](TaskContext context)
@@ -739,7 +739,7 @@ struct npc_proving_grounds_illusionary_aqualyte : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_aqualyte(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(2), [this](TaskContext context)
@@ -776,7 +776,7 @@ struct npc_proving_grounds_illusionary_tunneler : public provingGroundsAI
 {
     npc_proving_grounds_illusionary_tunneler(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(2), [this](TaskContext context)
@@ -813,7 +813,7 @@ struct npc_proving_grounds_illusionary_conqueror_healer : public provingGroundsA
 {
     npc_proving_grounds_illusionary_conqueror_healer(Creature* creature) : provingGroundsAI(creature) { }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(8), [this](TaskContext context)
@@ -905,7 +905,7 @@ struct npc_proving_grounds_kavan_the_arcanist : public customCreatureAI
             DoStartNoMovement(target);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_ARCANE_BLAST, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_ARCANE_BARRAGE, 3.5 * IN_MILLISECONDS);
@@ -1041,7 +1041,7 @@ struct npc_proving_grounds_ki_the_assassin : public customCreatureAI
             DoCast(victim, SPELL_CHEAP_SHOT, true);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_MUTILATE, 2 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_FAN_OF_KNIVES, 8 * IN_MILLISECONDS);
@@ -1188,7 +1188,7 @@ struct npc_proving_grounds_oto_the_protector : public customCreatureAI
         DoCast(me, SPELL_DEFENSIVE_STANCE, true);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(who, SPELL_CHARGE_S);
         events.ScheduleEvent(EVENT_DEVASTATE, 2 * IN_MILLISECONDS);
@@ -1345,7 +1345,7 @@ struct npc_proving_grounds_sooli_the_survivalist : public customCreatureAI
         allowFeignDeath = true;
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_AUTO_SHOT, 0.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_EXPLOSIVE_SHOT, 8 * IN_MILLISECONDS);
@@ -3157,7 +3157,7 @@ struct npc_proving_grounds_sikari_the_mistweaver : public customCreatureAI
         scheduler.CancelAll();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         scheduler
             .Schedule(Seconds(1), [this](TaskContext context)

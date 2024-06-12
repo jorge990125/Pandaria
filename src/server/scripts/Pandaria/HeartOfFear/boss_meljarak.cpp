@@ -282,7 +282,7 @@ class boss_wind_lord_meljarak : public CreatureScript
                     instance->SetBossState(DATA_MELJARAK, FAIL);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 // @TODO: Set in combat for other protectors
                 if (!instance->CheckRequiredBosses(DATA_MELJARAK, who->ToPlayer()))
@@ -292,7 +292,7 @@ class boss_wind_lord_meljarak : public CreatureScript
                     return;
                 }
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 std::list<Creature*> swarm = GetSwarmList();
                 for (auto&& itr : swarm)
@@ -718,10 +718,10 @@ class npc_meljarak_swarm : public CreatureScript
                 nonCombatEvents.ScheduleEvent(EVENT_LANDING, me->GetSplineDuration());
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (Creature* meljarak = GetClosestCreatureWithEntry(me, NPC_WIND_LORD_MELJARAK, 100.0f, true))
-                    if (!meljarak->GetVictim())             // Just optimization. EnterCombat won't be called anyway.
+                    if (!meljarak->GetVictim())             // Just optimization. JustEngagedWith won't be called anyway.
                         meljarak->AI()->AttackStart(who);   // Only Meljarak have to sets all the swarm in combat.
 
                 switch (me->GetEntry())

@@ -344,7 +344,7 @@ class boss_svala_sorrowgrave : public CreatureScript
                     instance->SetData(DATA_SVALA_SORROWGRAVE_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetReactState(REACT_AGGRESSIVE);
                 Talk(SAY_AGGRO);

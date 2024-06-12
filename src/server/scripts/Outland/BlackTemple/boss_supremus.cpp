@@ -116,7 +116,7 @@ class boss_supremus : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance || !instance->CheckRequiredBosses(DATA_SUPREMUS_EVENT, who->ToPlayer()))
                 {
@@ -289,7 +289,7 @@ class npc_volcano : public CreatureScript
 
             uint32 wait;
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void MoveInLineOfSight(Unit* /*who*/) override { }
 

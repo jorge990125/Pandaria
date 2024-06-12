@@ -153,7 +153,7 @@ class boss_omnotron : public CreatureScript
             uint64 m_uiGuids[4];
             uint8 current;
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance->GetBossState(DATA_OMNOTRON) == IN_PROGRESS)
                     return;
@@ -351,7 +351,7 @@ class boss_arcanotron : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* omnotron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_OMNOTRON)))
                     DoZoneInCombat(omnotron);
@@ -545,7 +545,7 @@ class boss_electron : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_LIGHTNING_CONDUCTOR, 10000);
                 events.ScheduleEvent(EVENT_ELECTRICAL_DISCHARGE, 6000);
@@ -707,7 +707,7 @@ class boss_magmatron : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_INSENERATION_SECURITY_MISSURE, 10000);
                 //events.ScheduleEvent(EVENT_ACQUIRING_TARGET, 25000);
@@ -894,7 +894,7 @@ class boss_toxitron : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CHEMICAL_BOMB, 10000);
                 events.ScheduleEvent(EVENT_POISON_PROTOCOL, 20000);

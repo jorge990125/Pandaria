@@ -513,7 +513,7 @@ class boss_sha_of_fear : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (isDuringP2Transition)
                     return;
@@ -1639,7 +1639,7 @@ class npc_sha_of_fear_bowman : public CreatureScript
 
             EventMap m_mLowEvents;
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_DEATH_BLOSSOM, 5000);
@@ -1777,7 +1777,7 @@ class npc_sha_globe : public CreatureScript
                 me->SetReactState(REACT_PASSIVE);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void SpellHitTarget(Unit* target, SpellInfo const* spell) override
             {

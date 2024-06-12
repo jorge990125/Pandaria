@@ -218,7 +218,7 @@ class boss_perotharn : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 
@@ -459,7 +459,7 @@ class npc_perotharn_eye_of_perotharn : public CreatureScript
                 me->SetSpeed(MOVE_RUN, 0.8f, true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             { 
                 events.ScheduleEvent(EVENT_NEXT_MOVE, urand(500, 2000));
             }

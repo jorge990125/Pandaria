@@ -181,7 +181,7 @@ class boss_lady_nazjar : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 
@@ -194,7 +194,7 @@ class boss_lady_nazjar : public CreatureScript
                 instance->SetData(DATA_LADY_NAZJAR, IN_PROGRESS);
             }
 
-            void JustDied(Unit* /*killer*/)
+            void JustDied(Unit* /*killer*/) override
             {
                 _JustDied();
 

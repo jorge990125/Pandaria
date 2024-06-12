@@ -419,9 +419,9 @@ class boss_razorscale : public CreatureScript
                     damage = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_RAZORSCALE_CONTROL)))
                     controller->AI()->DoAction(ACTION_HARPOON_BUILD);
                 me->SetSpeed(MOVE_RUN, 3.0f, true);
@@ -663,7 +663,7 @@ class boss_razorscale : public CreatureScript
                 switch (action)
                 {
                     case ACTION_EVENT_START:
-                        EnterCombat(nullptr);
+                        JustEngagedWith(nullptr);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                         me->SetReactState(REACT_AGGRESSIVE);
                         DoZoneInCombat(me, 200.0f);

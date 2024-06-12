@@ -272,7 +272,7 @@ class npc_tushui_trainee : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 isInCombat = true;
             }
@@ -371,7 +371,7 @@ class npc_huojin_trainee : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 isInCombat = true;
             }
@@ -430,7 +430,7 @@ class boss_jaomin_ro : public CreatureScript
             EventMap events;
             bool isInFalcon;
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_JAOMIN_JUMP, 1000);
                 events.ScheduleEvent(EVENT_HIT_CIRCLE, 2000);
@@ -444,7 +444,7 @@ class boss_jaomin_ro : public CreatureScript
                 me->SetFaction(2357); //mechant!
             }
 
-            void MoveInLineOfSight(Unit*  who)
+            void MoveInLineOfSight(Unit*  who) override
             {
                 Player * const player = who->ToPlayer();
                 if (!player)
@@ -1172,7 +1172,7 @@ class npc_trainee_nim : public CreatureScript
             npc_trainee_nimAI(Creature* creature) : ScriptedAI(creature) { }
             std::set<uint64> guids;
 
-            void MoveInLineOfSight(Unit*  who)
+            void MoveInLineOfSight(Unit* who) override
             {
                 Player * const player = who->ToPlayer();
                 if (!player)
@@ -1208,7 +1208,7 @@ class npc_merchant_lorvo : public CreatureScript
             npc_merchant_lorvoAI(Creature* creature) : ScriptedAI(creature) { }
             std::set<uint64> guids;
 
-            void MoveInLineOfSight(Unit*  who)
+            void MoveInLineOfSight(Unit* who) override
             {
                 Player * const player = who->ToPlayer();
                 if (!player)

@@ -90,12 +90,12 @@ class npc_frost_tomb : public CreatureScript
                 FrostTombGUID = uPrisoner->GetGUID();
             }
 
-            void Reset()
+            void Reset() override
             {
                 FrostTombGUID = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void AttackStart(Unit* /*who*/) override { }
 
@@ -193,7 +193,7 @@ class boss_keleseth : public CreatureScript
                     instance->SetData(DATA_PRINCEKELESETH_EVENT, DONE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 DoZoneInCombat();
@@ -296,9 +296,9 @@ class npc_vrykul_skeleton : public CreatureScript
                 isDead = false;
             }
 
-            void EnterCombat(Unit* /*who*/) { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             
-            void DamageTaken(Unit* attacker, uint32& damage)
+            void DamageTaken(Unit* attacker, uint32& damage) override
             {
                 if (attacker->GetGUID() == me->GetGUID())
                     return;

@@ -113,7 +113,7 @@ class npc_enslaved_soul : public CreatureScript
                 ReliquaryGUID = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, ENSLAVED_SOUL_PASSIVE, true);
                 DoZoneInCombat();
@@ -189,7 +189,7 @@ class boss_reliquary_of_souls : public CreatureScript
                     DoStartNoMovement(who);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance || !instance->CheckRequiredBosses(DATA_RELIQUARY_OF_SOULS_EVENT, who->ToPlayer()))
                 {
@@ -453,7 +453,7 @@ class boss_essence_of_suffering : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (!me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
                     {
@@ -586,7 +586,7 @@ class boss_essence_of_desire : public CreatureScript
                                 me->InterruptSpell(CURRENT_GENERIC_SPELL, false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(DESI_SAY_FREED);
                 DoZoneInCombat();
@@ -669,7 +669,7 @@ class boss_essence_of_anger : public CreatureScript
                 CheckedAggro = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(ANGER_SAY_FREED);
 

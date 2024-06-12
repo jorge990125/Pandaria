@@ -373,7 +373,7 @@ public:
             return std::find(hitedByWaves.begin(), hitedByWaves.end(), guid) != hitedByWaves.end();
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             Talk(SAY_SARTHARION_AGGRO);
             DoZoneInCombat();
@@ -1037,7 +1037,7 @@ public:
             m_bHasPortalOpen = false;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             Talk(SAY_TENEBRON_AGGRO);
             DoZoneInCombat();
@@ -1134,7 +1134,7 @@ public:
             m_bHasPortalOpen = false;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             Talk(SAY_SHADRON_AGGRO);
             DoZoneInCombat();
@@ -1234,7 +1234,7 @@ public:
             m_bHasPortalOpen = false;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             Talk(SAY_VESPERON_AGGRO);
             DoZoneInCombat();

@@ -98,7 +98,7 @@ class boss_bronjahm : public CreatureScript
                DoCast(me, SPELL_SOULSTORM_CHANNEL, true);
            }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 me->PlayMusic(MUSIC_EVENT_BRONJAHM);
@@ -226,7 +226,7 @@ class npc_corrupted_soul_fragment : public CreatureScript
                     instance->SetData(DATA_SOUL_POWER, 0);
             }
 
-            void MovementInform(uint32 type, uint32 pointId)
+            void MovementInform(uint32 type, uint32 pointId) override
             {
                 if (type != FOLLOW_MOTION_TYPE)
                     return;

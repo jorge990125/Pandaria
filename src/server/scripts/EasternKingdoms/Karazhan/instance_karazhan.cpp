@@ -582,7 +582,7 @@ class instance_karazhan : public InstanceMapScript
                         stalker->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_APPLAUD);
             }
 
-            std::list<uint64> const& GetChessPiecesByFaction(uint32 faction) const { return faction == FACTION_ID_CHESS_ALLIANCE ? chessPiecesAlliance : chessPiecesHorde; }
+            std::list<uint64> const& GetChessPiecesByFaction(uint32 faction) const override { return faction == FACTION_ID_CHESS_ALLIANCE ? chessPiecesAlliance : chessPiecesHorde; }
 
             void Update(uint32 diff) override
             {

@@ -42,7 +42,7 @@ struct boss_isle_of_conquest : public ScriptedAI
 {
     boss_isle_of_conquest(Creature* creature) : ScriptedAI(creature) { }
 
-    void Reset()
+    void Reset() override
     {
         uiMortalStrikeTimer         = 8 * IN_MILLISECONDS;
         uiDaggerThrowTimer          = 2 * IN_MILLISECONDS;
@@ -50,7 +50,7 @@ struct boss_isle_of_conquest : public ScriptedAI
         uiResetTimer                = 5 * IN_MILLISECONDS;
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         if (!me->IsWithinLOSInMap(who))
             EnterEvadeMode();

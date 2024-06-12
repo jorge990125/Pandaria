@@ -65,7 +65,7 @@ namespace LuaMap
         float y = luaL_checknumber(L, 2);
         float z = luaL_checknumber(L, 3);
 
-        sEluna->Push(L, map->GetAreaId(x, y, z));
+        sEluna->Push(L, map->GetAreaId(PHASEMASK_NORMAL, x, y, z));
         return 1;
     }
 

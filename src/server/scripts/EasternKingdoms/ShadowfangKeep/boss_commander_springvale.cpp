@@ -123,9 +123,9 @@ class boss_commander_springvale : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_TO_THE_GROUND, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -245,7 +245,7 @@ class npc_springvale_wailing_guardsman : public CreatureScript
                 events.Reset();
             }
             
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_MORTAL_STRIKE, 3000);
                 events.ScheduleEvent(EVENT_SCREAMS_OF_THE_PAST, urand(15000, 20000));    
@@ -311,7 +311,7 @@ class npc_springvale_tormented_officer : public CreatureScript
                 events.Reset();
             }
             
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_UNHOLY_EMPOWERMENT, 15000);
                 events.ScheduleEvent(EVENT_FORSAKEN_ABILITY, urand(10000, 30000));

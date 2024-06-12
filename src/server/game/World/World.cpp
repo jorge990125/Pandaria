@@ -57,6 +57,7 @@
 #include "OutdoorPvPMgr.h"
 #include "TemporarySummon.h"
 #include "WaypointMovementGenerator.h"
+#include "M2Stores.h"
 #include "MMapFactory.h"
 #include "GameEventMgr.h"
 #include "GitRevision.h"
@@ -1740,6 +1741,9 @@ void World::SetInitialWorldSettings()
     TC_LOG_INFO("server.loading", "Initialize data stores...");
     LoadDBCStores(m_dataPath, m_availableDbcLocaleMask);
     LoadDB2Stores(m_dataPath, m_availableDbcLocaleMask);
+
+    // Load cinematic cameras
+    LoadM2Cameras(m_dataPath);
 
     // Load IP Location Database
     sIPLocation->Load();

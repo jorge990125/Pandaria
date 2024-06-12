@@ -77,7 +77,7 @@ class boss_avatar_of_hakkar : public CreatureScript
                 HandleRemoveCharmedPlayers(false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_INTRO, 2 * IN_MILLISECONDS);

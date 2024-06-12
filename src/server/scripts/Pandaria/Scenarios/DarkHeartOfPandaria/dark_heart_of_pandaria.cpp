@@ -108,7 +108,7 @@ struct npc_darkheart_earthborn_hatred : public customCreatureAI
         }
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(who, SPELL_SCHARGE);
         events.ScheduleEvent(EVENT_STONE_RAIN, urand(3 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
@@ -173,7 +173,7 @@ struct npc_darkheart_fiery_anger : public customCreatureAI
         }
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_MOLTEN_HATRED, urand(3 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_FIRE_BLAST, urand(5 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
@@ -225,7 +225,7 @@ struct npc_darkheart_urtharges_the_destroyer : public customCreatureAI
         summons.Summon(summon);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         Talk(TALK_INTRO);
         events.ScheduleEvent(EVENT_RUPTURE_LINE, 5 * IN_MILLISECONDS);
@@ -403,7 +403,7 @@ struct npc_darkheart_mouth_of_terror : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_HOWL_OF_TERROR, urand(3 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
     }
@@ -557,7 +557,7 @@ struct npc_darkheart_echo_of_yshaarj : public customCreatureAI
         hasTriggered = false;
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         if (Creature* norushen = ObjectAccessor::GetCreature(*me, me->GetInstanceScript() ? me->GetInstanceScript()->GetData64(NPC_NORUSHEN) : 0))
             norushen->AI()->Talk(TALK_SPECIAL_1);

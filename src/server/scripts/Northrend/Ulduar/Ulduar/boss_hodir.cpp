@@ -221,7 +221,7 @@ class boss_hodir : public CreatureScript
                 Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->SetReactState(REACT_AGGRESSIVE);
 
@@ -237,7 +237,7 @@ class boss_hodir : public CreatureScript
                 if (summons.size() < FRIENDS_COUNT * 2u)
                     Reset();
 
-                _EnterCombat();
+                _JustEngagedWith();
                 me->SetReactState(REACT_AGGRESSIVE);
 
                 Talk(SAY_AGGRO);

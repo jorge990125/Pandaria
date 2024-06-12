@@ -2317,13 +2317,13 @@ class sat_monk_healing_sphere : public IAreaTriggerOnce
         GetCaster()->CastSpell(*targets.front(), SPELL_MONK_HEALING_SPHERE_EXPIRE_HEAL, true);
     }
 
-    bool CheckTriggering(WorldObject* object)
+    bool CheckTriggering(WorldObject* object) override
     {
         Unit* unit = object->ToUnit();
         return unit && (!unit->IsFullHealth() || unit->HasAuraType(SPELL_AURA_SCHOOL_HEAL_ABSORB)) && unit->IsFriendlyTo(GetCaster());
     }
 
-    void OnTrigger(WorldObject* target)
+    void OnTrigger(WorldObject* target) override
     {
         GetCaster()->CastSpell(target->ToUnit(), SPELL_MONK_HEALING_SPHERE_HEAL, true);
     }
@@ -2398,7 +2398,7 @@ class spell_monk_summon_gift_of_the_ox : public SpellScript
 // 373
 class sat_monk_gift_of_the_ox : public IAreaTriggerOnce
 {
-    bool CheckTriggering(WorldObject* object)
+    bool CheckTriggering(WorldObject* object) override
     {
         if (object != GetCaster())
             return false;
@@ -2407,7 +2407,7 @@ class sat_monk_gift_of_the_ox : public IAreaTriggerOnce
         return GetCaster()->IsInDist(GetTarget(), m_range);
     }
 
-    void OnTrigger(WorldObject* target)
+    void OnTrigger(WorldObject* target) override
     {
         GetCaster()->CastSpell(target->ToUnit(), SPELL_MONK_GIFT_OF_THE_OX_HEAL, true);
     }
@@ -2982,12 +2982,12 @@ class spell_monk_power_strikes : public SpellScript
 // 336 created by 121286 - Chi Sphere
 class sat_monk_chi_sphere : public IAreaTriggerOnce
 {
-    bool CheckTriggering(WorldObject* object)
+    bool CheckTriggering(WorldObject* object) override
     {
         return object == GetCaster();
     }
 
-    void OnTrigger(WorldObject*)
+    void OnTrigger(WorldObject*) override
     {
         GetCaster()->CastSpell(GetCaster(), SPELL_MONK_CHI_SHERE_ENERGIZE, true);
     }
@@ -3910,18 +3910,18 @@ class spell_monk_gif_of_the_serpent_summon : public SpellScript
 // 321
 struct sat_monk_gift_of_the_serpent : public IAreaTriggerOnce
 {
-    bool CheckTriggering(WorldObject* object)
+    bool CheckTriggering(WorldObject* object) override
     {
         Unit* unit = object->ToUnit();
         return unit && (!unit->IsFullHealth() || unit->HasAuraType(SPELL_AURA_SCHOOL_HEAL_ABSORB)) && unit->IsFriendlyTo(GetCaster());
     }
 
-    void OnTrigger(WorldObject* target)
+    void OnTrigger(WorldObject* target) override
     {
         GetCaster()->CastSpell(target->ToUnit(), SPELL_MONK_GIFT_OF_THE_SERPENT_HEAL, true);
     }
 
-    void OnExpire()
+    void OnExpire() override
     {
         GetCaster()->CastSpell(*GetTarget(), SPELL_MONK_GIFT_OF_THE_SERPENT_HEAL_EXPIRED, true);
     }
@@ -4291,7 +4291,7 @@ struct npc_monk_xuen : public PetAI
 {
     npc_monk_xuen(Creature* c) : PetAI(c) { }
 
-    void IsSummonedBy(Unit* summoner)
+    void IsSummonedBy(Unit* summoner) override
     {
         Player* monk = summoner->ToPlayer();
         if (!monk || monk->GetSpecialization() != SPEC_MONK_BREWMASTER)
@@ -5151,7 +5151,7 @@ class sat_monk_glyph_of_flying_serpent_kick : public IAreaTriggerOnce
         return false;
     }
 
-    void OnTrigger(WorldObject* target)
+    void OnTrigger(WorldObject* target) override
     {
         GetCaster()->CastSpell(GetCaster(), SPELL_MONK_FLYING_SERPENT_KICK_TRIGGER, true);
     }

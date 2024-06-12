@@ -60,7 +60,7 @@ class npc_shadopan_ambusher : public CreatureScript
                 me->RemoveAurasDueToSpell(SPELL_FLIP_OUT_AURA);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveAura(SPELL_STEALTH);
                 events.ScheduleEvent(EVENT_CRISE, urand(6 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
@@ -152,7 +152,7 @@ class npc_shadopan_warden: public CreatureScript
                 events.Reset();
             }
      
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (!aggroTalked)
                 {
@@ -228,7 +228,7 @@ class npc_shadopan_stormbringer : public CreatureScript
                         energy->RemoveAura(SPELL_FOCUSING_COMBAT);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FOCUSING_COMBAT, urand(4 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
             }
@@ -308,7 +308,7 @@ class npc_shadopan_disciple : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_PALM_STRIKE, urand(4 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_ROUNDHOUSE_STRIKE, urand(6 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
@@ -411,7 +411,7 @@ class npc_ethereal_sha : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHA_BLAST, urand(4 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_REACH_THROUGH_THE_VOID, urand(11 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
@@ -489,7 +489,7 @@ class npc_spm_void_sha : public CreatureScript
                 DoZoneInCombat();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_VOID_ENERGY, 5 * IN_MILLISECONDS);
             }
@@ -541,7 +541,7 @@ class npc_consuming_sha : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CONSUMING_BITE, urand(4 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_CONSUMPTION, urand(6 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
@@ -608,7 +608,7 @@ class npc_destroying_sha : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHADOWS_OF_DESTRUCTION, urand(4 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
             }
@@ -781,7 +781,7 @@ class npc_residual_hatred : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CURSE_OF_AGONY, urand(5 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_RING_OF_MALICE, urand(6 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
@@ -862,7 +862,7 @@ class npc_vistige_of_hatred : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BLACK_CLEAVE, 15 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_TOUCH_OF_WEAKNESS, urand(20 * IN_MILLISECONDS, 25 * IN_MILLISECONDS));
@@ -939,7 +939,7 @@ class npc_fragment_of_hatred : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SINISTER_STRIKE, urand(3 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
             }

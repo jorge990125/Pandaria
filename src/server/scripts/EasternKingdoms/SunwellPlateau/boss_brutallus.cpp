@@ -109,7 +109,7 @@ class boss_brutallus : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance->GetData(DATA_KALECGOS_EVENT) != DONE)
                 {
@@ -165,7 +165,7 @@ class boss_brutallus : public CreatureScript
                 }
             }
 
-            void EnterEvadeMode()
+            void EnterEvadeMode() override
             {
                 if (!intro)
                     ScriptedAI::EnterEvadeMode();
@@ -205,7 +205,7 @@ class boss_brutallus : public CreatureScript
                 TC_LOG_DEBUG("scripts", "End intro");
             }
 
-            void AttackStart(Unit* who)
+            void AttackStart(Unit* who) override
             {
                 if (!who || intro || isIntro)
                     return;
@@ -291,7 +291,7 @@ class boss_brutallus : public CreatureScript
                 }
             }
 
-            void MoveInLineOfSight(Unit* who)
+            void MoveInLineOfSight(Unit* who) override
             {
                 if (!who->isTargetableForAttack() || !me->IsHostileTo(who))
                     return;

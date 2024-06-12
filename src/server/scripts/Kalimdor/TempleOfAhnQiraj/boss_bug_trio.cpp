@@ -76,7 +76,7 @@ class boss_kri : public CreatureScript
                 Death = false;
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
             }
     
@@ -182,7 +182,7 @@ class boss_vem : public CreatureScript
                 }
             }
     
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
     
             void UpdateAI(uint32 diff) override
             {
@@ -280,7 +280,7 @@ class boss_yauj : public CreatureScript
                 }
             }
     
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
     
             void UpdateAI(uint32 diff) override
             {

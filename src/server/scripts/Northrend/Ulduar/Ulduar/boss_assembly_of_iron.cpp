@@ -290,21 +290,21 @@ void StartEncounter(InstanceScript* instance, Creature* caller)
         if (boss->IsAlive() && caller->GetGUID() != boss->GetGUID()) // Avoid redundant calls
         {
             boss->SetInCombatWithZone();
-            boss->AI()->EnterCombat(caller->GetVictim());
+            boss->AI()->JustEngagedWith(caller->GetVictim());
         }
 
     if (Creature* boss = ObjectAccessor::GetCreature(*caller, instance->GetData64(BOSS_BRUNDIR)))
         if (boss->IsAlive() && caller->GetGUID() != boss->GetGUID()) // Avoid redundant calls
         {
             boss->SetInCombatWithZone();
-            boss->AI()->EnterCombat(caller->GetVictim());
+            boss->AI()->JustEngagedWith(caller->GetVictim());
         }
 
     if (Creature* boss = ObjectAccessor::GetCreature(*caller, instance->GetData64(BOSS_MOLGEIM)))
         if (boss->IsAlive() && caller->GetGUID() != boss->GetGUID()) // Avoid redundant calls
         {
             boss->SetInCombatWithZone();
-            boss->AI()->EnterCombat(caller->GetVictim());
+            boss->AI()->JustEngagedWith(caller->GetVictim());
         }
 }
 
@@ -336,7 +336,7 @@ class boss_steelbreaker : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_ON_YOUR_SIDE, 1);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->setActive(true);
                 StartEncounter(instance, me);
@@ -559,7 +559,7 @@ public:
     {
         PrepareSpellScript(spell_steelbreaker_static_disruption_SpellScript);
 
-        bool Validate(SpellInfo const* /*spell*/)
+        bool Validate(SpellInfo const* /*spell*/) override
         {
             if (!sSpellMgr->GetSpellInfo(SPELL_STATIC_DISRUPTION_CHECKED_10))
                 return false;
@@ -645,7 +645,7 @@ class boss_runemaster_molgeim : public CreatureScript
                 ResetEncounter(instance, me);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->InterruptSpell(CURRENT_CHANNELED_SPELL);
                 me->setActive(true);
@@ -826,7 +826,7 @@ class npc_lightning_elemental : public CreatureScript
                 me->SetInCombatWithZone();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_LIGHTNING_ELEMENTAL_PASSIVE);      // TODO: Check if both this spell and the other one below are required
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -945,7 +945,7 @@ class boss_stormcaller_brundir : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_CANT_DO_THIS_WHILE_STUN, 1);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!who)
                     return;

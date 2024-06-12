@@ -165,7 +165,7 @@ class npc_dagger_in_dark_voljin : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_LIGHTNING_BOLT, 1 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_HEALING_WARD, 10 * IN_MILLISECONDS);
@@ -713,7 +713,7 @@ struct npc_dagger_in_dark_darkhatched_shaman : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_LIGHTNING_SHIELD);
         events.ScheduleEvent(EVENT_LIGHTNING_BOLT, 1 * IN_MILLISECONDS);
@@ -779,7 +779,7 @@ struct npc_dagger_in_dark_darkhatched_skulker : public customCreatureAI
         DoCast(me, SPELL_CRIPPLING_POISON);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_SHADOWSTEP);
         events.ScheduleEvent(EVENT_SHADOWSTEP, 10 * IN_MILLISECONDS);
@@ -821,7 +821,7 @@ struct npc_dagger_in_dark_darkhatched_skinflayer : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(who, SPELL_FIXATE);
         events.ScheduleEvent(EVENT_WHIRLWIND, 8 * IN_MILLISECONDS);
@@ -872,7 +872,7 @@ struct npc_dagger_in_dark_broodmaster_noshi : public customCreatureAI
         me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(me, SPELL_SWING);
 
@@ -965,7 +965,7 @@ struct npc_dagger_in_dark_corrupted_dark_hatched_egg : public customCreatureAI
         SetCombatMovement(false);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         me->Kill(me);
     }
@@ -985,7 +985,7 @@ struct npc_dagger_in_dark_corrupted_darkhatched_slayer : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_STRIKE, 6 * IN_MILLISECONDS);
     }
@@ -1024,7 +1024,7 @@ struct npc_dagger_in_dark_darkhatched_oracle : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_WRATH, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_ENTANGLING_ROOTS, 7.5 * IN_MILLISECONDS);
@@ -1065,7 +1065,7 @@ struct npc_dagger_in_dark_darkhatched_flesh_hunter : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_THROW_SPEAR, 2 * IN_MILLISECONDS);
     }
@@ -1111,7 +1111,7 @@ struct npc_dagger_in_dark_darkhatched_lizard_lord : public customCreatureAI
         targetGUID = 0;
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_WATER_JETS, 8 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_CALL_HELP, 21 * IN_MILLISECONDS);
@@ -1354,7 +1354,7 @@ struct npc_dagger_in_dark_rakgor_bloodrazor : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         if (who)
             DoCast(who, SPELL_CHEAP_SHOT);

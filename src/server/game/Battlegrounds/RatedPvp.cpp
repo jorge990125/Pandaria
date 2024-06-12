@@ -229,7 +229,7 @@ static CharTitlesEntry const* GetTitle(uint32 id)
 {
     CharTitlesEntry const* title = sCharTitlesStore.LookupEntry(id);
     if (!title)
-        TC_LOG_ERROR("server.loading", "Title %lu not found", id);
+        TC_LOG_ERROR("server.loading", "Title %u not found", id);
     return title;
 }
 
@@ -237,7 +237,7 @@ static AchievementEntry const* GetAchievement(uint32 id)
 {
     AchievementEntry const* ach = sAchievementStore.LookupEntry(id);
     if (!ach)
-        TC_LOG_ERROR("server.loading", "Achievement %lu not found", id);
+        TC_LOG_ERROR("server.loading", "Achievement %u not found", id);
     return ach;
 }
 
@@ -245,7 +245,7 @@ static ItemTemplate const* GetItem(uint32 id)
 {
     ItemTemplate const* proto = sObjectMgr->GetItemTemplate(id);
     if (!proto)
-        TC_LOG_ERROR("server.loading", "Item template %lu not found", id);
+        TC_LOG_ERROR("server.loading", "Item template %u not found", id);
     return proto;
 }
 

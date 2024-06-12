@@ -178,7 +178,7 @@ class boss_blood_council_controller : public CreatureScript
                 instance->SetBossState(DATA_BLOOD_PRINCE_COUNCIL, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 DoCastAOE(SPELL_REMOVE_EMPOWERED_BLOOD, true);
 
@@ -201,7 +201,7 @@ class boss_blood_council_controller : public CreatureScript
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, keleseth);
                     keleseth->SetInCombatWithZone();
                     if (who && !keleseth->IsInCombat())
-                        keleseth->AI()->EnterCombat(who);
+                        keleseth->AI()->JustEngagedWith(who);
                 }
 
                 if (Creature* taldaram = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_TALDARAM_GUID)))
@@ -209,7 +209,7 @@ class boss_blood_council_controller : public CreatureScript
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, taldaram);
                     taldaram->SetInCombatWithZone();
                     if (who && !taldaram->IsInCombat())
-                    taldaram->AI()->EnterCombat(who);
+                    taldaram->AI()->JustEngagedWith(who);
                 }
 
                 if (Creature* valanar = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_VALANAR_GUID)))
@@ -217,7 +217,7 @@ class boss_blood_council_controller : public CreatureScript
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, valanar);
                     valanar->SetInCombatWithZone();
                     if (who && !valanar->IsInCombat())
-                    valanar->AI()->EnterCombat(who);
+                    valanar->AI()->JustEngagedWith(who);
                 }
 
                 events.ScheduleEvent(EVENT_INVOCATION_OF_BLOOD, 46500);
@@ -394,7 +394,7 @@ class boss_prince_keleseth_icc : public CreatureScript
                 AttackStartCaster(victim, 25.0f);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_BLOOD_PRINCES_CONTROL)))
                     DoZoneInCombat(controller);
@@ -612,7 +612,7 @@ class boss_prince_taldaram_icc : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_THE_ORB_WHISPERER, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_BLOOD_PRINCES_CONTROL)))
                     DoZoneInCombat(controller);
@@ -842,7 +842,7 @@ class boss_prince_valanar_icc : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_THE_ORB_WHISPERER, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_BLOOD_PRINCES_CONTROL)))
                     DoZoneInCombat(controller);
@@ -1346,7 +1346,7 @@ class npc_dark_nucleus : public CreatureScript
                 me->SetHover(true);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 _targetAuraCheck = 1000;
                 if (me->GetDistance(who) >= 15.0f)

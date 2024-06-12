@@ -580,7 +580,7 @@ class boss_thorim : public CreatureScript
 
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(BOSS_THORIM, who->ToPlayer()))
                 {
@@ -589,7 +589,7 @@ class boss_thorim : public CreatureScript
                     return;
                 }
 
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(SAY_AGGRO_1);
 
                 // Spawn Sif
@@ -880,7 +880,7 @@ class boss_thorim : public CreatureScript
                 }
             }
 
-            void SetGUID(uint64 /*guid*/, int32 data)
+            void SetGUID(uint64 /*guid*/, int32 data) override
             {
                 switch (data)
                 {
@@ -1077,7 +1077,7 @@ class npc_thorim_pre_phase_add : public CreatureScript
                 Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void AttackStart(Unit* target) override
             {
@@ -1310,7 +1310,7 @@ class npc_thorim_arena_phase_add : public CreatureScript
                     summoner->AddAura(SPELL_BERSERK_PHASE_1, me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (myIndex == INDEX_DARK_RUNE_WARBRINGER)
                     DoCast(me, SPELL_AURA_OF_CELERITY);
@@ -1487,7 +1487,7 @@ class npc_runic_colossus : public CreatureScript
                         bunny->AI()->SetData(1, (i + 1)* 200);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 _phase = PHASE_MELEE;
                 _events.SetPhase(_phase);
@@ -1655,12 +1655,12 @@ class npc_ancient_rune_giant : public CreatureScript
                     giantAddLocations[i].pos.GetOrientation(),TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3*IN_MILLISECONDS);
             }
 
-            void JustSummoned(Creature *summon)
+            void JustSummoned(Creature *summon) override
             {
                 _summons.Summon(summon);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_RUNIC_FORTIFICATION);
                 _events.ScheduleEvent(EVENT_STOMP, urand(10*IN_MILLISECONDS, 12*IN_MILLISECONDS));
@@ -1936,7 +1936,7 @@ class npc_thorim_trap_bunny : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 EnterEvadeMode();
             }
@@ -2022,7 +2022,7 @@ class npc_thorim_event_bunny : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 EnterEvadeMode();
             }

@@ -473,9 +473,9 @@ class boss_horridon : public CreatureScript
                 summon->setActive(true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 m_mBerserkEvents.ScheduleEvent(EVENT_BERSERK, 12 * MINUTE * IN_MILLISECONDS);
                 InitCombatEvents();
                 
@@ -1107,7 +1107,7 @@ class npc_war_god_jalak : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BESTIAL_CRY, 10 * IN_MILLISECONDS);
             }

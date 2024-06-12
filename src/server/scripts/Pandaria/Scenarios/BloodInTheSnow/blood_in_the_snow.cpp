@@ -400,7 +400,7 @@ struct npc_bloodsnow_frostmane_flesh_eater : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DRAIN_BLOOD, urand(2.5 * IN_MILLISECONDS, 5.5 * IN_MILLISECONDS));
     }
@@ -456,7 +456,7 @@ struct npc_bloodsnow_frostmane_headhunter : public customCreatureAI
         allowAttack = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_THROW_AXE, 1.5 * IN_MILLISECONDS);
     }
@@ -546,7 +546,7 @@ struct npc_bloodsnow_frostmane_snowstalker : public customCreatureAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHOT, 1 * IN_MILLISECONDS);
     }
@@ -622,7 +622,7 @@ struct npc_bloodsnow_frostmane_berserker : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DEVASTATING_LEAP, urand(6.5 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
     }
@@ -683,7 +683,7 @@ struct npc_bloodsnow_frostmane_bonechiller : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FROSTBOLT, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_FREEZING_CIRCLE, 8.5 * IN_MILLISECONDS);
@@ -777,7 +777,7 @@ struct npc_bloodsnow_farastu : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FREEZE_SOLID, urand(9.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
     }
@@ -850,7 +850,7 @@ struct npc_bloodsnow_hekima_the_wise : public customCreatureAI
         hasYell3 = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_HEKIMA_BRANDS, urand(3.5 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_HEKIMAS_WISDOM, 14 * IN_MILLISECONDS);
@@ -966,7 +966,7 @@ struct npc_bloodsnow_frostmane_witch_doctor : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FROST_SHOCK, urand(2.5 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_HEKIMAS_WISDOM, 14 * IN_MILLISECONDS);
@@ -1038,7 +1038,7 @@ struct npc_bloodsnow_ironforge_guardian : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (me->GetEntry() == NPC_PYROMANCE_FLAMEHEARTH)
         {

@@ -155,13 +155,13 @@ class boss_wase_mari : public CreatureScript
                     instance->SetData(DATA_WISE_MARI, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_DRY);
                 me->PrepareChanneledCast(me->GetOrientation());
                 phase = 1;
                 hydrolancePhase = HYDROLANCE_BOTTOM;
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(TALK_AGGRO);
                 Talk(TALK_BOSS_EMOTE_AGGRO);
                 me->SetInCombatWithZone();

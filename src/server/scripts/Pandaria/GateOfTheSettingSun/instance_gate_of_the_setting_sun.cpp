@@ -116,7 +116,7 @@ class instance_gate_of_the_setting_sun : public InstanceMapScript
                 ++playersInInstanceCnt;
             }
 
-            void OnPlayerLeave(Player* /*player*/)
+            void OnPlayerLeave(Player* /*player*/) override
             {
                 if (--playersInInstanceCnt == 0)
                 {

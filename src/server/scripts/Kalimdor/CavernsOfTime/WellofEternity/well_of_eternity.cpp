@@ -667,7 +667,7 @@ class npc_well_of_eternity_legion_demon : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_STRIKE_FEAR, urand(5000, 7000));
                 //DoCast(who, SPELL_CRUSHING_LEAP);
@@ -1478,7 +1478,7 @@ class npc_well_of_eternity_legion_demon_preevent : CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->CombatStop(true);
                 me->getHostileRefManager().deleteReferences();
@@ -1686,7 +1686,7 @@ class npc_well_of_eternity_guardian_demon : CreatureScript
                         me->DespawnOrUnsummon(500);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (who->HasAura(SPELL_SHADOW_WALK_AURA) || who->HasAura(SPELL_SHADOWCLOAK_PETS))
                 {
@@ -2134,7 +2134,7 @@ class npc_well_of_eternity_portal_trash : public CreatureScript
                             me->DespawnOrUnsummon(1000);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (who->HasAura(SPELL_SHADOW_WALK_AURA) || who->HasAura(SPELL_SHADOWCLOAK_PETS))
                 {
@@ -2578,7 +2578,7 @@ class spell_well_of_eternity_shadow_walk : public SpellScriptLoader
         {
             PrepareAuraScript(spell_well_of_eternity_shadow_walk_AuraScript);
 
-            bool Validate(SpellInfo const* /*entry*/)
+            bool Validate(SpellInfo const* /*entry*/) override
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_SHADOW_AMBUSHER) || !sSpellMgr->GetSpellInfo(SPELL_SHADOW_AMBUSHER_BUFF) || !sSpellMgr->GetSpellInfo(SPELL_SHADOWCLOAK_PLAYERS) || !sSpellMgr->GetSpellInfo(SPELL_SHADOWCLOAK_PETS) || !sSpellMgr->GetSpellInfo(SPELL_SHADOW_WALK_STACKS))
                     return false;
@@ -2661,7 +2661,7 @@ class spell_well_of_eternity_shadowcloak_illidan : public SpellScriptLoader
         {
             PrepareAuraScript(spell_well_of_eternity_shadowcloak_illidan_AuraScript);
 
-            bool Validate(SpellInfo const* /*entry*/)
+            bool Validate(SpellInfo const* /*entry*/) override
             {
                 if (!sObjectMgr->GetCreatureTemplate(NPC_SHADOWCLOAK_ILLIDAN_STALKER))
                     return false;
@@ -2746,7 +2746,7 @@ class npc_well_of_eternity_eternal_champion : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_QUEENS_BLADE, urand(2000, 6000));
                 events.ScheduleEvent(EVENT_SHIMMERING_STRIKE, urand(9000, 12000));
@@ -2803,7 +2803,7 @@ class npc_well_of_eternity_eye_of_legion : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FEL_FLAMES, urand(2000, 10000));
             }
@@ -2858,7 +2858,7 @@ class npc_well_of_eternity_enchanted_highmistress : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (me->GetEntry() == NPC_ENCHANTED_HIGHMISTRESS_1)
                 {
@@ -2939,7 +2939,7 @@ class npc_well_of_eternity_royal_handmaiden : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SWEET_LULLABY, urand(7000, 12000));
             }
@@ -3034,7 +3034,7 @@ class npc_well_of_eternity_doomguard_annihilator : public CreatureScript
 
             void Reset() override { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!who)
                     return;
@@ -3531,7 +3531,7 @@ class npc_well_of_eternity_abyssal_doombringer : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_ABYSSAL_FLAMES, 5000);
             }

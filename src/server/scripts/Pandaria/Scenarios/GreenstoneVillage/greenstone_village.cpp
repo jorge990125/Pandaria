@@ -215,7 +215,7 @@ struct greenstone_village_pillager_typeAI : public ScriptedAI
                 nonCombatEvents.ScheduleEvent(EVENT_COSMETIC, urand(3 * IN_MILLISECONDS, 18 * IN_MILLISECONDS));
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         nonCombatEvents.Reset();
     }
@@ -284,7 +284,7 @@ class npc_greenstone_wily_woodling : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_WRATH, 1500);
                 events.ScheduleEvent(EVENT_REJV, 8 * IN_MILLISECONDS);
@@ -359,7 +359,7 @@ class npc_greenstone_village_terror : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_TERROR_SHARDS, urand(3 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
             }
@@ -418,7 +418,7 @@ class npc_greenstone_belligerent_blossom : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_POLLEN_PUFF, urand(3 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
             }
@@ -483,7 +483,7 @@ class npc_greenstone_village_cursed_brew : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_KEG_SLAM, urand(4 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_BREW_BUBLE, urand(9 * IN_MILLISECONDS, 16 * IN_MILLISECONDS));
@@ -708,7 +708,7 @@ class npc_greenstone_village_monstrosity : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 switch (me->GetEntry())
                 {
@@ -927,7 +927,7 @@ class npc_greenstone_vengeful_hui : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (me->HasAura(SPELL_GIANT_HUI))
                     me->CastSpell(me, SPELL_GIANT_HUI, false);

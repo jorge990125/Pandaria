@@ -116,7 +116,7 @@ class boss_baleroc : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_SHARE_THE_PAIN, 1);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_BALEROC, who->ToPlayer()))
                 {

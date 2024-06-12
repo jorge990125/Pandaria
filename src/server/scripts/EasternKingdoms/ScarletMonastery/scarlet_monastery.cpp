@@ -105,7 +105,7 @@ class npc_scarlet_flamethower : public CreatureScript
             }
 
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 nonCombatEvents.Reset();
                 events.ScheduleEvent(EVENT_FLAMETHOWER_COMBAT, urand(1500, 2000));
@@ -241,7 +241,7 @@ class npc_frenzied_spirit : public CreatureScript
                 me->RemoveAllAuras();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FRENZIED, 1000);
             }
@@ -322,7 +322,7 @@ class npc_scarlet_fanatic : public CreatureScript
                     nonCombatEvents.ScheduleEvent(EVENT_REPRODUCE_EMOTE, 2000);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_HANDS_OF_PURITY, 1000);
                 events.ScheduleEvent(EVENT_FANATICAL_STRIKE, urand(2000, 4000));
@@ -409,7 +409,7 @@ class npc_scarlet_judicator : public CreatureScript
                 me->RemoveAllAuras();
             }
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
                 nonCombatEvents.Reset();
             }
@@ -478,7 +478,7 @@ class npc_pile_corpses : public CreatureScript
                 DoCast(me, SPELL_PILE_OF_CORPSES);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetReactState(REACT_PASSIVE);
                 me->AddUnitState(UNIT_STATE_ROOT);
@@ -544,7 +544,7 @@ class npc_scarlet_centurion : public CreatureScript
                 me->RemoveAllAuras();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 nonCombatEvents.Reset();
                 events.ScheduleEvent(EVENT_CLEAVE, urand(2000, 4000));
@@ -630,7 +630,7 @@ class npc_zombified_corpse : public CreatureScript
 
             void Reset() override { }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void JustDied(Unit* /*killer*/) override { }
 
@@ -694,7 +694,7 @@ class npc_scarlet_zealot : public CreatureScript
             EventMap events;
             uint64 ResTarget;
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
                 events.ScheduleEvent(EVENT_HEAL, 10000);
                 events.ScheduleEvent(EVENT_SMITE, urand(4000, 6000));
@@ -888,7 +888,7 @@ class npc_scarlet_purifier : public CreatureScript
 
             void Reset() override { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FLAMESTRIKE, 9000);
                 events.ScheduleEvent(EVENT_PURIFYING_FLAMES, urand(4000, 6000));

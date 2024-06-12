@@ -86,7 +86,7 @@ class npc_raz_the_crazed : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CLEAVE, 0.5 * IN_MILLISECONDS);
             }

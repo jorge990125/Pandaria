@@ -70,7 +70,7 @@ class boss_marwyn : public CreatureScript
                     instance->SetData(DATA_MARWYN_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance)
                     instance->SetData(DATA_MARWYN_EVENT, IN_PROGRESS);

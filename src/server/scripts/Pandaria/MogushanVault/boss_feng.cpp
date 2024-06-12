@@ -361,7 +361,7 @@ class boss_feng : public CreatureScript
                 me->SummonCreature(NPC_LOREWALKER_CHO, ChoPastFengSpawn, TEMPSUMMON_MANUAL_DESPAWN);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_FENG, who->ToPlayer()))
                 {
@@ -376,7 +376,7 @@ class boss_feng : public CreatureScript
                 me->m_Events.Schedule(delay += 3000, 20, [this]()
                 {
                     if (me->IsInCombat())
-                        _EnterCombat();
+                        _JustEngagedWith();
                 });
                 Talk(TALK_AGGRO);
                 berserkEvents.ScheduleEvent(EVENT_BERSERK, IsHeroic() ? 10 * MINUTE * IN_MILLISECONDS : 9 * MINUTE * IN_MILLISECONDS);
@@ -872,7 +872,7 @@ class npc_siphon_shield : public CreatureScript
             InstanceScript* instance;
             std::map<uint32, uint32> soulsMap;
 
-            void Reset()
+            void Reset() override
             {
                 instance = me->GetInstanceScript();
                 // Set invisible

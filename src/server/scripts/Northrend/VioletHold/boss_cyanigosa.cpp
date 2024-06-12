@@ -72,7 +72,7 @@ class boss_cyanigosa : public CreatureScript
                     instance->SetData(DATA_CYANIGOSA_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 

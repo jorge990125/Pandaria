@@ -185,7 +185,7 @@ struct npc_feralas_hippogryph : public ScriptedAI
         }
     }
 
-    void EnterCombat(Unit* /*victim*/) override
+    void JustEngagedWith(Unit* /*victim*/) override
     {
         if (_hippogryph_called)
         {
@@ -306,7 +306,7 @@ struct npc_feralas_wandering_forest_walker : public ScriptedAI
         }
     }
 
-    void EnterCombat(Unit* /*victim*/) override
+    void JustEngagedWith(Unit* /*victim*/) override
     {
         if (_treant_called)
         {

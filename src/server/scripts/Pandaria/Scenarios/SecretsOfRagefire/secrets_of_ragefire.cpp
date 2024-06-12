@@ -777,7 +777,7 @@ struct npc_ragefire_dark_shaman_xorenth : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_TWISTED_ELEMENTS, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_GLACIAL_FREEZE_TOTEM, 8 * IN_MILLISECONDS);
@@ -927,7 +927,7 @@ struct npc_ragefire_korkron_dark_shaman : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_LAVA_BURST, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_POISON_BOLT_TOTEM, urand(8 * IN_MILLISECONDS, 12.5 * IN_MILLISECONDS));
@@ -988,7 +988,7 @@ struct npc_ragefire_korkron_emberguard : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_EMBERSTRIKES, urand(6.5 * IN_MILLISECONDS, 12.5 * IN_MILLISECONDS));
     }
@@ -1102,7 +1102,7 @@ struct npc_ragefire_korkron_shadowblade : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHADOWSTEP, urand(6.5 * IN_MILLISECONDS, 12.5 * IN_MILLISECONDS));
     }
@@ -1208,7 +1208,7 @@ struct npc_ragefire_overseer_elaglo : public customCreatureAI
         waveId = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DEMOLISH_ARMOR, urand(8 * IN_MILLISECONDS, 12.5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_SHATTERING_STOMP, 6.5 * IN_MILLISECONDS);
@@ -1354,7 +1354,7 @@ struct npc_ragefire_korkron_dire_solder : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DIRE_RAGE, 6 * IN_MILLISECONDS);
     }
@@ -1426,7 +1426,7 @@ struct npc_ragefire_flame_hound : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FLAME_BREATH, urand(4.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
     }

@@ -414,7 +414,7 @@ class boss_ancient_regail : public CreatureScript
                     instance->SetBossState(DATA_PROTECTORS, FAIL);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance)
                 {
@@ -743,7 +743,7 @@ class boss_ancient_asani : public CreatureScript
                     me->GetMotionMaster()->MoveChase(vict);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance)
                 {
@@ -1079,7 +1079,7 @@ class boss_protector_kaolan : public CreatureScript
                     instance->SetBossState(DATA_PROTECTORS, FAIL);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance)
                 {

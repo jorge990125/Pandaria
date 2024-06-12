@@ -224,12 +224,12 @@ class boss_tortos : public CreatureScript
                     me->GetMap()->SetWorldState(WORLDSTATE_ONE_UP, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 me->AddAura(SPELL_KICK_SHELL_A, me);
                 me->AddAura(SPELL_ROCKFALL_AURA, me);

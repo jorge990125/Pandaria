@@ -66,9 +66,9 @@ public:
             Summoned = false;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_BLAST_WAVE, 20 * IN_MILLISECONDS);
             events.ScheduleEvent(EVENT_SHOUT,       2 * IN_MILLISECONDS);
             events.ScheduleEvent(EVENT_CLEAVE,      6 * IN_MILLISECONDS);

@@ -285,7 +285,7 @@ class instance_oculus : public InstanceMapScript
                 return 0;
             }
 
-            bool IsPlayerEligibleForCache(uint64 playerGuid) const
+            bool IsPlayerEligibleForCache(uint64 playerGuid) const override
             {
                 return playersEligibleForCache.find(playerGuid) != playersEligibleForCache.end();
             }

@@ -128,9 +128,9 @@ class boss_ayamiss : public CreatureScript
                 BossAI::EnterEvadeMode();
             }
 
-            void EnterCombat(Unit* attacker) override
+            void JustEngagedWith(Unit* attacker) override
             {
-                BossAI::EnterCombat(attacker);
+                BossAI::JustEngagedWith(attacker);
 
                 events.ScheduleEvent(EVENT_STINGER_SPRAY, urand(20000, 30000));
                 events.ScheduleEvent(EVENT_POISON_STINGER, 5000);

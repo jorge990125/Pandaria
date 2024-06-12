@@ -1335,6 +1335,7 @@ bool WorldSession::DosProtection::EvaluateOpcode(WorldPacket& p, time_t time) co
 
             return false;
         }
+        case BAN_SOLO:
         default: // invalid policy
             return true;
     }

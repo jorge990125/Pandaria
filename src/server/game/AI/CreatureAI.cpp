@@ -30,6 +30,16 @@
 #include "CellImpl.h"
 #include "InstanceScript.h"
 
+CreatureAI::CreatureAI(Creature* creature) : UnitAI(creature), me(creature), m_MoveInLineOfSight_locked(false), m_canSeeEvenInPassiveMode(false)
+{ 
+
+}
+
+CreatureAI::~CreatureAI() 
+{ 
+
+}
+
 //Disable CreatureAI when charmed
 void CreatureAI::OnCharmed(bool /*apply*/)
 {

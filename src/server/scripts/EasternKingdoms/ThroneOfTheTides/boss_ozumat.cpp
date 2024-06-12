@@ -560,7 +560,7 @@ class npc_vicious_mindslasher : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_BRAIN_SPIKE, urand(6000, 10000));
                 if (IsHeroic())
@@ -640,7 +640,7 @@ class npc_unyielding_behemoth : public CreatureScript
                         pNeptulon->AI()->Talk(SAY_KILL);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_BLIGHT_SPRAY, urand(8000, 12000));
             }

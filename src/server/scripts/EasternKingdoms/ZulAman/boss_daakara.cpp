@@ -151,7 +151,7 @@ class boss_daakara : public CreatureScript
                 //me->SetByteValue(UNIT_FIELD_BYTES_2, 0, SHEATH_STATE_MELEE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 
@@ -489,7 +489,7 @@ class npc_daakara_amani_lynx : public CreatureScript
                 events.Reset();
             }
             
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FERAL_SWIPE, urand(6000, 9000));
             }

@@ -136,7 +136,7 @@ class npc_ashtongue_channeler : public CreatureScript
             }
 
             void JustDied(Unit* /*killer*/) override;
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void AttackStart(Unit* /*who*/) override { }
             void MoveInLineOfSight(Unit* /*who*/) override { }
             void UpdateAI(uint32 /*diff*/) override { }
@@ -172,7 +172,7 @@ class npc_ashtongue_sorcerer : public CreatureScript
             }
 
             void JustDied(Unit* /*killer*/) override;
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void AttackStart(Unit* /*who*/) override { }
             void MoveInLineOfSight(Unit* /*who*/) override { }
             void UpdateAI(uint32 diff) override
@@ -336,7 +336,7 @@ class boss_shade_of_akama : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override { }
+            void JustEngagedWith(Unit* who) override { }
 
             void AttackStart(Unit* who) override
             {
@@ -671,7 +671,7 @@ class npc_akama_shade : public CreatureScript
 
             void AttackStart(Unit* who) override { }
             void MoveInLineOfSight(Unit* who) override { }
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void BeginEvent(Player* player)
             {

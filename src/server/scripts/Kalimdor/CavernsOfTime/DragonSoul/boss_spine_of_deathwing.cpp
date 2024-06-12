@@ -566,7 +566,7 @@ class npc_spine_of_deathwing_corruption : public CreatureScript
                     pSpawner->DespawnOrUnsummon();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (!instance->GetData(DATA_IS_LFR))
                 {
@@ -764,7 +764,7 @@ class npc_spine_of_deathwing_hideous_amalgamation : public CreatureScript
                 return 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (IsHeroic())
                     events.ScheduleEvent(EVENT_BLOOD_CORRUPTION, urand(6000, 11000));

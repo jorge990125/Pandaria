@@ -109,7 +109,7 @@ class boss_gekkan : public CreatureScript
                 DoCast(SPELL_RECKLESS_INSPIRATION_2);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 DoZoneInCombat();
 
@@ -350,7 +350,7 @@ class npc_glintrok_skulker : public CreatureScript
                     me->CastSpell(me, SPELL_STEALTH, false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(1, 2000);
 
@@ -432,7 +432,7 @@ class npc_glintrok_ironhide : public CreatureScript
                 DoCast(me, SPELL_IRON_PROTECTOR);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->ClearUnitState(UNIT_STATE_CASTING);
                 events.ScheduleEvent(1, 2000);
@@ -493,7 +493,7 @@ class npc_glintrok_oracle : public CreatureScript
                     SetCombatMovement(false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(1, 16000);
                 events.ScheduleEvent(2, 4000);
@@ -572,7 +572,7 @@ class npc_glintrok_hexxer : public CreatureScript
                     SetCombatMovement(false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(1, 10000);
                 events.ScheduleEvent(2, 4000);

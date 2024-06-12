@@ -1206,7 +1206,7 @@ class npc_gunship : public CreatureScript
                 me->SetArmor(0);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
                 SetCombatMovement(false);
@@ -1702,7 +1702,7 @@ class npc_gunship_cannon : public CreatureScript
                     DoCast(me, SPELL_HEAT_DRAIN, true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
             }
@@ -1955,7 +1955,7 @@ class npc_gunship_trigger : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
                 SetCombatMovement(false);
@@ -2549,7 +2549,7 @@ class transport_icc_gunship : public TransportScript
             const_cast<GameObjectValue*>(transport->GetGOValue())->Transport.PathProgress = itr->ArriveTime;
         }
 
-        void OnAddCreaturePassenger(Transport* transport, Creature* passenger)
+        void OnAddCreaturePassenger(Transport* transport, Creature* passenger) override
         {
             passenger->Respawn();
             passenger->setActive(false, ActiveFlags::OnTransport);

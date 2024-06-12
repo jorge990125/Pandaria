@@ -687,7 +687,7 @@ class boss_generic_guardian : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance)
                     instance->SetBossState(DATA_STONE_GUARD, IN_PROGRESS);

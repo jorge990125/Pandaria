@@ -477,7 +477,7 @@ public:
             int dunLevel = CalculateDungeonLevel(map, player);
             int numInGroup = GetNumInGroup(player);
             uint32 classBalance = GetClassBalance(player);
-            TC_LOG_DEBUG("solocraft", "solocraft player guid = %lu, difficulty=%f, dunLevel=%d, numInGroup=%d, classBalance=%lu", player->GetGUIDLow(), difficulty, dunLevel, numInGroup, classBalance);
+            TC_LOG_DEBUG("solocraft", "solocraft player guid = %u, difficulty=%f, dunLevel=%d, numInGroup=%d, classBalance=%lu", player->GetGUIDLow(), difficulty, dunLevel, numInGroup, classBalance);
             ApplyBuffs(player, map, difficulty, dunLevel, numInGroup, classBalance);
         }
     }
@@ -609,10 +609,10 @@ protected:
                 {
                     if (result)
                     {
-                        player->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_VALUE, (*result)[1].GetFloat() * (*result)[4].GetFloat(), false);
+                        player->HandleStatFlatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_VALUE, (*result)[1].GetFloat() * (*result)[4].GetFloat(), false);
                     }
 
-                    player->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_VALUE, difficulty * solocraftConfig.SoloCraftStatsMult, true);
+                    player->HandleStatFlatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_VALUE, difficulty * solocraftConfig.SoloCraftStatsMult, true);
                 }
 
                 player->SetFullHealth();
@@ -714,7 +714,7 @@ protected:
 
             for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
             {
-                player->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_VALUE, difficulty * StatsMultPct, false);
+                player->HandleStatFlatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_VALUE, difficulty * StatsMultPct, false);
             }
 
             if (player->GetPowerType() == POWER_MANA && difficulty > 0)

@@ -123,7 +123,7 @@ class boss_skarvald_the_constructor : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!ghost && instance)
                 {
@@ -295,7 +295,7 @@ class boss_dalronn_the_controller : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!ghost && instance)
                 {

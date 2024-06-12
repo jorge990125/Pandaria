@@ -322,9 +322,9 @@ class boss_lei_shen : public CreatureScript
                 berserkEvents.ScheduleEvent(EVENT_REMOVE_INACTIVITY, 2 * IN_MILLISECONDS); // scheduler stuck here...
             }
     
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
     
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -2039,7 +2039,7 @@ class spell_bouncing_bolt_eff : public SpellScript
         }
     }
 
-    void Register()
+    void Register() override
     {
         OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_bouncing_bolt_eff::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
         OnEffectHitTarget += SpellEffectFn(spell_bouncing_bolt_eff::HandleDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
@@ -2155,7 +2155,7 @@ class spell_violent_gale_winds : public SpellScript
     private:
         uint32 prevSpellId;
 
-    void Register()
+    void Register() override
     {
         OnEffectHitTarget += SpellEffectFn(spell_violent_gale_winds::HandleScriptEff, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
     }
@@ -2224,7 +2224,7 @@ class spell_ball_lightning_jump : public SpellScript
                 caster->CastSpell(target, SPELL_BALL_LIGHTNIG_JUMP_EFF, true);
     }
 
-    void Register()
+    void Register() override
     {
         OnEffectHitTarget += SpellEffectFn(spell_ball_lightning_jump::HandleDamage, EFFECT_0, SPELL_EFFECT_JUMP);
     }
@@ -2361,7 +2361,7 @@ class spell_leishen_overcharge_eff : public SpellScript
         }
     }
 
-    void Register()
+    void Register() override
     {
         OnEffectHitTarget += SpellEffectFn(spell_leishen_overcharge_eff::HandleDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
     }

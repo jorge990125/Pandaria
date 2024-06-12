@@ -110,9 +110,9 @@ class boss_saboteur_kiptilak : public CreatureScript
                     Talk(SAY_SLAY);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(SAY_AGGRO);
                 me->GetMotionMaster()->Clear();
 

@@ -156,9 +156,9 @@ class boss_jandice_barov : public CreatureScript
                     itr->DespawnOrUnsummon();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 //Talk(TALK_INTO);
                 if (instance)
                 {

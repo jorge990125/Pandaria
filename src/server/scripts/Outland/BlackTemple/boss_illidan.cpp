@@ -348,7 +348,7 @@ class npc_flame_of_azzinoth : public CreatureScript
                 GlaiveGUID = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
             }
@@ -501,7 +501,7 @@ class boss_illidan_stormrage : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->setActive(true);
                 DoZoneInCombat();
@@ -1136,7 +1136,7 @@ class boss_maiev_shadowsong : public CreatureScript
                 me->SetUInt32Value(UNIT_FIELD_VIRTUAL_ITEM_ID + 2, 32326);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void MoveInLineOfSight(Unit* /*who*/) override { }
             void EnterEvadeMode() override { }
 
@@ -1455,7 +1455,7 @@ class npc_akama_illidan : public CreatureScript
                 me->CombatStop(true);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void MoveInLineOfSight(Unit* /*who*/) override { }
 
             void MovementInform(uint32 type, uint32 /*pointId*/) override
@@ -2029,7 +2029,7 @@ class npc_cage_trap_trigger : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void MoveInLineOfSight(Unit* who) override
             {
@@ -2108,7 +2108,7 @@ class npc_shadow_demon : public CreatureScript
 
             uint64 TargetGUID;
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
             }
@@ -2200,7 +2200,7 @@ class npc_parasitic_shadowfiend : public CreatureScript
                 DoCast(me, SPELL_SHADOWFIEND_PASSIVE, true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
             }

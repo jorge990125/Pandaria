@@ -74,9 +74,9 @@ class boss_commander_rimok : public CreatureScript
                 getType = 4;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 me->SetReactState(REACT_AGGRESSIVE);
                 Talk(SAY_AGGRO);
 

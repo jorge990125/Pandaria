@@ -300,9 +300,9 @@ class boss_jikun : public CreatureScript
                 return 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                 {
@@ -637,7 +637,7 @@ struct npc_young_hatchling_jikun : public ScriptedAI
         }
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CHEEP, urand(2.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
     }
@@ -1071,7 +1071,7 @@ struct npc_nest_guardian : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_TALON_RAKE, urand(2.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
     }

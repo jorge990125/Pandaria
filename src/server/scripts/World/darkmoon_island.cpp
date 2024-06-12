@@ -139,7 +139,7 @@ struct npc_darkmoon_moonfang : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_MOONFANG_CURSE, 19s + 500ms);
         events.ScheduleEvent(EVENT_FANGS_OF_THE_MOON, 8s + 500ms);

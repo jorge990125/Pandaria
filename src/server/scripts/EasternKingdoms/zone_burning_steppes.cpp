@@ -87,7 +87,7 @@ struct npc_burning_steppes_war_reaver : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_UPPERCUTE, 5.5 * IN_MILLISECONDS);
         events.ScheduleEvent(SPELL_FLAME_BLAST, 8 * IN_MILLISECONDS);
@@ -280,7 +280,7 @@ class npc_burning_steppes_chiseled_golem : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void UpdateAI(uint32 diff) override
             {

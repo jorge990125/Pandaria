@@ -443,7 +443,7 @@ class spell_gen_bonked : public SpellScript
         }
     }
 
-    void Register()
+    void Register() override
     {
         OnEffectHitTarget += SpellEffectFn(spell_gen_bonked::HandleScript, EFFECT_1, SPELL_EFFECT_SCRIPT_EFFECT);
     }
@@ -3007,7 +3007,7 @@ class spell_gen_upper_deck_create_foam_sword : public SpellScript
         }
     }
 
-    void Register()
+    void Register() override
     {
         OnEffectHitTarget += SpellEffectFn(spell_gen_upper_deck_create_foam_sword::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
     }
@@ -3105,7 +3105,7 @@ class spell_gen_vehicle_scaling : public SpellScriptLoader
                 }
             }
 
-            void Register()
+            void Register() override
             {
                 DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_vehicle_scaling_AuraScript::CalculateAmount, EFFECT_ALL, SPELL_AURA_ANY);
                 AfterEffectRemove += AuraEffectRemoveFn(spell_gen_vehicle_scaling_AuraScript::HandleAfterRemove, EFFECT_ALL, SPELL_AURA_ANY, AURA_EFFECT_HANDLE_REAL);
@@ -3385,7 +3385,7 @@ class spell_gen_debug_move : public SpellScript
         return SPELL_CAST_OK;
     }
 
-    void Register()
+    void Register() override
     {
         OnCheckCast += SpellCheckCastFn(spell_gen_debug_move::CheckCast);
     }
@@ -4115,7 +4115,7 @@ class spell_gen_shadowmeld : public SpellScript
             caster->CombatStop();
     }
 
-    void Register()
+    void Register() override
     {
         OnEffectHitTarget += SpellEffectFn(spell_gen_shadowmeld::HandleHit, EFFECT_1, SPELL_EFFECT_DUMMY);
     }
@@ -4148,7 +4148,7 @@ class spell_gen_free_action_potion : public SpellScript
         }
     }
 
-    void Register()
+    void Register() override
     {
         AfterHit += SpellHitFn(spell_gen_free_action_potion::HandleAfterHit);
     }
@@ -4178,7 +4178,7 @@ class spell_gen_elixir_of_wandering_spirits : public SpellScript
         caster->CastSpell(caster, Trinity::Containers::SelectRandomContainerElement(wanderingSpiritsAuras), true);
     }
 
-    void Register()
+    void Register() override
     {
         OnEffectHitTarget += SpellEffectFn(spell_gen_elixir_of_wandering_spirits::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
     }

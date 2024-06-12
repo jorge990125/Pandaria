@@ -97,7 +97,7 @@ struct npc_high_seas_cannoneer : public customCreatureAI
         x = 0.0f; y = 0.0f; z = 0.0f;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->RemoveAurasDueToSpell(SPELL_CANNON_LAUNCH);
         DoCast(me, SPELL_CANNONEERS_TORCH);
@@ -211,7 +211,7 @@ struct npc_high_seas_swashbuckler : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->RemoveAurasDueToSpell(SPELL_CANNON_LAUNCH);
         events.ScheduleEvent(EVENT_SWASHBUCKLING, 4.5 * IN_MILLISECONDS);
@@ -366,7 +366,7 @@ struct npc_high_seas_admiral_hagman : public ScriptedAI
 
     void Reset() override { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_INTRO);
     }
@@ -510,7 +510,7 @@ struct npc_high_seas_horde_captain : public customCreatureAI
 
     void Reset() override  { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHOT, 1.5 * IN_MILLISECONDS);
     }
@@ -624,7 +624,7 @@ struct npc_high_seas_horde_squalsharper : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_WATER_BOLT, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_CHAIN_HEAL, 10 * IN_MILLISECONDS);
@@ -878,7 +878,7 @@ struct npc_high_seas_triad_of_lieutenants : public customCreatureAI
         return barrelGUID;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_THROW_BOMB, 4 * IN_MILLISECONDS);
         
@@ -970,7 +970,7 @@ struct npc_high_seas_explosive_barrel : public ScriptedAI
     {
         if (actionId == ACTION_START_INTRO && !hasTriggered)
         {
-            hasTriggered;
+            hasTriggered = true;
 
             if (me->GetEntry() == NPC_PLANT_EXPLOSIVES)
                 me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
@@ -1002,7 +1002,7 @@ struct npc_high_seas_admiral_hodgson : public customCreatureAI
         x = 0.0f; y = 0.0f; z = 0.0f;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_INTRO);
 

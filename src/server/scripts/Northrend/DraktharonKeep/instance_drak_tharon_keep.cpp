@@ -388,7 +388,7 @@ public:
             return str_data;
         }
 
-        void OnUnitDeath(Unit* unit)
+        void OnUnitDeath(Unit* unit) override
         {
             if (unit->GetEntry() == NPC_CRYSTAL_HANDLER)
             {

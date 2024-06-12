@@ -172,9 +172,9 @@ class boss_corla_herald_of_twilight : public CreatureScript
                     me->GetMap()->SetWorldState(WORLDSTATE_ARRESTED_DEVELOPMENT, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 me->CastStop();
                 me->GetMotionMaster()->MoveChase(me->GetVictim());
 

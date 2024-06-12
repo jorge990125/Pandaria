@@ -1272,7 +1272,7 @@ class npc_sourcerous_skeleton : public CreatureScript
                 me->setActive(true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FROSTBOLT, urand(3 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
 
@@ -1359,7 +1359,7 @@ class npc_stone_sleeper : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->HandleEmoteStateCommand(EMOTE_STATE_NONE);
                 events.ScheduleEvent(EVENT_FEAR, urand(3 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
@@ -1447,7 +1447,7 @@ class npc_dread_scryer : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CONE_OF_COLD, urand(3 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
 

@@ -186,7 +186,7 @@ class boss_echo_of_jaina : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 
@@ -319,7 +319,7 @@ class npc_echo_of_jaina_flarecore : public CreatureScript
                     me->AddAura(SPELL_CHECK_PLAYER_DIST, me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CHECK_PLAYER, 500);
                 events.ScheduleEvent(EVENT_EXPLODE, 10000);

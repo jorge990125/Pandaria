@@ -44,7 +44,7 @@ class instance_mechanar : public InstanceMapScript
             uint64 cacheGUID;
             bool chestAvailable;
 
-            void OnGameObjectCreate(GameObject* gameObject)
+            void OnGameObjectCreate(GameObject* gameObject) override
             {
                 switch (gameObject->GetEntry())
                 {

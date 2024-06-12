@@ -124,7 +124,7 @@ class instance_end_time : public InstanceMapScript
                 }
             }
 
-            void SetData(uint32 type,uint32 data)
+            void SetData(uint32 type,uint32 data) override
             {
                 switch (type)
                 {

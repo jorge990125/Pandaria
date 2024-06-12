@@ -214,7 +214,7 @@ class boss_eye_of_cthun : public CreatureScript
                     pPortal->SetReactState(REACT_PASSIVE);
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
                 if (instance)
@@ -530,10 +530,10 @@ class boss_cthun : public CreatureScript
                     instance->SetData(DATA_CTHUN_PHASE, PHASE_NOT_STARTED);
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
-                _EnterCombat();
+                _JustEngagedWith();
             }
     
             void SpawnEyeTentacle(float x, float y)
@@ -950,7 +950,7 @@ class npc_eye_tentacle : public CreatureScript
                 KillSelfTimer = 35000;
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
             }
@@ -1024,7 +1024,7 @@ class npc_claw_tentacle : public CreatureScript
                 EvadeTimer = 5000;
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
             }
@@ -1135,7 +1135,7 @@ class npc_giant_claw_tentacle : public CreatureScript
                 EvadeTimer = 5000;
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
             }
@@ -1247,7 +1247,7 @@ class npc_giant_eye_tentacle : public CreatureScript
                 BeamTimer = 500;
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
             }

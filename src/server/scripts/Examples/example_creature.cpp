@@ -124,7 +124,7 @@ class example_creature : public CreatureScript
 
             // *** HANDLED FUNCTION ***
             // Enter Combat called once per combat
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 //Say some stuff
                 Talk(SAY_AGGRO, who);

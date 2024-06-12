@@ -15,6 +15,7 @@ endif()
 file(GLOB_RECURSE sources_Asio Asio/*.cpp Asio/*.h)
 file(GLOB_RECURSE sources_Collision Collision/*.cpp Collision/*.h Collision/Management/*.cpp Collision/Management/*.h Collision/Maps/*.cpp Collision/Maps/*.h Collision/Models/*.cpp Collision/Models/*.h)
 file(GLOB_RECURSE sources_Configuration Configuration/*.cpp Configuration/*.h)
+file(GLOB_RECURSE sources_Containers Containers/*.cpp Containers/*.h Containers/Utilities/*.cpp Containers/Utilities/*.h)
 file(GLOB_RECURSE sources_Cryptography Cryptography/*.cpp Cryptography/*.h Cryptography/Authentication/*.cpp Cryptography/Authentication/*.h)
 file(GLOB_RECURSE sources_Hacks Hacks/*.cpp Hacks/*.h)
 file(GLOB_RECURSE sources_IPLocation IPLocation/*.cpp IPLocation/*.h)
@@ -27,6 +28,7 @@ source_group(CMake FILES CMakeLists.txt)
 source_group(Asio FILES ${sources_Asio})
 source_group(Collision FILES ${sources_Collision})
 source_group(Configuration FILES ${sources_Configuration})
+source_group(Containers FILES ${sources_Containers})
 source_group(Cryptography FILES ${sources_Cryptography})
 source_group(Hacks FILES ${sources_Hacks})
 source_group(IPLocation FILES ${sources_IPLocation})
@@ -48,6 +50,7 @@ set(common_STAT_SRCS
   ${sources_Asio}
   ${sources_Collision}
   ${sources_Configuration}
+  ${sources_Containers}
   ${sources_Cryptography}
   ${sources_Debugging}
   ${sources_Hacks}
@@ -74,6 +77,8 @@ target_include_directories(common
     ${CMAKE_CURRENT_SOURCE_DIR}/Collision/Management
     ${CMAKE_CURRENT_SOURCE_DIR}/Collision/Maps
     ${CMAKE_CURRENT_SOURCE_DIR}/Collision/Models
+    ${CMAKE_CURRENT_SOURCE_DIR}/Containers
+    ${CMAKE_CURRENT_SOURCE_DIR}/Containers/Utilities
     ${CMAKE_CURRENT_SOURCE_DIR}/Configuration
     ${CMAKE_CURRENT_SOURCE_DIR}/Cryptography
     ${CMAKE_CURRENT_SOURCE_DIR}/Cryptography/Authentication  

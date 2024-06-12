@@ -177,7 +177,7 @@ class boss_lord_marrowgar : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_BONED, 1);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_LORD_MARROWGAR, who->ToPlayer()))
                 {
@@ -478,7 +478,7 @@ class npc_coldflame : public CreatureScript
             {
             }
 
-            void IsSummonedBy(Unit* owner)
+            void IsSummonedBy(Unit* owner) override
             {
                 if (owner->GetTypeId() != TYPEID_UNIT || !owner->GetAI())
                     return;
@@ -525,7 +525,8 @@ class npc_coldflame : public CreatureScript
                     owner->GetNearPosition(pos, owner->GetObjectSize() / 2.0f, ang - owner->GetOrientation());
                 }
 
-                me->UpdateGroundPositionZ(pos.GetPositionX(), pos.GetPositionY(), pos.m_positionZ, 10.0f, 50.0f);
+                //me->UpdateGroundPositionZ(pos.GetPositionX(), pos.GetPositionY(), pos.m_positionZ, 10.0f, 50.0f);
+                me->UpdateGroundPositionZ(pos.GetPositionX(), pos.GetPositionY(), pos.m_positionZ);
 
                 me->NearTeleportTo(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), me->GetOrientation());
                 if (omnidirection)
@@ -541,7 +542,8 @@ class npc_coldflame : public CreatureScript
                 {
                     Position newPos;
                     me->GetNearPosition(newPos, 5.0f, 0.0f);
-                    me->UpdateGroundPositionZ(newPos.GetPositionX(), newPos.GetPositionY(), newPos.m_positionZ, 10.0f, 50.0f);
+                    //me->UpdateGroundPositionZ(newPos.GetPositionX(), newPos.GetPositionY(), newPos.m_positionZ, 10.0f, 50.0f);
+                    me->UpdateGroundPositionZ(newPos.GetPositionX(), newPos.GetPositionY(), newPos.m_positionZ);
                     me->NearTeleportTo(newPos.GetPositionX(), newPos.GetPositionY(), newPos.GetPositionZ(), me->GetOrientation());
                     DoCast(SPELL_COLDFLAME_SUMMON);
                     _events.ScheduleEvent(EVENT_COLDFLAME_TRIGGER, 500);
@@ -596,7 +598,7 @@ class npc_bone_spike : public CreatureScript
                     KilledUnit(passenger);
             }
 
-            void IsSummonedBy(Unit* summoner)
+            void IsSummonedBy(Unit* summoner) override
             {
                 DoCast(summoner, SPELL_IMPALED);
                 summoner->CastSpell(me, SPELL_RIDE_VEHICLE, true);

@@ -1480,6 +1480,22 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
              dest = SpellDestination(x, y, liquidLevel, m_caster->GetOrientation());
              break;
         }
+        case TARGET_DEST_CASTER_FRONT_LEAP:
+        {
+            Unit* unitCaster = m_caster->ToUnit();
+            if (!unitCaster)
+                break;
+
+            //float dist = spellEffectInfo.CalcRadius(unitCaster);
+            float dist = m_spellInfo->Effects[effIndex].CalcRadius(m_caster);
+            float angle = targetType.CalcDirectionAngle();
+
+            Position pos = dest._position;
+
+            unitCaster->MovePositionToFirstCollision(pos, dist, angle);
+            dest.Relocate(pos);
+            break;
+        }        
         default:
         {
             float dist;
@@ -8382,7 +8398,7 @@ void Spell::HandleAfterCast()
         if (!found && !(m_spellInfo->AttributesEx2 & SPELL_ATTR2_NOT_RESET_AUTO_ACTIONS))
         {
             m_caster->resetAttackTimer(BASE_ATTACK);
-            if (m_caster->HasOffhandWeapon())
+            if (m_caster->haveOffhandWeapon())
                 m_caster->resetAttackTimer(OFF_ATTACK);
             m_caster->resetAttackTimer(RANGED_ATTACK);
         }

@@ -293,7 +293,7 @@ class boss_kalecgos : public CreatureScript
                 }
             }
 
-            void MoveInLineOfSight(Unit* who)
+            void MoveInLineOfSight(Unit* who) override
             {
                 if (justReset)//boss is invisible, don't attack
                     return;
@@ -323,7 +323,7 @@ class boss_kalecgos : public CreatureScript
                 DoCast(target, SPELL_SPECTRAL_BLAST_SELF_VISUAL, true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetStandState(UNIT_STAND_STATE_STAND);
                 Talk(SAY_EVIL_AGGRO);
@@ -333,12 +333,12 @@ class boss_kalecgos : public CreatureScript
                     instance->SetData(DATA_KALECGOS_EVENT, IN_PROGRESS);
             }
 
-            void KilledUnit(Unit* /*victim*/)override
+            void KilledUnit(Unit* /*victim*/) override
             {
                 Talk(SAY_EVIL_SLAY);
             }
 
-            void MovementInform(uint32 type,uint32 id)
+            void MovementInform(uint32 type,uint32 id) override
             {
                 if (type != EFFECT_MOTION_TYPE || id != 1)
                     return;
@@ -586,7 +586,7 @@ class boss_sathrovarr : public CreatureScript
                     TeleportAllPlayersBack();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 isStarted = true;
                 if (Creature* kalec = me->SummonCreature(NPC_KALEC, me->GetPositionX() + 10, me->GetPositionY() + 5, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0))

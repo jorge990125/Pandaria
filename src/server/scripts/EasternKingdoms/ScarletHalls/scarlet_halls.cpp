@@ -111,7 +111,7 @@ class npc_starving_hound : public CreatureScript
                 attacked = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_HUNGRY_DOG, urand(8000, 15000));
             }
@@ -406,9 +406,9 @@ class npc_commander_lindon : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 HandleDoors();
                 if (instance)
                     instance->SetData(DATA_COMANDER_LINDON, IN_PROGRESS);
@@ -559,7 +559,7 @@ class npc_scarlet_master_archer : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BLEEDING_WOUND, urand(2500, 4500));
             }
@@ -649,7 +649,7 @@ class npc_scarlet_scourge_hewer : public CreatureScript
                 SetEquipmentSlots(false, W_DRAGON_REACH, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->CastSpell(me, SPELL_SEAL_OF_BLOOD, false);
             }
@@ -701,7 +701,7 @@ class npc_scarlet_myrmidon : public CreatureScript
                 SetEquipmentSlots(false, W_REMORSE, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_RAZOR_EDGE, urand(10000, 19000));
             }
@@ -762,7 +762,7 @@ class npc_scarlet_evangelist : public CreatureScript
                 SetEquipmentSlots(false, W_MOULDERING_CORPSE, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_HOLY_FIRE, urand(5000, 7000));
                 events.ScheduleEvent(EVENT_HOLY_SMITE, urand(1500, 2500));
@@ -941,7 +941,7 @@ class npc_scarlet_halls_defender : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_DISARM, urand(9000, 18000));
                 me->CastSpell(me, SPELL_COMMANDING_SHOUT, false);
@@ -999,7 +999,7 @@ class npc_scarlet_evoker : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FIREBALL, urand(3000, 5000));
                 events.ScheduleEvent(EVENT_FLAMESTRIKE, urand(7000, 15500));
@@ -1060,7 +1060,7 @@ class npc_scarlet_hall_guardian : public CreatureScript
                 SetEquipmentSlots(false, W_REMORSE, W_MAGIC_SHIELD, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_JOLT, urand(1500, 3000));
                 events.ScheduleEvent(EVENT_SLASH_ARMOR, urand(7000, 14000));
@@ -1120,7 +1120,7 @@ class npc_scarlet_treasurer : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_TOSS_STATUE, urand(3 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
             }
@@ -1244,7 +1244,7 @@ class npc_scarlet_scholar : public CreatureScript
                 SetEquipmentSlots(false, W_MOULDERING_CORPSE, 0, EQUIP_NO_CHANGE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SCARLET_PROTECTION, urand(3000, 8000));
                 events.ScheduleEvent(EVENT_FIREBALL_VALLEY, urand(9000, 18000));
@@ -1312,7 +1312,7 @@ class npc_scarlet_pupil : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BEATDOWN, urand(2500, 6000));
             }

@@ -179,7 +179,7 @@ class boss_devourer_of_souls : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_THREE_FACED, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance)
                     instance->SetData(DATA_DEVOURER_EVENT, IN_PROGRESS);
@@ -196,7 +196,7 @@ class boss_devourer_of_souls : public CreatureScript
                 events.ScheduleEvent(EVENT_WAILING_SOULS, urand(60000, 70000));
             }
 
-            void DamageTaken(Unit* /*attacker*/, uint32& damage)
+            void DamageTaken(Unit* /*attacker*/, uint32& damage) override
             {
                 if (uiMirroredSoulTarget && me->HasAura(SPELL_MIRRORED_SOUL))
                 {

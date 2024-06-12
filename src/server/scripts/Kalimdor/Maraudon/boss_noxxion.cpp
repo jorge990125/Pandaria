@@ -60,7 +60,7 @@ public:
             Invisible = false;
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void SummonAdds(Unit* victim)
         {

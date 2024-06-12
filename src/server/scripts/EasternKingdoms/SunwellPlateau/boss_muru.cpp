@@ -129,7 +129,7 @@ class boss_entropius : public CreatureScript
                     instance->SetData(DATA_MURU_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCastAOE(SPELL_NEGATIVE_ENERGY_E, true);
                 DoCast(me, SPELL_ENTROPIUS_SPAWN, false);
@@ -239,7 +239,7 @@ class boss_muru : public CreatureScript
                     instance->SetData(DATA_MURU_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance->GetData(DATA_KALECGOS_EVENT) != DONE || instance->GetData(DATA_BRUTALLUS_EVENT) != DONE || instance->GetData(DATA_FELMYST_EVENT) != DONE)
                 {

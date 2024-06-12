@@ -773,7 +773,7 @@ struct npc_shaolmara_beastcaller : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_TWO_HANDED_STRIKE, 3.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_BEAST_WITHIN, 8 * IN_MILLISECONDS);
@@ -843,7 +843,7 @@ struct npc_shaolmara_raptor : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DUST_CLOUD, urand(3.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
     }
@@ -934,7 +934,7 @@ struct npc_arcanital_marakah : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ARCANITAL_SPARK, urand(3.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_WAVES_OF_LIGHT, 11 * IN_MILLISECONDS);
@@ -1002,7 +1002,7 @@ struct npc_shaolmara_anki : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_EARTH_SHATTER, urand(5 * IN_MILLISECONDS, 7 * IN_MILLISECONDS));
     }
@@ -1048,7 +1048,7 @@ struct npc_shaolmara_beastcaller_pakutesh : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_THROW_AXE, urand(3.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_LIGHTNING_CHARGED, 10 * IN_MILLISECONDS);
@@ -1127,7 +1127,7 @@ struct npc_shaolmara_zebtula_stoneshield : public barricadeBaseAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SPECIAL_ATTACK, urand(3.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
 
@@ -1761,7 +1761,7 @@ struct npc_arcanital_tulachek : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_SPECIAL_4);
         events.ScheduleEvent(EVENT_ARCANITAL_SPARK, urand(3.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
@@ -1822,7 +1822,7 @@ struct npc_zebtula_kresh_the_reaper : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_BERSERKER_RUSH, urand(3.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
     }
@@ -2102,7 +2102,7 @@ struct npc_wargod_alchukla : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_SPECIAL_2);
         events.ScheduleEvent(EVENT_LIGHTNING_POLE, urand(3.5 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
@@ -2191,7 +2191,7 @@ struct npc_teardown_zandalari_bloodguard : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_BLOODY_STRIKE, urand(3.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_RAGE_ZONE, urand(5 * IN_MILLISECONDS, 20 * IN_MILLISECONDS));
@@ -2232,7 +2232,7 @@ struct npc_teardown_spirit_void_sentry : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SPIRIT_CLEAVE, urand(3.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_VOID_SOUL, urand(5 * IN_MILLISECONDS, 20 * IN_MILLISECONDS));
@@ -2275,7 +2275,7 @@ struct npc_teardown_zandalari_soultwister : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_LEGACY_OF_BLOOD, urand(3.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
     }
@@ -2329,7 +2329,7 @@ struct npc_teardown_zandalari_haruspex : public customCreatureAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CURSE_OF_BABBLING_TONG, urand(3.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_STARFALL, 7 * IN_MILLISECONDS);
@@ -2391,7 +2391,7 @@ struct npc_slavemaster_shiaxu : public customCreatureAI
         hasTriggered = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_INTRO);
         events.ScheduleEvent(EVENT_CAPTURE, urand(3.5 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
@@ -2462,7 +2462,7 @@ struct npc_shanze_electrocutioner : public customCreatureAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, urand(1.5 * IN_MILLISECONDS, 2.5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_LIGHTNING_STRIKE, 7.5 * IN_MILLISECONDS);
@@ -2565,7 +2565,7 @@ struct npc_shanze_slaver : public customCreatureAI
         }
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ELECTRIFIED_CHAINS, urand(4.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
     }
@@ -2603,7 +2603,7 @@ struct npc_beastmaster_horaki : public customCreatureAI
         me->RemoveAllAreasTrigger();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_SPECIAL_3);
         events.ScheduleEvent(EVENT_SHOT, urand(1.5 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
@@ -3601,7 +3601,7 @@ struct npc_captain_halukal : public customCreatureAI
         me->RemoveAllAreasTrigger();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->RemoveAurasDueToSpell(SPELL_COSMETIC_SLEEP);
         events.ScheduleEvent(EVENT_WELL_FED, urand(1.5 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
@@ -3744,7 +3744,7 @@ struct npc_veteran_wingrider : public customCreatureAI
             hasMarked = true;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_BASH_SKULL, urand(2.5 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
     }
@@ -3791,7 +3791,7 @@ struct npc_zandalari_golem : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_BODY_OF_STONE, true);
         events.ScheduleEvent(EVENT_THUNDER_CLAP, urand(2.5 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
@@ -3829,7 +3829,7 @@ struct npc_zandalari_spirit_twister : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SPIRIT_BOLT, urand(1.5 * IN_MILLISECONDS, 3 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_SPIRIT_TWISTING, urand(10 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
@@ -3873,7 +3873,7 @@ struct npc_huseng_gatekeeper : public customCreatureAI
         summons.DespawnAll();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->RemoveAurasDueToSpell(SPELL_HUSENG_ASLEEP);
         Talk(TALK_SPECIAL_2);
@@ -4051,7 +4051,7 @@ struct npc_stormsea_landing_sentry_beam_bunny : public ScriptedAI
     TaskScheduler scheduler;
     uint64 targetGUID;
 
-    void IsSummonedBy(Unit* summoner)
+    void IsSummonedBy(Unit* summoner) override
     {
         if (summoner->ToCreature())
             targetGUID = summoner->ToCreature()->AI()->GetGUID();
@@ -4774,7 +4774,7 @@ struct npc_shanbu_palace_gatekeeper : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CRUSHING_STOMP, urand(4.5 * IN_MILLISECONDS, 14.5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_BOULDER_THROW, urand(15, 25));
@@ -4832,7 +4832,7 @@ struct npc_shanbu_shanze_electrocutioner : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, urand(1.5 * IN_MILLISECONDS, 2.5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_LIGHTNING_STRIKE, 7.5 * IN_MILLISECONDS);
@@ -4929,7 +4929,7 @@ struct npc_shanbu_quilen_guardian : public customCreatureAI
             me->GetInstanceScript()->SetData(STEP_TO_LEI_SHEN_PALACE, IN_PROGRESS);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(who, SPELL_FIXATED_LEAP);
         events.ScheduleEvent(EVENT_STONE_CLAW, urand(1.5 * IN_MILLISECONDS, 2.5 * IN_MILLISECONDS));
@@ -4998,7 +4998,7 @@ struct npc_shan_bu : public shanbuAssaultBaseAI
         }
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_SHADOW_CRASH, urand(1.5 * IN_MILLISECONDS, 2.5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_DRAW_SHADOWS, 7.5 * IN_MILLISECONDS);
@@ -5364,7 +5364,7 @@ struct npc_thunder_forge_shado_pan_warrior : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (me->GetEntry() == NPC_SHADO_PAN_DEFENDER)
             events.ScheduleEvent(EVENT_HEALING_ORB, 10 * IN_MILLISECONDS);
@@ -5556,7 +5556,7 @@ struct npc_forgemaster_vulkon : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_LIGHTNING_SMASH, urand(3.5 * IN_MILLISECONDS, 9 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_ELECTRIFIED, 15 * IN_MILLISECONDS);
@@ -5629,7 +5629,7 @@ struct npc_thunder_forge_shanze_warrior : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_MORTAL_STRIKE, urand(3.5 * IN_MILLISECONDS, 9 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_CLEAVE, 5 * IN_MILLISECONDS);
@@ -5688,7 +5688,7 @@ struct npc_thunder_forge_shanze_pyromancer : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FIREBALL, urand(1.5 * IN_MILLISECONDS, 2 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_METEOR, 9.5 * IN_MILLISECONDS);
@@ -5812,7 +5812,7 @@ struct npc_thunder_forge_sha_fiend : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (me->GetEntry() == NPC_SHA_FIEND)
             events.ScheduleEvent(EVENT_SHA_BLAST, urand(1.5 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
@@ -5868,7 +5868,7 @@ struct npc_sha_almagmation : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_INSANITY, 20 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_METEOR_STORM, urand(9.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
@@ -5951,7 +5951,7 @@ struct npc_thunder_forge_celestial_defender : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_POWER_SURGE, 15 * IN_MILLISECONDS);
     }

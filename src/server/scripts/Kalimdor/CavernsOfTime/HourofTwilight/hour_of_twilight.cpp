@@ -587,7 +587,7 @@ class npc_thrall_intro : public CreatureScript
             uint32 timer;
             uint32 wp;
 
-            void Reset()
+            void Reset() override
             {
                 events.Reset();
                 nonCombatEvents.Reset();
@@ -610,7 +610,7 @@ class npc_thrall_intro : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_LAVA_BURST, 1500);
                 events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, 30000);
@@ -776,13 +776,13 @@ class npc_thrall_arcurion : public CreatureScript
                 phase        = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
                 me->HandleEmoteStateCommand(EMOTE_STATE_READY1H);
             }
 
-            void Reset()
+            void Reset() override
             {
                 if (instance && instance->GetBossState(DATA_ARCURION) == DONE)
                 {
@@ -989,7 +989,7 @@ class npc_thrall_asira : public CreatureScript
                 me->HandleEmoteStateCommand(EMOTE_STATE_CANNIBALIZE);
             }
 
-            void Reset()
+            void Reset() override
             {
                 events.Reset();
                 nonCombatEvents.Reset();
@@ -1030,7 +1030,7 @@ class npc_thrall_asira : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_LAVA_BURST, 1500);
                 events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, 30000);
@@ -1253,7 +1253,7 @@ class npc_thrall_trash_benedictus : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void InitializeAI() override
             {
@@ -1417,7 +1417,7 @@ class npc_thrall_benedictus : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_LAVA_BURST, 1500);
                 events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, 30000);
@@ -1630,7 +1630,7 @@ class npc_twilights_hammer : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 switch (me->GetEntry())
                 {
@@ -1798,7 +1798,7 @@ class npc_faceless_minions : public CreatureScript
                 ScriptedAI::EnterEvadeMode();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 switch (me->GetEntry())
                 {
@@ -1909,7 +1909,7 @@ class npc_crystalline_elemental : public CreatureScript
             EventMap events;
             uint32 timer;
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 timer = 3000;
             }

@@ -144,9 +144,9 @@ class boss_rattlegore : public CreatureScript
                         u_SoulFlame->RemoveAura(SPELL_SOULFLAME);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 SetBonePile(true);
                 Talk(TALK_BONE_PILE_ANN);
                 if (instance)

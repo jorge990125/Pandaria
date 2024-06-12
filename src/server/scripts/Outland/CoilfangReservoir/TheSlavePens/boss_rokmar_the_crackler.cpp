@@ -60,9 +60,9 @@ class boss_rokmar_the_crackler : public CreatureScript
                     instance->SetData(DATA_ROKMAR, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 events.ScheduleEvent(EVENT_WOUND, urand(8 * IN_MILLISECONDS, 20 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_MOSS, urand(15 * IN_MILLISECONDS, 27.5 * IN_MILLISECONDS));

@@ -420,7 +420,7 @@ class npc_arthas : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_ARTHAS_AURA);
             }

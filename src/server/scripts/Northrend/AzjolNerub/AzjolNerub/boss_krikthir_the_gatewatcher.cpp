@@ -118,7 +118,7 @@ class boss_krik_thir : public CreatureScript
                     instance->SetData(DATA_KRIKTHIR_THE_GATEWATCHER_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Talk(SAY_AGGRO);
                 Summon();
@@ -397,7 +397,7 @@ class npc_watcher_gashra : public CreatureScript
                 uiInfectedBiteTimer = 4 * IN_MILLISECONDS;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_ENRAGE, true);
             }

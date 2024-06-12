@@ -57,7 +57,7 @@ class instance_ruby_sanctum : public InstanceMapScript
                 instance->SetWorldState(instance->Is25ManRaid() ? WORLDSTATE_TWILIGHT_DESTROYER_25 : WORLDSTATE_TWILIGHT_DESTROYER_10, 1);
             }
 
-            void OnPlayerEnter(Player* /*player*/)
+            void OnPlayerEnter(Player* /*player*/) override
             {
                 if (!GetData64(DATA_HALION_CONTROLLER) && GetBossState(DATA_HALION) != DONE && GetBossState(DATA_GENERAL_ZARITHRIAN) == DONE)
                 {

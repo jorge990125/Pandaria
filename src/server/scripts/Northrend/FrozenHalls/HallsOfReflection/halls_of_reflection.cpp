@@ -848,7 +848,7 @@ struct npc_hor_trash_ai : ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         //Talk(SAY_TRASH_AGGRO, who->GetGUID()); // Unused on retail
     }
@@ -893,9 +893,9 @@ class npc_ghostly_priest : public CreatureScript
         {
             npc_ghostly_priestAI(Creature* creature) : npc_hor_trash_ai(creature) { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                npc_hor_trash_ai::EnterCombat(who);
+                npc_hor_trash_ai::JustEngagedWith(who);
                 events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, urand(3000, 8000));
                 events.ScheduleEvent(EVENT_CIRCLE_OF_DESTRUCTION, urand(8000, 10000));
                 events.ScheduleEvent(EVENT_COWER_IN_FEAR, 10000);
@@ -977,9 +977,9 @@ class npc_phantom_mage : public CreatureScript
         {
             npc_phantom_mageAI(Creature* creature) : npc_hor_trash_ai(creature) { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                npc_hor_trash_ai::EnterCombat(who);
+                npc_hor_trash_ai::JustEngagedWith(who);
                 events.ScheduleEvent(EVENT_FIREBALL_FROSTBOLT, 0);
                 events.ScheduleEvent(EVENT_FLAMESTRIKE_HALLUCINATION, urand(4000, 9000));
                 events.ScheduleEvent(EVENT_CHAINS_OF_ICE, 12000);
@@ -1070,9 +1070,9 @@ class npc_shadowy_mercenary : public CreatureScript
         {
             npc_shadowy_mercenaryAI(Creature* creature) : npc_hor_trash_ai(creature) { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                npc_hor_trash_ai::EnterCombat(who);
+                npc_hor_trash_ai::JustEngagedWith(who);
                 events.ScheduleEvent(EVENT_SHADOW_STEP, 30000);
                 events.ScheduleEvent(EVENT_DEADLY_POISON, 5000);
                 events.ScheduleEvent(EVENT_ENVENOMED_DAGGER_THROW, 10000);
@@ -1141,9 +1141,9 @@ class npc_spectral_footman : public CreatureScript
         {
             npc_spectral_footmanAI(Creature* creature) : npc_hor_trash_ai(creature) { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                npc_hor_trash_ai::EnterCombat(who);
+                npc_hor_trash_ai::JustEngagedWith(who);
                 events.ScheduleEvent(EVENT_SPECTRAL_STRIKE, urand(4000, 8000));
                 events.ScheduleEvent(EVENT_SHIELD_BASH, 10000);
                 events.ScheduleEvent(EVENT_TORTURED_ENRAGE, urand(8000, 16000));
@@ -1197,9 +1197,9 @@ class npc_tortured_rifleman : public CreatureScript
         {
             npc_tortured_riflemanAI(Creature* creature) : npc_hor_trash_ai(creature) { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                npc_hor_trash_ai::EnterCombat(who);
+                npc_hor_trash_ai::JustEngagedWith(who);
                 events.ScheduleEvent(EVENT_SHOOT, 0);
                 events.ScheduleEvent(EVENT_CURSED_ARROW, urand(11000, 15000));
                 events.ScheduleEvent(EVENT_FROST_TRAP, urand(12000, 22000));
@@ -1340,7 +1340,7 @@ class npc_frostworn_general : public CreatureScript
                 AttackStart(who);
             }
 
-            void EnterCombat(Unit* /*victim*/)
+            void JustEngagedWith(Unit* /*victim*/) override
             {
                 if (!instance)
                     return;
@@ -1563,7 +1563,7 @@ class npc_jaina_and_sylvanas_hor_part2 : public CreatureScript
                 return true;
             }
 
-            void WaypointReached(uint32 waypointId)
+            void WaypointReached(uint32 waypointId) override
             {
                 switch (waypointId)
                 {
@@ -1626,9 +1626,9 @@ class npc_jaina_and_sylvanas_hor_part2 : public CreatureScript
                 }
             }
 
-            void MoveInLineOfSight(Unit* /*who*/) { }
+            void MoveInLineOfSight(Unit* /*who*/) override { }
 
-            void DamageTaken(Unit* /*attacker*/, uint32& damage)
+            void DamageTaken(Unit* /*attacker*/, uint32& damage) override
             {
                 if (!instance)
                     return;
@@ -2009,7 +2009,7 @@ struct npc_queldelar_weapon : public customCreatureAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_MORTAL_STRIKE, 3 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_BLADESTORM, 8.5 * IN_MILLISECONDS);

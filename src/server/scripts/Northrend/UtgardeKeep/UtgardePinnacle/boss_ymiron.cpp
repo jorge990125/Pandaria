@@ -149,7 +149,7 @@ class boss_ymiron : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_KINGS_BANE, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 me->HandleEmoteStateCommand(EMOTE_ONESHOT_NONE);

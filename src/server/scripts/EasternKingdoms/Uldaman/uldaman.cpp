@@ -62,7 +62,7 @@ class npc_jadespine_basilisk : public CreatureScript
                 uiCslumberTimer = 2000;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
             }
 

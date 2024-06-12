@@ -229,9 +229,9 @@ class npc_barnes : public CreatureScript
                 Start(false, false);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
-            void WaypointReached(uint32 i)
+            void WaypointReached(uint32 i) override
             {
                 if (!instance)
                     return;
@@ -524,9 +524,9 @@ class npc_image_of_medivh : public CreatureScript
                     me->RemoveCorpse();
                 }
             }
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
-            void MovementInform(uint32 type, uint32 id)
+            void MovementInform(uint32 type, uint32 id) override
             {
                 if (type != POINT_MOTION_TYPE)
                     return;

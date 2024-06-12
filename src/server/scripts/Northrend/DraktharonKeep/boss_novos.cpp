@@ -137,9 +137,9 @@ class boss_novos : public CreatureScript
                 SetBubbled(false);
             }
 
-            void EnterCombat(Unit* /*victim*/) override
+            void JustEngagedWith(Unit* /*victim*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(SAY_AGGRO);
 
                 SetCrystalsStatus(true);
@@ -538,7 +538,7 @@ class spell_novos_summon_minions : public SpellScriptLoader
         {
             PrepareSpellScript(spell_novos_summon_minions_SpellScript);
 
-            bool Validate(SpellInfo const* /*spellInfo*/)
+            bool Validate(SpellInfo const* /*spellInfo*/) override
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_SUMMON_COPY_OF_MINIONS))
                     return false;

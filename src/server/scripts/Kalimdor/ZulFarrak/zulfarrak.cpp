@@ -409,7 +409,7 @@ class npc_sandfury_executioner : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(TALK_AGGRO);
                 events.ScheduleEvent(EVENT_CLEAVE, 8 * IN_MILLISECONDS);
@@ -516,7 +516,7 @@ class npc_gahzrilla : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SOLID, urand(10 * IN_MILLISECONDS, 22 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_SLAM, urand(16 * IN_MILLISECONDS, 27 * IN_MILLISECONDS));

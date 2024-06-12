@@ -350,11 +350,11 @@ public:
             ResetPlayerScale();
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             me->SetFaction(uiFaction);
 
-            _EnterCombat();
+            _JustEngagedWith();
             FindGameObjects();
             for (uint8 i = 0; i <= 3; ++i)
             {

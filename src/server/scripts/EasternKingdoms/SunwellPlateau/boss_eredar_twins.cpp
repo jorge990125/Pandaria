@@ -131,7 +131,7 @@ class boss_sacrolash : public CreatureScript
                     instance->SetData(DATA_EREDAR_TWINS_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance->GetData(DATA_KALECGOS_EVENT) != DONE || instance->GetData(DATA_BRUTALLUS_EVENT) != DONE || instance->GetData(DATA_FELMYST_EVENT) != DONE)
                 {
@@ -402,7 +402,7 @@ class boss_alythess : public CreatureScript
                     instance->SetData(DATA_EREDAR_TWINS_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance->GetData(DATA_KALECGOS_EVENT) != DONE || instance->GetData(DATA_BRUTALLUS_EVENT) != DONE || instance->GetData(DATA_FELMYST_EVENT) != DONE)
                 {
@@ -698,7 +698,7 @@ class npc_shadow_image : public CreatureScript
                 killTimer = 15000;
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void SpellHitTarget(Unit* target, const SpellInfo* spell) override
             {

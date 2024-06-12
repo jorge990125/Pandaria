@@ -59,7 +59,7 @@ class instance_halls_of_lightning : public InstanceMapScript
             uint64 m_questGiverGUID;
             uint64 m_questEnderGUID;
 
-            void Initialize()
+            void Initialize() override
             {
                 memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
 

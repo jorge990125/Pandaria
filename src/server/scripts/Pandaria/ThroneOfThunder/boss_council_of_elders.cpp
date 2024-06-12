@@ -393,8 +393,8 @@ class boss_council_of_elders_baseAI : public ScriptedAI
             });
         }
 
-        // Override EnterCombat to send the DoAction to the helper
-        void EnterCombat(Unit* /*who*/) override 
+        // Override JustEngagedWith to send the DoAction to the helper
+        void JustEngagedWith(Unit* /*who*/) override 
         {
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
 
@@ -700,7 +700,7 @@ class boss_frost_king_malakk : public CreatureScript
             }
 
             // No need to override Reset since there is nothing to reset here
-            // No need to override EnterCombat since there is nothing to do here
+            // No need to override JustEngagedWith since there is nothing to do here
             void UpdateAI(uint32 diff) override
             {
                 scheduler.Update(diff);
@@ -759,7 +759,7 @@ class boss_frost_king_malakk : public CreatureScript
             }
 
         private:
-            void InitStandartEvents()
+            void InitStandartEvents() override
             {
                 darkPowerEvents.Reset();
                 events.Reset();
@@ -768,7 +768,7 @@ class boss_frost_king_malakk : public CreatureScript
                 events.ScheduleEvent(EVENT_BITING_COLD, 15 * IN_MILLISECONDS);
             }
 
-            void InitPossessedEvents()
+            void InitPossessedEvents() override
             {
                 events.Reset();
 
@@ -922,7 +922,7 @@ class boss_kazrajin : public CreatureScript
             // cause spell ticks each second, instead of being a permanent
             // dummy. Fuck blizzard's logic.
             uint64 uiRecklessChargeTargetGUID;
-            void InitStandartEvents()
+            void InitStandartEvents() override
             {
                 darkPowerEvents.Reset();
                 events.Reset();
@@ -930,7 +930,7 @@ class boss_kazrajin : public CreatureScript
                 events.ScheduleEvent(EVENT_RECKLESS_CHARGE_PRE_PATH, urand(3, 4) * IN_MILLISECONDS);
             }
 
-            void InitPossessedEvents()
+            void InitPossessedEvents() override
             {
                 events.Reset();
 
@@ -1066,7 +1066,7 @@ class boss_sul_the_sandcrawler : public CreatureScript
             }
 
         private:
-            void InitStandartEvents()
+            void InitStandartEvents() override
             {
                 darkPowerEvents.Reset();
                 events.Reset();
@@ -1075,7 +1075,7 @@ class boss_sul_the_sandcrawler : public CreatureScript
                 events.ScheduleEvent(EVENT_QUICKSAND, 10 * IN_MILLISECONDS);
             }
 
-            void InitPossessedEvents()
+            void InitPossessedEvents() override
             {
                 events.Reset();
 
@@ -1238,7 +1238,7 @@ class boss_high_priestess_marli : public CreatureScript
             }
 
             // Override function to return the GUIDs of the targets for the Loa Spirits.
-            uint64 GetGUID(int32 iIndex) const
+            uint64 GetGUID(int32 iIndex) const override
             {
                 switch (iIndex)
                 {
@@ -1270,7 +1270,7 @@ class boss_high_priestess_marli : public CreatureScript
             // is summoned.
             std::list<uint64> uiBlessedLoaSpiritBossGUIDs;
 
-            void InitStandartEvents()
+            void InitStandartEvents() override
             {
                 darkPowerEvents.Reset();
                 events.Reset();
@@ -1279,7 +1279,7 @@ class boss_high_priestess_marli : public CreatureScript
                 events.ScheduleEvent(EVENT_BLESSED_LOA_SPIRIT, 25 * IN_MILLISECONDS);
             }
 
-            void InitPossessedEvents()
+            void InitPossessedEvents() override
             {
                 events.Reset();
 

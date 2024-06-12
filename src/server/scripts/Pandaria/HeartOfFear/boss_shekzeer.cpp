@@ -269,7 +269,7 @@ class boss_grand_empress_shekzeer : public CreatureScript
                     instance->SetBossState(DATA_SHEKZEER, FAIL);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_SHEKZEER, who->ToPlayer()))
                 {
@@ -279,7 +279,7 @@ class boss_grand_empress_shekzeer : public CreatureScript
                 }
 
                 // @TODO: Set in combat for other protectors
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);

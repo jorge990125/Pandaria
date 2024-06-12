@@ -627,9 +627,9 @@ class boss_spoils_of_pandaria : public CreatureScript
                     allowAchiev = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 scheduler
                     .Schedule(Milliseconds(1000), [this](TaskContext context)
@@ -1167,7 +1167,7 @@ struct npc_modified_anima_golem : public spoils_baseAI
 {
     npc_modified_anima_golem(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_MATTER_SCRAMBLE, 4 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_CRIMSON_RECONSTRUCT, urand(6 * IN_MILLISECONDS, 7 * IN_MILLISECONDS));
@@ -1257,7 +1257,7 @@ struct npc_mogu_shadow_ritualist : public spoils_baseAI
         me->SetInCombatWithZone();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_RUNE_OF_POWER, 2.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_TORMENT, 7.5 * IN_MILLISECONDS);
@@ -1318,7 +1318,7 @@ struct npc_zarthik_amber_priest : public spoils_baseAI
 {
     npc_zarthik_amber_priest(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_RESIDUE, 7.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_MANTID_SWARM, urand(3 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
@@ -1364,7 +1364,7 @@ struct npc_setthik_wielder : public spoils_baseAI
 {
     npc_setthik_wielder(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_RAGE_OF_EMPRESS, urand(6 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_WIND_STORM, 1.5 * IN_MILLISECONDS);
@@ -1413,7 +1413,7 @@ struct npc_animated_stone_mogu : public spoils_baseAI
 {
     npc_animated_stone_mogu(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_EARTHEN_SHARD, urand(6 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_HARDEN_FLESH, 10 * IN_MILLISECONDS);
@@ -1522,7 +1522,7 @@ struct npc_spoils_quilen_guardian : public spoils_baseAI
 {
     npc_spoils_quilen_guardian(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CARNIVOROUS_BITE, urand(2.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
     }
@@ -1562,7 +1562,7 @@ struct npc_srithik_bombardier : public spoils_baseAI
 {
     npc_srithik_bombardier(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_THROW_EXPLOSIVES, urand(1.5 * IN_MILLISECONDS, 3 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_GUSTING_BOMB, 8 * IN_MILLISECONDS);
@@ -1601,7 +1601,7 @@ struct npc_korthik_warcaller : public spoils_baseAI
 {
     npc_korthik_warcaller(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ENRAGE, urand(1.5 * IN_MILLISECONDS, 3 * IN_MILLISECONDS));
     }
@@ -1632,7 +1632,7 @@ struct npc_spoils_mogu_warlord : public spoils_baseAI
 {
     npc_spoils_mogu_warlord(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_JADE_TEMPEST, 6 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_RETURN_TO_STONE, 3 * IN_MILLISECONDS);
@@ -1698,7 +1698,7 @@ struct npc_spoils_mantid_commander : public spoils_baseAI
 {
     npc_spoils_mantid_commander(Creature* creature) : spoils_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_PHEROMONES_CLOUD, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_SET_TO_BLOW, urand(4 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
@@ -1734,7 +1734,7 @@ struct npc_spoils_amber_encased_kunchong : public spoils_baseAI
 {
     npc_spoils_amber_encased_kunchong(Creature* creature) : spoils_baseAI(creature) { }
 
-    void DoAction(int32 actionId)
+    void DoAction(int32 actionId) override
     {
         if (actionId == ACTION_INITIALIZE_COMBAT)
             DoCast(me, SPELL_ENCAPSULATED_PHEROMONES_AURA);
@@ -1877,7 +1877,7 @@ struct npc_spoils_ancient_brewmaster_spirit : public ScriptedAI
         return summonerGUID;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_KEG_TOSS, 3 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_BREATH_OF_FIRE, urand(6 * IN_MILLISECONDS, 9 * IN_MILLISECONDS));
@@ -2011,7 +2011,7 @@ struct npc_spoils_wise_mistweaver_spirit : public ScriptedAI
         return summonerGUID;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_EMINENCE);
         events.ScheduleEvent(EVENT_GUSTING_CRANE_KICK, 3 * IN_MILLISECONDS);
@@ -2109,7 +2109,7 @@ struct npc_spoils_nameless_windwalker_spirit : public ScriptedAI
         return summonerGUID;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_PATH_OF_BLOSSOMS, 6.5 * IN_MILLISECONDS);
     }

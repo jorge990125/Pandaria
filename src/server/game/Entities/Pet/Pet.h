@@ -35,7 +35,7 @@ typedef std::vector<uint32> AutoSpellList;
 
 class Player;
 
-class Pet : public Guardian
+class TC_GAME_API Pet : public Guardian
 {
     public:
         static const float BaseRunSpeedRate;
@@ -69,8 +69,8 @@ class Pet : public Guardian
         void setDeathState(DeathState s) override;                   // overwrite virtual Creature::setDeathState and Unit::setDeathState
         void Update(uint32 diff) override;                           // overwrite virtual Creature::Update and Unit::Update
 
-        uint8 GetPetAutoSpellSize() const { return m_autospells.size(); }
-        uint32 GetPetAutoSpellOnPos(uint8 pos) const
+        uint8 GetPetAutoSpellSize() const override { return m_autospells.size(); }
+        uint32 GetPetAutoSpellOnPos(uint8 pos) const override
         {
             if (pos >= m_autospells.size())
                 return 0;
@@ -118,7 +118,7 @@ class Pet : public Guardian
         bool UnlearnSpell(uint32 spellId, bool learnPrev, bool cleaActionBar = true);
         bool RemoveSpell(uint32 spell_id, bool learn_prev, bool clear_ab = true);
         void CleanupActionBar();
-        virtual void ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs);
+        virtual void ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs) override;
 
         PetSpellMap     m_spells;
         AutoSpellList   m_autospells;
@@ -168,9 +168,6 @@ class Pet : public Guardian
         {
             ASSERT(false);
         }
-        void DeleteFromDB()                                 // override of Creature::DeleteFromDB - must not be called
-        {
-            ASSERT(false);
-        }
+
 };
 #endif

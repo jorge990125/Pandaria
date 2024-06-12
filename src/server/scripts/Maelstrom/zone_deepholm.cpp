@@ -124,7 +124,7 @@ struct npc_deepholm_wyvern : public CreatureAI
             clicker->CastSpell(clicker, SPELL_DEEPHOLM_INTRO_TAXI, true);
     }
 
-    void UpdateAI(const uint32 /*diff*/) { }
+    void UpdateAI(const uint32 /*diff*/) override { }
 };
 
 // Wyvern 45024
@@ -317,7 +317,7 @@ class spell_deepholm_intro_teleport : public AuraScript
 {
     PrepareAuraScript(spell_deepholm_intro_teleport);
 
-    bool Load()
+    bool Load() override
     {
         isLoading = false;
         return true;

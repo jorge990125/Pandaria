@@ -336,11 +336,11 @@ class boss_suen : public CreatureScript
                 return targetGUID;
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Talk(TALK_INTRO);
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -945,7 +945,7 @@ class boss_lulin : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->setActive(true, ActiveFlags::InCombat);
                 DoZoneInCombat();
@@ -1068,7 +1068,7 @@ class boss_lulin : public CreatureScript
                 }
             }
 
-            void DoAction(int32 actionId)
+            void DoAction(int32 actionId) override
             {
                 switch (actionId)
                 {

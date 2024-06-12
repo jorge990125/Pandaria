@@ -159,7 +159,7 @@ class boss_akmahat : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHOCKWAVE, 16000);
                 events.ScheduleEvent(EVENT_FURY_OF_THE_SANDS, 9000);

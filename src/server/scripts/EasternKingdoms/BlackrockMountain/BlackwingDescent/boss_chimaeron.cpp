@@ -169,7 +169,7 @@ class boss_chimaeron : public CreatureScript
                         me->GetMap()->SetWorldState(WORLDSTATE_FULL_OF_SOUND_AND_FURY, 0);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (IsHeroic())
                     events.ScheduleEvent(EVENT_BERSERK, 7.5 * MINUTE * IN_MILLISECONDS);

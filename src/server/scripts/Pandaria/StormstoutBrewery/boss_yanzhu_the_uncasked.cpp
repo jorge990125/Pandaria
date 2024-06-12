@@ -753,9 +753,9 @@ class boss_yanzhu : public CreatureScript
                 Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 // Disabled until targeting type is fixed
                 /* if (me->HasAura(SPELL_SUDSY_BREW))
@@ -1093,7 +1093,7 @@ class npc_yeasty_alemental : public CreatureScript
             EventMap events;
             InstanceScript* instance;
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FERMENT, 10000);
 
@@ -1178,7 +1178,7 @@ class npc_sudsy_alemental : public CreatureScript
 
             EventMap events;
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_SUDS, urand(5000, 15000));
                 events.ScheduleEvent(EVENT_BREW_BOLT, urand(4000, 11000));
@@ -1265,7 +1265,7 @@ class npc_fizzy_alemental : public CreatureScript
 
             EventMap events;
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_CARBONATION, urand(5000, 15000));
                 events.ScheduleEvent(EVENT_BREW_BOLT, urand(4000, 11000));
@@ -1348,7 +1348,7 @@ class npc_bloated_alemental : public CreatureScript
 
             EventMap events;
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_BLOAT, urand(5000, 15000));
                 events.ScheduleEvent(EVENT_BREW_BOLT, urand(4000, 11000));
@@ -1431,7 +1431,7 @@ class npc_stout_alemental : public CreatureScript
 
             EventMap events;
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_BLACKOUT, 8000);
                 events.ScheduleEvent(EVENT_BREW_BOLT, urand(4000, 11000));
@@ -1536,7 +1536,7 @@ class npc_bubbling_alemental : public CreatureScript
                 cosmeticEvents.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_BUBBLE_SHIELD, 5000);
                 me->GetMotionMaster()->Clear();

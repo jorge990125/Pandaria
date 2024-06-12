@@ -197,7 +197,7 @@ class boss_murozond : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_INFINITE_BREATH, urand(10000, 20000));

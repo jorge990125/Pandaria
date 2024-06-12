@@ -95,7 +95,7 @@ class boss_oondasta : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
                 if (Creature* dohaman = me->FindNearestCreature(NPC_DOHAMAN_THE_BEAST_LORD, 150.0f, true))
                     dohaman->AI()->Talk(TALK_INTRO);

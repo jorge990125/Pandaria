@@ -209,7 +209,7 @@ class boss_archbishop_benedictus : public CreatureScript
                 }
             }
 
-            void Reset()
+            void Reset() override
             {
                 _Reset();
 
@@ -221,11 +221,11 @@ class boss_archbishop_benedictus : public CreatureScript
 
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetReactState(REACT_AGGRESSIVE);
                 bPhase = false;
-                _EnterCombat();
+                _JustEngagedWith();
                 events.ScheduleEvent(EVENT_PURIFYING_LIGHT, 10000);
                 events.ScheduleEvent(EVENT_SMITE, urand(1000, 2000));
                 events.ScheduleEvent(EVENT_RIGHTEOUS_SNEAR, urand(5000, 10000));

@@ -90,7 +90,7 @@ class boss_grand_vizier_ertan : public CreatureScript
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 for (uint8 i = 0; i < 8; i++)
                     if (TempSummon* m_vortex = me->SummonCreature(NPC_ERTAN_VORTEX, ertanvortexPos_1[i]))

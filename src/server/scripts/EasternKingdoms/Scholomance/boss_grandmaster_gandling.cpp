@@ -112,9 +112,9 @@ class boss_grandmaster_gandling : public CreatureScript
                 HandleDoors(true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(TALK_AGGRO);
 
                 if (instance)

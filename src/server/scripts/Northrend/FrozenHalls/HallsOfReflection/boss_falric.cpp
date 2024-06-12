@@ -80,7 +80,7 @@ class boss_falric : public CreatureScript
                     instance->SetData(DATA_FALRIC_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance)
                     instance->SetData(DATA_FALRIC_EVENT, IN_PROGRESS);

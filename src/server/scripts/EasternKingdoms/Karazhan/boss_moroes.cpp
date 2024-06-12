@@ -145,7 +145,7 @@ class boss_moroes : public CreatureScript
                 DoZoneInCombat();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 StartEvent();
 

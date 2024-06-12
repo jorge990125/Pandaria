@@ -77,7 +77,7 @@ class npc_water_elemental : public CreatureScript
             balindaGUID = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             Talk(YELL_AGGRO);
             _events.ScheduleEvent(EVENT_CAST_SPELL_WATERBOLT, 3s);
@@ -146,7 +146,7 @@ struct boss_balinda : public ScriptedAI
         Initialize();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(YELL_AGGRO);
         _events.ScheduleEvent(EVENT_CAST_SPELL_ARCANE_EXPLOSION, randtime(5s, 15s));

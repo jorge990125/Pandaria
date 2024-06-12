@@ -161,7 +161,7 @@ class instance_zulaman : public InstanceMapScript
                 }
             }
 
-            bool SetBossState(uint32 id, EncounterState state)
+            bool SetBossState(uint32 id, EncounterState state) override
             {
                 if (!InstanceScript::SetBossState(id, state))
                     return false;

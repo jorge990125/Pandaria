@@ -392,9 +392,9 @@ class boss_alakir : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 
                 Talk(SAY_AGGRO);
                 

@@ -18,7 +18,23 @@
 #ifndef DBCENUMS_H
 #define DBCENUMS_H
 
-enum LevelLimit
+#pragma pack(push, 1)
+
+struct DBCPosition2D
+{
+    float X;
+    float Y;
+};
+
+struct DBCPosition3D
+{
+    float X;
+    float Y;
+    float Z;
+};
+
+#pragma pack(pop)
+enum LevelLimit : uint8
 {
     // Client expected level limitation, like as used in DBC item max levels for "until max player level"
     // use as default max player level, must be fit max level for used client

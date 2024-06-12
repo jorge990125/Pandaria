@@ -144,9 +144,9 @@ class boss_helix_gearbreaker : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -298,7 +298,7 @@ class npc_lumbering_oaf : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -473,7 +473,7 @@ class npc_sticky_bomb : public CreatureScript
                 canBoom = false;
             }
      
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_ARMING_YELLOW, 1000);
             }
@@ -588,7 +588,7 @@ class npc_helix_crew : public CreatureScript
                 summons.Despawn(summon);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_STICKY_BOMB, 8000);
             }

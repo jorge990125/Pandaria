@@ -459,10 +459,10 @@ class boss_durumu : public CreatureScript
                 me->AI()->Talk(urand(0,1) == 0 ? SAY_KILL1 : SAY_KILL2);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Talk(SAY_AGGRO);
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -2103,7 +2103,7 @@ class sat_disintegration_beam : public IAreaTriggerAura
         return triggering && triggering->ToPlayer();
     }
 
-    void OnTriggeringUpdate(WorldObject* triggering) 
+    void OnTriggeringUpdate(WorldObject* triggering) override
     {
         if (Unit* caster = GetCaster())
             if (Player* target = triggering->ToPlayer())

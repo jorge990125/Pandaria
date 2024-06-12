@@ -83,10 +83,10 @@ class boss_sartura : public CreatureScript
     
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
-                _EnterCombat();
+                _JustEngagedWith();
             }
     
              void JustDied(Unit* /*killer*/) override
@@ -222,7 +222,7 @@ class npc_sartura_royal_guard : public CreatureScript
                 AggroReset = false;
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
             }
     

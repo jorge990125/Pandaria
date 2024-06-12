@@ -239,7 +239,7 @@ class spell_dru_tooth_and_claw_trigger : public SpellScript
 {
     PrepareSpellScript(spell_dru_tooth_and_claw_trigger);
 
-    bool Load() { return GetCaster()->HasAura(SPELL_DRUID_TOOTH_AND_CLAW_AURA); }
+    bool Load() override { return GetCaster()->HasAura(SPELL_DRUID_TOOTH_AND_CLAW_AURA); }
 
     void HandleCast()
     {
@@ -1704,7 +1704,7 @@ class spell_dru_eclipse : public SpellScript
 {
     PrepareSpellScript(spell_dru_eclipse);
 
-    bool Load()
+    bool Load() override
     {
         Player* caster = GetCaster()->ToPlayer();
         return caster && caster->GetTalentSpecialization() == SPEC_DRUID_BALANCE;
@@ -3016,7 +3016,7 @@ class sat_druid_ursols_vortex : public IAreaTriggerAura
         m_caster->CastSpell(triggering->ToUnit(), SPELL_DRUID_URSOLS_VORTEX_SNARE, true);
     }
 
-    void OnTriggeringUpdate(WorldObject* triggering)
+    void OnTriggeringUpdate(WorldObject* triggering) override
     {
         if (!triggering->ToUnit()->HasAura(SPELL_DRUID_URSOLS_VORTEX_SNARE))
             GetCaster()->CastSpell(triggering->ToUnit(), SPELL_DRUID_URSOLS_VORTEX_SNARE, true);
@@ -4560,11 +4560,10 @@ class spell_dru_shapeshift_move_speed : public AuraScript
 
     bool CheckAreaTarget(Unit* target)
     {
-        bool isOutdoor = true;
         if (Map* map = target->FindMap())
-            map->GetAreaId(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), &isOutdoor);
+            map->GetAreaId(target->GetPhaseMask(), target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
 
-        return isOutdoor;
+        return true;
     }
 
     void Register() override
@@ -4786,7 +4785,7 @@ class spell_druid_astral_communion : public SpellScriptLoader
             PrepareAuraScript(spell_druid_astral_communion_AuraScript);
 
             int32 direction;
-            bool Load()
+            bool Load() override
             {
                 direction = 1;
                 return true;
@@ -4822,7 +4821,7 @@ class spell_druid_astral_communion : public SpellScriptLoader
                 player->CastCustomSpell(player, 89265, &mod, nullptr, nullptr, true);
             }
 
-            void Register()
+            void Register() override
             {
                 OnEffectApply += AuraEffectApplyFn(spell_druid_astral_communion_AuraScript::HandleApply, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY, AURA_EFFECT_HANDLE_REAL);
                 OnEffectPeriodic += AuraEffectPeriodicFn(spell_druid_astral_communion_AuraScript::OnTick, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);

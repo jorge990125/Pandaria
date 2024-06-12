@@ -83,9 +83,9 @@ class boss_sha_of_violence : public CreatureScript
                     me->SummonCreature(itr.first, itr.second, TEMPSUMMON_MANUAL_DESPAWN);
             }
              
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(TALK_AGGRO);
                 if (instance)
                 {
@@ -284,7 +284,7 @@ struct npc_achiev_prisoned_sha : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (me->GetEntry() == NPC_SHA_MANIFESTATION)
         {

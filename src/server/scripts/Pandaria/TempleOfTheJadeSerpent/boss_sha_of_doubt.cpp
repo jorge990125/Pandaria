@@ -148,7 +148,7 @@ class boss_sha_of_doubt : public CreatureScript
                         creature->DespawnOrUnsummon();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(TALK_AGGRO);
                 events.ScheduleEvent(EVENT_WITHER_WILL, 5 * IN_MILLISECONDS);
@@ -165,7 +165,7 @@ class boss_sha_of_doubt : public CreatureScript
                 me->m_Events.Schedule(delay += 3000, 20, [this]()
                 {
                     if (me->IsInCombat())
-                        _EnterCombat();
+                        _JustEngagedWith();
                 });
             }
 
@@ -319,7 +319,7 @@ class npc_figment_of_doubt : public CreatureScript
                     me->CastSpell((Unit*)NULL, SPELL_DRAW_DOUBT, false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->CastSpell(me, SPELL_GATHERING_DOUBT, false);
                 events.ScheduleEvent(EVENT_GATHERING_DOUBT, 1 * IN_MILLISECONDS);
@@ -472,12 +472,12 @@ struct npc_ghost_of_lin_dagu : public ScriptedAI
     InstanceScript* instance;
     EventMap events;
 
-    void Reset()
+    void Reset() override
     {
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_LIN_DEATH);
         events.ScheduleEvent(EVENT_NOODLES, urand(5, 8) * IN_MILLISECONDS);

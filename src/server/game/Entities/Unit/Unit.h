@@ -37,6 +37,20 @@
 
 #define WORLD_TRIGGER   12999
 
+enum UnitModifierFlatType
+{
+    BASE_VALUE = 0,
+    TOTAL_VALUE = 1,
+    MODIFIER_TYPE_FLAT_END = 2
+};
+
+enum UnitModifierPctType
+{
+    BASE_PCT = 0,
+    TOTAL_PCT = 1,
+    MODIFIER_TYPE_PCT_END = 2
+};
+
 enum SpellModOp
 {
     SPELLMOD_DAMAGE = 0,
@@ -290,14 +304,14 @@ struct SpellImmune
 
 typedef std::list<SpellImmune> SpellImmuneList;
 
-enum UnitModifierType
-{
-    BASE_VALUE = 0,
-    BASE_PCT = 1,
-    TOTAL_VALUE = 2,
-    TOTAL_PCT = 3,
-    MODIFIER_TYPE_END = 4
-};
+// enum UnitModifierType
+// {
+//     BASE_VALUE = 0,
+//     BASE_PCT = 1,
+//     TOTAL_VALUE = 2,
+//     TOTAL_PCT = 3,
+//     MODIFIER_TYPE_END = 4
+// };
 
 enum WeaponDamageRange
 {
@@ -361,7 +375,7 @@ enum UnitMods
     UNIT_MOD_RAGE,
     UNIT_MOD_FOCUS,
     UNIT_MOD_ENERGY,
-    UNIT_MOD_UNUSED,                                        // Old UNIT_MOD_HAPPINESS
+    UNIT_MOD_HAPPINESS,                                     // Old UNIT_MOD_HAPPINESS
     UNIT_MOD_RUNE,
     UNIT_MOD_RUNIC_POWER,
     UNIT_MOD_SOUL_SHARDS,
@@ -1188,7 +1202,7 @@ public:
 
     virtual ~Unit();
 
-    UnitAI* GetAI() { return i_AI; }
+    UnitAI* GetAI() const { return i_AI; }
     void SetAI(UnitAI* newAI)
     {
         i_AI = newAI;
@@ -1234,19 +1248,10 @@ public:
     {
         return m_attackTimer [type] == 0;
     }
-    bool HasOffhandWeapon() const;
-    bool CanDualWield() const
-    {
-        return m_canDualWield;
-    }
-    void SetCanDualWield(bool value)
-    {
-        m_canDualWield = value;
-    }
-    float GetCombatReach() const
-    {
-        return m_floatValues [UNIT_FIELD_COMBAT_REACH];
-    }
+    bool haveOffhandWeapon() const;
+    bool CanDualWield() const { return m_canDualWield; }
+    virtual void SetCanDualWield(bool value) { m_canDualWield = value; }
+    float GetCombatReach() const override { return m_floatValues [UNIT_FIELD_COMBAT_REACH]; }
     float GetMeleeReach() const;
     bool IsWithinCombatRange(const Unit* obj, float dist2compare) const;
     bool IsWithinMeleeRange(const Unit* obj, float dist = NOMINAL_MELEE_RANGE) const;
@@ -1408,6 +1413,7 @@ public:
     }
     void SetPower(Powers power, int32 val);
     void SetMaxPower(Powers power, int32 val);
+    inline void SetFullPower(Powers power) { SetPower(power, GetMaxPower(power)); }
     // returns the change in power
     int32 ModifyPower(Powers power, int32 val);
     int32 ModifyPowerPct(Powers power, float pct, bool apply = true);
@@ -1483,14 +1489,9 @@ public:
     UnitAnimationTier GetAnimationTier() const { return (UnitAnimationTier)GetByteValue(UNIT_FIELD_ANIM_TIER, 3); }
     void SetAnimationTier(UnitAnimationTier tier) { SetByteValue(UNIT_FIELD_ANIM_TIER, 3, (uint8)tier); }
 
-    bool IsMounted() const
-    {
-        return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_MOUNT);
-    }
-    uint32 GetMountID() const
-    {
-        return GetUInt32Value(UNIT_FIELD_MOUNT_DISPLAY_ID);
-    }
+    bool IsMounted() const { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_MOUNT); }
+    uint32 GetMountDisplayId() const { return GetUInt32Value(UNIT_FIELD_MOUNT_DISPLAY_ID); }
+    void SetMountDisplayId(uint32 mountDisplayId) { SetUInt32Value(UNIT_FIELD_MOUNT_DISPLAY_ID, mountDisplayId); }
     void Mount(uint32 mount, uint32 vehicleId = 0, uint32 creatureEntry = 0);
     void Dismount();
     MountCapabilityEntry const* GetMountCapability(uint32 mountType) const;
@@ -1645,10 +1646,7 @@ public:
     void ResetPvECombatTimer() { m_combatTimerPvE = 0; }
 
     bool HasAuraTypeWithFamilyFlags(AuraType auraType, uint32 familyName, uint32 familyFlags) const;
-    bool virtual HasSpell(uint32 /*spellID*/) const
-    {
-        return false;
-    }
+    bool virtual HasSpell(uint32 /*spellID*/) const { return false; }
 
     bool HasCrowdControlAuraType(AuraType type, uint32 excludeAura = 0, uint32 dispelType = 0) const;
     bool HasCrowdControlAura(Unit* excludeCasterChannel = NULL, uint32 dispelType = 0) const;
@@ -1685,9 +1683,8 @@ public:
     bool IsValidAssistTarget(Unit const* target) const;
     bool _IsValidAssistTarget(Unit const* target, SpellInfo const* bySpell) const;
 
-    virtual bool IsInWater() const;
-    virtual bool IsUnderWater() const;
-    virtual void UpdateUnderwaterState(Map* m, float x, float y, float z);
+    bool IsInWater() const;
+    bool IsUnderWater() const;
     bool isInAccessiblePlaceFor(Creature const* c) const;
 
     void SendHealSpellLog(Unit* victim, uint32 SpellID, uint32 Damage, uint32 OverHeal, uint32 Absorb, bool critical = false);
@@ -2080,6 +2077,8 @@ public:
     int32 GetMaxPositiveAuraModifierByAffectMask(AuraType auratype, SpellInfo const* affectedSpell) const;
     int32 GetMaxNegativeAuraModifierByAffectMask(AuraType auratype, SpellInfo const* affectedSpell) const;
 
+    void UpdateResistanceBuffModsMod(SpellSchools school);
+
     template <class Cond>
     float GetTotalAuraMultiplier(AuraType auraType, Cond cond) const;
     template <class Cond>
@@ -2187,25 +2186,33 @@ public:
     void Schedule(TimeValue const& timer, std::function<void(Unit*)> const& func) { m_Events.Schedule(timer.ToMilliseconds(), std::bind(func, this)); }
 
     // stat system
-    bool HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, float amount, bool apply);
-    void SetModifierValue(UnitMods unitMod, UnitModifierType modifierType, float value)
-    {
-        m_auraModifiersGroup [unitMod] [modifierType] = value;
-    }
-    float GetModifierValue(UnitMods unitMod, UnitModifierType modifierType) const;
+    void HandleStatFlatModifier(UnitMods unitMod, UnitModifierFlatType modifierType, float amount, bool apply);
+    void ApplyStatPctModifier(UnitMods unitMod, UnitModifierPctType modifierType, float amount);
+
+    void SetStatFlatModifier(UnitMods unitMod, UnitModifierFlatType modifierType, float val);
+    void SetStatPctModifier(UnitMods unitMod, UnitModifierPctType modifierType, float val);
+
+    float GetFlatModifierValue(UnitMods unitMod, UnitModifierFlatType modifierType) const;
+    float GetPctModifierValue(UnitMods unitMod, UnitModifierPctType modifierType) const;
+
+    void UpdateUnitMod(UnitMods unitMod);
+
+    // only players have item requirements
+    virtual bool CheckAttackFitToAuraRequirement(WeaponAttackType /*attackType*/, AuraEffect const* /*aurEff*/) const { return true; }
+
+    virtual void UpdateDamageDoneMods(WeaponAttackType attackType, int32 skipEnchantSlot = -1);
+    void UpdateAllDamageDoneMods();
+
+    void UpdateDamagePctDoneMods(WeaponAttackType attackType);
+    void UpdateAllDamagePctDoneMods();
+
     float GetTotalStatValue(Stats stat) const;
     float GetTotalAuraModValue(UnitMods unitMod) const;
     SpellSchools GetSpellSchoolByAuraGroup(UnitMods unitMod) const;
     Stats GetStatByAuraGroup(UnitMods unitMod) const;
     Powers GetPowerTypeByAuraGroup(UnitMods unitMod) const;
-    bool CanModifyStats() const
-    {
-        return m_canModifyStats;
-    }
-    void SetCanModifyStats(bool modifyStats)
-    {
-        m_canModifyStats = modifyStats;
-    }
+    bool CanModifyStats() const { return m_canModifyStats; }
+    void SetCanModifyStats(bool modifyStats) { m_canModifyStats = modifyStats; }
     virtual bool UpdateStats(Stats stat) = 0;
     virtual bool UpdateAllStats() = 0;
     virtual void UpdateResistances(uint32 school) = 0;
@@ -2213,7 +2220,7 @@ public:
     virtual void UpdateMaxHealth() = 0;
     virtual void UpdateMaxPower(Powers power) = 0;
     virtual void UpdateAttackPowerAndDamage(bool ranged = false) = 0;
-    virtual void UpdateDamagePhysical(WeaponAttackType attType) = 0;
+    virtual void UpdateDamagePhysical(WeaponAttackType attType);
     void UpdateCastingSpeed();
     void UpdateAttackSpeed(WeaponAttackType att);
     void UpdateHasteRegen();
@@ -2221,12 +2228,10 @@ public:
     // "True" haste. Used for power regen, rppm and global/normal cooldown modifications
     float GetHasteMultiplier() const;
     float GetTotalAttackPowerValue(WeaponAttackType attType) const;
-    float GetWeaponDamageRange(WeaponAttackType attType, WeaponDamageRange type) const;
-    void SetBaseWeaponDamage(WeaponAttackType attType, WeaponDamageRange damageRange, float value)
-    {
-        m_weaponDamage [attType] [damageRange] = value;
-    }
-
+    float GetWeaponDamageRange(WeaponAttackType attType, WeaponDamageRange type, uint8 damageIndex = 0) const;
+    void SetBaseWeaponDamage(WeaponAttackType attType, WeaponDamageRange damageRange, float value) { m_weaponDamage [attType] [damageRange] = value; }
+    virtual void CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bool addTotalPct, float& minDamage, float& maxDamage, uint8 damageIndex) const = 0;
+    
     bool isInFrontInMap(Unit const* target, float distance, float arc = M_PI) const;
     bool isInBackInMap(Unit const* target, float distance, float arc = M_PI) const;
 
@@ -2235,8 +2240,8 @@ public:
     void SetVisible(bool x);
 
     // common function for visibility checks for player/creatures with detection code
-    void SetPhaseMask(uint32 newPhaseMask, bool update);// overwrite WorldObject::SetPhaseMask
-    void UpdateObjectVisibility(bool forced = true);
+    void SetPhaseMask(uint32 newPhaseMask, bool update) override;// overwrite WorldObject::SetPhaseMask
+    void UpdateObjectVisibility(bool forced = true) override;
 
     SpellImmuneList m_spellImmune [MAX_SPELL_IMMUNITY];
     uint32 m_lastSanctuaryTime;
@@ -2335,8 +2340,8 @@ public:
     void RemoveGameObject(uint32 spellid, bool del);
     void RemoveAllGameObjects();
 
-    uint32 CalculateDamage(WeaponAttackType attType, bool normalized, bool addTotalPct);
-    float GetAPMultiplier(WeaponAttackType attType, bool normalized);
+    uint32 CalculateDamage(WeaponAttackType attType, bool normalized, bool addTotalPct, uint8 itemDamagesMask = 0) const;
+    float GetAPMultiplier(WeaponAttackType attType, bool normalized) const;
     void ModifyAuraState(AuraStateType flag, bool apply);
     uint32 BuildAuraStateUpdateForTarget(Unit* target) const;
     bool HasAuraState(AuraStateType flag, SpellInfo const* spellProto = NULL, Unit const* Caster = NULL) const;
@@ -2416,14 +2421,8 @@ public:
     static Player* GetPlayer(WorldObject& object, uint64 guid);
     static Creature* GetCreature(WorldObject& object, uint64 guid);
 
-    MotionMaster* GetMotionMaster()
-    {
-        return i_motionMaster;
-    }
-    const MotionMaster* GetMotionMaster() const
-    {
-        return i_motionMaster;
-    }
+    MotionMaster* GetMotionMaster() { return i_motionMaster; }
+    MotionMaster const* GetMotionMaster() const { return i_motionMaster; }
 
     bool IsStopped() const { return !(HasUnitState(UNIT_STATE_MOVING)); }
     void StopMoving();
@@ -2553,7 +2552,7 @@ public:
     bool IsOnVehicle(const Unit* vehicle) const;
     Unit* GetVehicleBase()  const;
     Creature* GetVehicleCreatureBase() const;
-    uint64 GetTransGUID() const;
+    uint64 GetTransGUID() const override;
     /// Returns the transport this unit is on directly (if on vehicle and transport, return vehicle)
     TransportBase* GetDirectTransport() const;
 
@@ -2631,16 +2630,15 @@ public:
         if (IsSummon()) return reinterpret_cast<TempSummon const*>(this); else return NULL;
     }
 
-    uint64 GetTarget() const
-    {
-        return GetUInt64Value(UNIT_FIELD_TARGET);
-    }
+    uint64 GetTarget() const { return GetUInt64Value(UNIT_FIELD_TARGET); }
     virtual void SetTarget(uint64 /*guid*/) = 0;
 
     void OnRelocated();
 
     // Movement info
     Movement::MoveSpline* movespline;
+
+    float GetCollisionHeight() const override;
 
     uint32 GetMovementCounter() const
     {
@@ -2701,7 +2699,7 @@ public:
 protected:
     explicit Unit (bool isWorldObject);
 
-    void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player* target) const;
+    void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player* target) const override;
 
     UnitAI* i_AI, *i_disabledAI;
 
@@ -2756,7 +2754,8 @@ protected:
     std::map<AuraType, float> m_totalAuraEffectValue;
     flag64 m_interruptMask;
 
-    float m_auraModifiersGroup [UNIT_MOD_END] [MODIFIER_TYPE_END];
+    float m_auraFlatModifiersGroup[UNIT_MOD_END][MODIFIER_TYPE_FLAT_END];
+    float m_auraPctModifiersGroup[UNIT_MOD_END][MODIFIER_TYPE_PCT_END];    
     float m_weaponDamage [MAX_ATTACK] [2];
     bool m_canModifyStats;
     VisibleAuraMap m_visibleAuras;
@@ -2779,10 +2778,13 @@ protected:
     uint32 m_unitTypeMask;
     LiquidTypeEntry const* _lastLiquid;
 
-    bool IsAlwaysVisibleFor(WorldObject const* seer) const;
-    bool IsAlwaysDetectableFor(WorldObject const* seer) const;
+    bool IsAlwaysVisibleFor(WorldObject const* seer) const override;
+    bool IsAlwaysDetectableFor(WorldObject const* seer) const override;
 
     void DisableSpline();
+
+    void ProcessPositionDataChanged(PositionFullTerrainStatus const& data) override;
+    virtual void ProcessTerrainStatusUpdate(ZLiquidStatus oldLiquidStatus, Optional<LiquidData> const& newLiquidData);
 
 private:
     bool IsTriggeredAtSpellProcEvent(Unit* victim, ProcTriggeredData& triggerData, SpellInfo const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, bool active);

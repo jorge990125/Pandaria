@@ -267,7 +267,7 @@ class boss_tayak : public CreatureScript
                     instance->SetBossState(DATA_TAYAK, FAIL);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_TAYAK, who->ToPlayer()))
                 {
@@ -279,7 +279,7 @@ class boss_tayak : public CreatureScript
                 if (instance->GetBossState(DATA_TAYAK) == IN_PROGRESS)
                     return;
 
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_TEMPEST_SLASH, 10 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_UNSEEN_STRIKE, 30.5 * IN_MILLISECONDS);

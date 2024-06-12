@@ -193,10 +193,10 @@ class boss_ra_den : public CreatureScript
                 }
             }
     
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Talk(TALK_AGGRO);
-                _EnterCombat();
+                _JustEngagedWith();
 
                 instance->DoUpdateWorldState(WORLDSTATE_ATTEMPS_REMAINING, 50);
                 events.ScheduleEvent(EVENT_MATERIALS_OF_CREATION, 10.5 * IN_MILLISECONDS);

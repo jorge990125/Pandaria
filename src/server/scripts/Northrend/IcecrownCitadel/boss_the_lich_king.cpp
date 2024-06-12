@@ -660,7 +660,7 @@ class boss_the_lich_king : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_THE_LICH_KING, who->ToPlayer()))
                 {
@@ -1627,7 +1627,7 @@ class npc_tirion_fordring_tft : public CreatureScript
                     SetEquipmentSlots(true);    // remove glow on ashbringer
             }
 
-            bool OnGossipSelect(Player* /*player*/, uint32 sender, uint32 action)
+            bool OnGossipSelect(Player* /*player*/, uint32 sender, uint32 action) override
             {
                 if (me->GetGossipMenuId() == sender && !action)
                 {
@@ -1824,7 +1824,7 @@ class npc_raging_spirit : public CreatureScript
                 return target->GetPositionZ() > 830.0f;
             }
 
-            void IsSummonedBy(Unit* /*summoner*/)
+            void IsSummonedBy(Unit* /*summoner*/) override
             {
                 // player is the spellcaster so register summon manually
                 if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_THE_LICH_KING)))
@@ -1931,7 +1931,7 @@ class npc_valkyr_shadowguard : public CreatureScript
                 _returningHome = false;
             }
 
-            void IsSummonedBy(Unit* /*summoner*/)
+            void IsSummonedBy(Unit* /*summoner*/) override
             {
                 _events.Reset();
                 _events.ScheduleEvent(EVENT_GRAB_PLAYER, 2500);
@@ -2166,7 +2166,7 @@ class npc_strangulate_vehicle : public CreatureScript
         {
             npc_strangulate_vehicleAI(Creature* creature) : ScriptedAI(creature), _instance(creature->GetInstanceScript()) { }
 
-            void IsSummonedBy(Unit* summoner)
+            void IsSummonedBy(Unit* summoner) override
             {
                 me->SetFacingToObject(summoner);
                 DoCast(summoner, SPELL_HARVEST_SOUL_VEHICLE);
@@ -2386,7 +2386,7 @@ class npc_terenas_menethil : public CreatureScript
                 }
             }
 
-            void IsSummonedBy(Unit* /*summoner*/)
+            void IsSummonedBy(Unit* /*summoner*/) override
             {
                 _events.Reset();
                 _events.SetPhase(PHASE_OUTRO);
@@ -2545,7 +2545,7 @@ class npc_spirit_bomb : public CreatureScript
         {
             npc_spirit_bombAI(Creature* creature) : CreatureAI(creature) { }
 
-            void IsSummonedBy(Unit* /*summoner*/)
+            void IsSummonedBy(Unit* /*summoner*/) override
             {
                 float destX, destY, destZ;
                 me->GetPosition(destX, destY);
@@ -2597,7 +2597,7 @@ class npc_broken_frostmourne : public CreatureScript
                 _events.Reset();
             }
 
-            void IsSummonedBy(Unit* /*summoner*/)
+            void IsSummonedBy(Unit* /*summoner*/) override
             {
                 _events.SetPhase(PHASE_OUTRO);
                 _events.ScheduleEvent(EVENT_OUTRO_KNOCK_BACK, 3000, 0, PHASE_OUTRO);

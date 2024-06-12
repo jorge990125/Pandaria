@@ -326,7 +326,7 @@ class boss_feludius : public CreatureScript
                 _JustReachedHome();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* _ignacious = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_IGNACIOUS)))
                     if (!_ignacious->IsInCombat())
@@ -543,7 +543,7 @@ class boss_ignacious : public CreatureScript
                 _JustReachedHome();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* _feludius = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_FELUDIUS)))
                     if (!_feludius->IsInCombat())
@@ -821,7 +821,7 @@ class boss_arion : public CreatureScript
                 _JustReachedHome();
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void JustSummoned(Creature* summon) override
             {
@@ -1010,7 +1010,7 @@ class boss_terrastra: public CreatureScript
                 _JustReachedHome();
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void JustSummoned(Creature* summon) override
             {
@@ -1175,7 +1175,7 @@ class boss_elementium_monstrosity : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_ELEMENTARY, 1);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Talk(SAY_MONSTROSITY_AGGRO);
                 DoCast(me, SPELL_CRYOGENIC_AURA);

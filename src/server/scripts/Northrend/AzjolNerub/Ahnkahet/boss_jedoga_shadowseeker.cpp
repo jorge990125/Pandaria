@@ -169,7 +169,7 @@ class boss_jedoga_shadowseeker : public CreatureScript
                 me->GetMap()->SetWorldState(WORLD_STATE_VOLUNTEER_WORK, 1);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance || (who->GetTypeId() == TYPEID_UNIT && who->GetEntry() == NPC_JEDOGA_CONTROLLER))
                     return;
@@ -191,7 +191,7 @@ class boss_jedoga_shadowseeker : public CreatureScript
                 ScriptedAI::AttackStart(who);
             }
 
-            void KilledUnit(Unit* victim)
+            void KilledUnit(Unit* victim) override
             {
                 if (!victim || victim->GetTypeId() != TYPEID_PLAYER)
                     return;
@@ -199,7 +199,7 @@ class boss_jedoga_shadowseeker : public CreatureScript
                 Talk(TEXT_SLAY);
             }
 
-            void JustDied(Unit* /*killer*/)
+            void JustDied(Unit* /*killer*/) override
             {
                 Talk(TEXT_DEATH);
 
@@ -274,7 +274,7 @@ class boss_jedoga_shadowseeker : public CreatureScript
                         AttackStart(target);
                         instance->SetData(DATA_JEDOGA_RESET_INITIANDS, 0);
                         if (instance->GetData(DATA_JEDOGA_SHADOWSEEKER_EVENT) != IN_PROGRESS)
-                            EnterCombat(target);
+                            JustEngagedWith(target);
                     }
                     else if (!me->IsInCombat())
                         EnterEvadeMode();
@@ -471,7 +471,7 @@ class npc_jedoga_initiand : public CreatureScript
                     instance->SetData64(DATA_PL_JEDOGA_TARGET, killer->GetGUID());
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if ((instance && instance->GetData(DATA_JEDOGA_SHADOWSEEKER_EVENT) == IN_PROGRESS) || !who)
                     return;
@@ -612,7 +612,7 @@ class npc_jedogas_aufseher_trigger : public CreatureScript
 
             void Reset() override { }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void AttackStart(Unit* /*who*/) override { }
 

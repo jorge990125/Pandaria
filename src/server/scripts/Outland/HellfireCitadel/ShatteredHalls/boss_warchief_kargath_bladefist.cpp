@@ -93,7 +93,7 @@ class boss_warchief_kargath_bladefist : public CreatureScript
                     instance->SetBossState(DATA_KARGATH, DONE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
             }

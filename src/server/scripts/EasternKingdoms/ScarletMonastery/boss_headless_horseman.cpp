@@ -153,7 +153,7 @@ struct boss_headless_horseman : public ScriptedAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoZoneInCombat(me, 100.0f);
     }

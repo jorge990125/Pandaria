@@ -559,7 +559,7 @@ void HookMgr::OnGameObjectStateChanged(GameObject* pGameObject, uint32 state)
     sEluna->ExecuteCall(3, 0);
 }
 // Player
-void HookMgr::OnPlayerEnterCombat(Player* pPlayer, Unit* pEnemy)
+void HookMgr::OnPlayerJustEngagedWith(Player* pPlayer, Unit* pEnemy)
 {
     for (std::vector<int>::const_iterator itr = sEluna->PlayerEventBindings[PLAYER_EVENT_ON_ENTER_COMBAT].begin();
         itr != sEluna->PlayerEventBindings[PLAYER_EVENT_ON_ENTER_COMBAT].end(); ++itr)
@@ -1296,9 +1296,9 @@ struct HookMgr::ElunaCreatureAI : ScriptedAI
 
     //Called for reaction at enter to combat if not in combat yet (enemy can be NULL)
     //Called at creature aggro either by MoveInLOS or Attack Start
-    void EnterCombat(Unit* target) override
+    void JustEngagedWith(Unit* target) override
     {
-        ScriptedAI::EnterCombat(target);
+        ScriptedAI::JustEngagedWith(target);
         int bind = sEluna->CreatureEventBindings->GetBind(me->GetEntry(), CREATURE_EVENT_ON_ENTER_COMBAT);
         if (!bind)
             return;
@@ -1452,7 +1452,7 @@ struct HookMgr::ElunaCreatureAI : ScriptedAI
         sEluna->ExecuteCall(2, 0);
     }
 
-    // Called before EnterCombat even before the creature is in combat.
+    // Called before JustEngagedWith even before the creature is in combat.
     void AttackStart(Unit* target) override
     {
         ScriptedAI::AttackStart(target);

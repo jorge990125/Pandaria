@@ -101,7 +101,7 @@ class npc_sikthik_amber_weaver : public CreatureScript
                 visualTimer = 1000;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->InterruptNonMeleeSpells(true);
             }

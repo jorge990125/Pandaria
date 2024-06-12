@@ -211,7 +211,7 @@ class boss_mannoroth : public CreatureScript
                 me->Attack(target, false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* pVarothen = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VAROTHEN)))
                     if (!pVarothen->IsInCombat())
@@ -523,7 +523,7 @@ class npc_mannoroth_varothen : public CreatureScript
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_VAROTHEN_AGGRO);
                 events.ScheduleEvent(EVENT_MAGNISTRIKE, urand(3000, 7000));

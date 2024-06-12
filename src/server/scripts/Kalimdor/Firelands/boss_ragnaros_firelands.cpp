@@ -378,7 +378,7 @@ class boss_ragnaros_firelands : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_RAGNAROS, who->ToPlayer()))
                 {
@@ -1191,7 +1191,7 @@ class npc_ragnaros_firelands_magma_trap : public CreatureScript
                 DoCast(me, SPELL_MAGMA_TRAP_DUMMY);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CHECK_PLAYER, 500);
             }
@@ -1482,7 +1482,7 @@ class npc_ragnaros_firelands_lava_scion : public CreatureScript
                 me->SetReactState(REACT_PASSIVE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CONTINUE, 2000);
                 events.ScheduleEvent(EVENT_BLAZING_HEAT, urand(7000, 13000));
@@ -1647,7 +1647,7 @@ class npc_ragnaros_firelands_living_meteor : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_LIVING_METEOR_DMG_REDUCTION, true);
                 DoCast(me, SPELL_LIVING_METEOR_AURA_1, true);

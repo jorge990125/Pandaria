@@ -212,7 +212,7 @@ class npc_theramore_sergeant_grud : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CLEAVE, urand(5 * IN_MILLISECONDS, 12.8*IN_MILLISECONDS));
             }
@@ -271,7 +271,7 @@ class npc_theramore_roknah_grunt : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CLEAVE, urand(5 * IN_MILLISECONDS, 12.8*IN_MILLISECONDS));
             }
@@ -330,7 +330,7 @@ class npc_theramore_airship_crewman : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_KICK, urand(2.5 * IN_MILLISECONDS, 9.4 * IN_MILLISECONDS));
             }
@@ -391,7 +391,7 @@ class npc_theramore_sky_captain_dazrip : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CLEAVE, urand(5 * IN_MILLISECONDS, 12.8 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_DASHING_SMILE, urand(9.5 * IN_MILLISECONDS, 16.5 * IN_MILLISECONDS));
@@ -463,7 +463,7 @@ class npc_theramore_roknah_felcaster : public CreatureScript
                 prevSpellId = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FEL_INCINERATE, urand(2 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_SECOND_ABILITY, urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
@@ -584,7 +584,7 @@ class npc_theramore_roknah_headhunter : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHOT, urand(2 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
             }
@@ -645,7 +645,7 @@ class npc_theramore_roknah_rider : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CHARGE, 1 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_CLEAVE, urand(5 * IN_MILLISECONDS, 12.8 * IN_MILLISECONDS));
@@ -717,7 +717,7 @@ class npc_theramore_roknah_loa_singer : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_HOLLY_SMITE, urand(2 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_HEAL, 9 * IN_MILLISECONDS);
@@ -825,7 +825,7 @@ class npc_theramore_roknah_wave_caller : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_OFFENSIVE_ABILITY, urand(2 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_HEALING_WAVE, 9 * IN_MILLISECONDS);
@@ -929,7 +929,7 @@ class npc_theramore_captain_korthok : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CLEAVE, urand(5 * IN_MILLISECONDS, 12.8 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_DANCING_BLADES, urand(9.5 * IN_MILLISECONDS, 16.5 * IN_MILLISECONDS));
@@ -1004,7 +1004,7 @@ class npc_theramore_captain_mousson : public CreatureScript
                 prevSpellId = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FROST_BOLT, urand(2 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_SECOND_ABILITY, urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
@@ -1141,7 +1141,7 @@ class npc_theramore_gashnul : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_KITE_FIGHT, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 //Talk(TALK_SPECIAL_1);
                 events.ScheduleEvent(EVENT_STORM_TOTEM, urand(4 * IN_MILLISECONDS, 9.5 * IN_MILLISECONDS));
@@ -1217,7 +1217,7 @@ class npc_theramore_vicious_wyvern : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_POISON, urand(5 * IN_MILLISECONDS, 7.5 * IN_MILLISECONDS));
             }
@@ -1327,7 +1327,7 @@ class npc_theramore_gatecrusher : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_NO_TANK_YOU, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 //Talk(TALK_INTRO);
                 events.ScheduleEvent(EVENT_SIGHTS, 1 * IN_MILLISECONDS);

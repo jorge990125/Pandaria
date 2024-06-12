@@ -298,7 +298,7 @@ class boss_sinestra : public CreatureScript
                 instance->SetBossState(DATA_SINESTRA, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance)
                 {
@@ -1080,7 +1080,7 @@ class npc_sinestra_twilight_drake : public CreatureScript
 
             void Reset() override { }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void JustDied(Unit* /*killer*/) override
             {

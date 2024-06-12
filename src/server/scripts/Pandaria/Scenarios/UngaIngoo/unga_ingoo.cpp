@@ -160,7 +160,7 @@ class npc_brewmaster_bo_escort : public CreatureScript
                 ScriptedAI::MoveInLineOfSight(who);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_REJ_MIST, 5 * IN_MILLISECONDS);
             }
@@ -466,7 +466,7 @@ struct npc_unga_spearscamp : public ScriptedAI
     InstanceScript* instance;
     EventMap events;
 
-    void IsSummonedBy(Unit* summoner)
+    void IsSummonedBy(Unit* summoner) override
     {
         Movement::MoveSplineInit init(me);
         for (auto itr : SpearscampPath)
@@ -482,7 +482,7 @@ struct npc_unga_spearscamp : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_NET_TOS, urand(5 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_THROW_SPEAR, urand(3 * IN_MILLISECONDS, 11 * IN_MILLISECONDS));
@@ -593,7 +593,7 @@ struct npc_unga_gladiators : public ScriptedAI
         nonCombatEvents.ScheduleEvent(EVENT_COSMETIC, 1 * IN_MILLISECONDS);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         nonCombatEvents.Reset();
         me->RemoveAurasDueToSpell(SPELL_FRENZIED_STRIKES);
@@ -710,7 +710,7 @@ struct npc_unga_captain_ook : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         nonCombatEvents.Reset();
         events.ScheduleEvent(EVENT_GONNA_OOK, urand(8 * IN_MILLISECONDS, 16 * IN_MILLISECONDS));
@@ -842,7 +842,7 @@ struct npc_unga_pirate : public ScriptedAI
             DoAction(ACTION_INTRO);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         switch (me->GetEntry())
         {
@@ -1029,7 +1029,7 @@ struct npc_unga_ookie : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_INTRO);
         events.ScheduleEvent(EVENT_CLEAVE_TOSS, 5 * IN_MILLISECONDS);

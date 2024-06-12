@@ -635,7 +635,7 @@ class npc_zanvess_zanthik_brutalizer : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_STOMP, 5 * IN_MILLISECONDS);
             }
@@ -698,7 +698,7 @@ class npc_zanvess_zanthik_ambermancer : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_SONIC_SHIELD);
                 events.ScheduleEvent(EVENT_SONIC_SHIELD, urand(10 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
@@ -785,7 +785,7 @@ class npc_zanvess_7th_legion_infiltrator : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_RUSH);
                 events.ScheduleEvent(EVENT_RUSH, 10 * IN_MILLISECONDS);
@@ -849,7 +849,7 @@ class npc_zanvess_7th_legion_priest : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_HEAL, urand(10 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_SHADOW_WORD, 8 * IN_MILLISECONDS);
@@ -955,7 +955,7 @@ class npc_zanvess_team_leader_scooter : public CreatureScript
                 targetGUID = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FIXATE, urand(8 * IN_MILLISECONDS, 29 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_WHIRLWIND, 14 * IN_MILLISECONDS);
@@ -1080,7 +1080,7 @@ class npc_zanvess_commander_telvrak : public CreatureScript
                 weaponData = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_SWAP_WEAPON);
                 events.ScheduleEvent(EVENT_SWAP_WEAPON, 15 * IN_MILLISECONDS);

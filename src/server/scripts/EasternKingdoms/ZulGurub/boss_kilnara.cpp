@@ -169,7 +169,7 @@ class boss_kilnara : public CreatureScript
                 ResetAchievement();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 bTwoPhase = false;

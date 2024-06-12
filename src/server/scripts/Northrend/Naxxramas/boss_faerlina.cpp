@@ -67,9 +67,9 @@ class boss_faerlina : public CreatureScript
             }
 
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_POISON, urand(10000, 15000));
                 events.ScheduleEvent(EVENT_FIRE, urand(6000, 18000));

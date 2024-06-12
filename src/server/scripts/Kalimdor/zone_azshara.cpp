@@ -211,19 +211,19 @@ class npc_voljin_ancient_enemy : public CreatureScript
     {
         npc_voljin_ancient_enemyAI(Creature* c) : ScriptedAI(c) {}
 
-        void Reset()
+        void Reset() override
         {
             EventInProgress = false;
             events.Reset();
             me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
 
-        void AttackStart(Unit * who)
+        void AttackStart(Unit * who) override
         {
             ScriptedAI::AttackStartNoMove(who);
         }
 
-        void DoAction(int32 /*action*/)
+        void DoAction(int32 /*action*/) override
         {
             if(EventInProgress)
                 return;
@@ -242,13 +242,13 @@ class npc_voljin_ancient_enemy : public CreatureScript
             events.ScheduleEvent(EVENT_INTRO, 10000);
         }
 
-        void EnterCombat(Unit * /*who*/)
+        void JustEngagedWith(Unit * /*who*/) override
         {
             events.ScheduleEvent(EVENT_SHOOT, 2000);
             events.ScheduleEvent(EVENT_SHADOW_SHOCK, 5000);
         }
 
-        void UpdateAI(uint32 diff)
+        void UpdateAI(uint32 diff) override
         {
             if(!EventInProgress)
                 return;
@@ -285,7 +285,7 @@ class npc_voljin_ancient_enemy : public CreatureScript
 
 public:
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
         if(player->GetQuestStatus(QUEST_ANCIENT_ENEMY) == QUEST_STATUS_INCOMPLETE)
         {
@@ -295,7 +295,7 @@ public:
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
     {
         player->PlayerTalkClass->ClearMenus();
         player->CLOSE_GOSSIP_MENU();
@@ -308,7 +308,7 @@ public:
 
     npc_voljin_ancient_enemy() : CreatureScript("npc_voljin_ancient_enemy") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* creature) const override
     {
         return new npc_voljin_ancient_enemyAI (creature);
     }
@@ -336,18 +336,18 @@ class npc_zarjira : public CreatureScript
     {
         npc_zarjiraAI(Creature* c) : ScriptedAI(c) {}
 
-        void Reset()
+        void Reset() override
         {
             me->SetReactState(REACT_PASSIVE);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         }
 
-        void AttackStart(Unit * who)
+        void AttackStart(Unit * who) override
         {
             ScriptedAI::AttackStartNoMove(who);
         }
 
-        void DoAction(int32 action)
+        void DoAction(int32 action) override
         {
             if(action == 1)
                 events.ScheduleEvent(EVENT_INTRO, 12000);
@@ -371,14 +371,14 @@ class npc_zarjira : public CreatureScript
                 player->KilledMonsterCredit(NPC_ZARJIRA, 0);
         }
 
-        void EnterCombat(Unit *)
+        void JustEngagedWith(Unit *) override
         {
             events.ScheduleEvent(EVENT_FROSTBOLT, 3000);
             events.ScheduleEvent(EVENT_MANIFESTATION, 10000);
             events.ScheduleEvent(EVENT_FIRES, 60000);
         }
 
-        void UpdateAI(uint32 diff)
+        void UpdateAI(uint32 diff) override
         {
             events.Update(diff);
             if(uint32 eventId = events.ExecuteEvent())
@@ -455,7 +455,7 @@ class npc_zarjira : public CreatureScript
 public:
     npc_zarjira() : CreatureScript("npc_zarjira") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* creature) const override
     {
         return new npc_zarjiraAI (creature);
     }
@@ -472,12 +472,12 @@ class npc_fire_of_the_seas : public CreatureScript
     {
         npc_fire_of_the_seasAI(Creature* c) : ScriptedAI(c) {}
 
-        void Reset()
+        void Reset() override
         {
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void SpellHit(Unit * /*caster*/, const SpellInfo * spell)
+        void SpellHit(Unit * /*caster*/, const SpellInfo * spell) override
         {
             if(spell->Id == SPELL_STAMP_OUT_FIRES)
             {
@@ -495,7 +495,7 @@ class npc_fire_of_the_seas : public CreatureScript
 public:
     npc_fire_of_the_seas() : CreatureScript("npc_fire_of_the_seas") { }
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* creature) const override
     {
         return new npc_fire_of_the_seasAI (creature);
     }

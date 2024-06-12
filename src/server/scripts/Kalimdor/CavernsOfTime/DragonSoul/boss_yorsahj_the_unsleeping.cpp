@@ -218,7 +218,7 @@ class boss_yorsahj_the_unsleeping: public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_TASTE_THE_RAINBOW_PY, 0);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance->GetBossState(DATA_MORCHOK) != DONE)
                 {

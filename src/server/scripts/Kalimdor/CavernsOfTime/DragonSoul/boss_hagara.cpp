@@ -421,7 +421,7 @@ class boss_hagara_the_stormbinder: public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_HOLDING_HANDS, 1); // criteria controlled by spell
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 
@@ -945,7 +945,7 @@ class npc_hagara_the_stormbinder_stormborn_myrmidon : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SPARK, urand(3000, 10000));
                 events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, urand(2000, 10000));
@@ -1020,7 +1020,7 @@ class npc_hagara_the_stormbinder_stormbinder_adept : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_TORNADO, urand(5000, 15000));
             }
@@ -1143,7 +1143,7 @@ class npc_hagara_the_stormbinder_twilight_frost_evoker : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FROST_BOLT, 1);
                 events.ScheduleEvent(EVENT_BLIZZARD, urand(5000, 15000));
@@ -1239,7 +1239,7 @@ class npc_hagara_the_stormbinder_lieutenant_shara : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHATTER, urand(4000, 6000));
                 events.ScheduleEvent(EVENT_FROST_CORRUPTION, urand(3000, 10000));

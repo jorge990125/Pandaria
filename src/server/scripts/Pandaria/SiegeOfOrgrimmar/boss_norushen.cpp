@@ -362,9 +362,9 @@ class boss_norushen : public CreatureScript
                     me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
             }
 
             void JustSummoned(Creature* summon) override
@@ -619,7 +619,7 @@ class boss_amalgam_of_corruption : public CreatureScript
                 me->SetReactState(REACT_PASSIVE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* quarantinMeasure = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(NPC_QUARANTINE_MEASURES) : 0))
                     quarantinMeasure->SetInCombatWithZone();
@@ -1233,7 +1233,7 @@ struct npc_greater_corruption : public ScriptedAI
         summon->setActive(true);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->RemoveAurasDueToSpell(SPELL_MANIFEST_SPAWN_VIS);
 
@@ -1380,7 +1380,7 @@ struct npc_titanic_corruption : public ScriptedAI
         DoZoneInCombat(me, 100.0f);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->RemoveAurasDueToSpell(SPELL_MANIFEST_SPAWN_VIS);
 
@@ -1716,7 +1716,7 @@ struct npc_test_of_reliance_helpers : public customCreatureAI
             DoCast(me, SPELL_DAMAGE_DEALER, true);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (me->GetEntry() == NPC_SUN_TENDERHEART_GC)
             events.ScheduleEvent(EVENT_FIRE_BALL, 2 * IN_MILLISECONDS);

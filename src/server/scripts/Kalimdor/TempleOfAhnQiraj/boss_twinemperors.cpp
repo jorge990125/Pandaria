@@ -98,7 +98,7 @@ struct boss_twinemperorsAI : public ScriptedAI
     uint32 EnrageTimer;
 
     virtual bool IAmVeklor() = 0;
-    virtual void Reset() = 0;
+    virtual void Reset() override = 0;
     virtual void CastSpellOnBug(Creature* target) = 0;
 
     void TwinReset()
@@ -164,7 +164,7 @@ struct boss_twinemperorsAI : public ScriptedAI
         DoPlaySoundToSet(me, IAmVeklor() ? SOUND_VL_KILL : SOUND_VN_KILL);
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoZoneInCombat();
         Creature* pOtherBoss = GetOtherBoss();
@@ -421,7 +421,7 @@ class boss_veknilash : public CreatureScript
     
         struct boss_veknilashAI : public boss_twinemperorsAI
         {
-            bool IAmVeklor() {return false;}
+            bool IAmVeklor() override { return false; }
             boss_veknilashAI(Creature* creature) : boss_twinemperorsAI(creature) { }
     
             uint32 UpperCut_Timer;
@@ -459,7 +459,7 @@ class boss_veknilash : public CreatureScript
                 }
             }
     
-            void CastSpellOnBug(Creature* target)
+            void CastSpellOnBug(Creature* target) override
             {
                 target->SetFaction(14);
                 target->AI()->AttackStart(me->getThreatManager().getHostilTarget());
@@ -521,7 +521,7 @@ class boss_veklor : public CreatureScript
     
         struct boss_veklorAI : public boss_twinemperorsAI
         {
-            bool IAmVeklor() {return true;}
+            bool IAmVeklor() override { return true; }
             boss_veklorAI(Creature* creature) : boss_twinemperorsAI(creature) { }
     
             uint32 ShadowBolt_Timer;
@@ -548,7 +548,7 @@ class boss_veklor : public CreatureScript
                 me->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, 0);
             }
     
-            void CastSpellOnBug(Creature* target)
+            void CastSpellOnBug(Creature* target) override
             {
                 target->SetFaction(14);
                 target->AddAura(SPELL_EXPLODEBUG, target);

@@ -105,6 +105,8 @@ enum ZLiquidStatus : uint32;
 
 typedef std::unordered_map<Player*, UpdateData> UpdateDataMapType;
 
+float const DEFAULT_COLLISION_HEIGHT = 2.03128f; // Most common value in dbc
+
 class TC_GAME_API Object
 {
     public:
@@ -506,7 +508,7 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         virtual void Update (uint32 /*time_diff*/) { }
 
         void _Create(uint32 guidlow, HighGuid guidhigh, uint32 phaseMask);
-        // void AddToWorld() override;
+        void AddToWorld() override;
         void RemoveFromWorld() override;
 
         void GetNearPoint2D(float &x, float &y, float distance, float absAngle) const;
@@ -535,8 +537,8 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         void MovePositionToFirstCollosionBySteps(Position& pos, float dist, float angle, float heightCheckInterval = 2.0f, bool allowInAir = false);
 
         float GetObjectSize() const;
-        void UpdateGroundPositionZ(float x, float y, float &z, float offset = 0.0f, float maxSearchDist = DEFAULT_HEIGHT_SEARCH) const;
-        void UpdateAllowedPositionZ(float x, float y, float &z, float offset = 0.0f, float maxSearchDist = DEFAULT_HEIGHT_SEARCH) const;
+        void UpdateGroundPositionZ(float x, float y, float &z) const;
+        void UpdateAllowedPositionZ(float x, float y, float &z, float* groundZ = nullptr) const;
 
         void GetRandomPoint(Position const &srcPos, float distance, float &rand_x, float &rand_y, float &rand_z) const;
         void GetRandomPoint(Position const &srcPos, float distance, Position &pos) const;
@@ -731,8 +733,10 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         virtual float GetStationaryZ() const { return GetPositionZ(); }
         virtual float GetStationaryO() const { return GetOrientation(); }
 
+        float GetFloorZ() const;
         virtual float GetCollisionHeight() const { return 0.0f; }
 
+        float GetMapWaterOrGroundLevel(float x, float y, float z, float* ground = nullptr) const;
         float GetMapHeight(float x, float y, float z, bool vmap = true, float distanceToSearch = 50.0f) const; // DEFAULT_HEIGHT_SEARCH in map.h
 
         virtual uint16 GetAIAnimKitId() const { return 0; }
@@ -792,7 +796,7 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         bool m_customVisibilityZoneOnly = false;
         uint32 m_customVisibilityZoneID = 0; // Used to know which Map::m_customVisibilityDistanceObjectsByZone container the object was added to
 
-        virtual bool _IsWithinDist(WorldObject const* obj, float dist2compare, bool is3D) const;
+        virtual bool _IsWithinDist(WorldObject const* obj, float dist2compare, bool is3D, bool incOwnRadius = true, bool incTargetRadius = true) const;
 
         bool CanNeverSee(WorldObject const* obj) const;
         virtual bool CanAlwaysSee(WorldObject const* /*obj*/) const { return false; }

@@ -352,7 +352,7 @@ class boss_jin_qin_xi : public CreatureScript
                         me->GetInstanceScript()->SetData(ACHIEVE, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
 
@@ -949,7 +949,7 @@ class npc_woe_add_generic : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 switch (me->GetEntry())
                 {

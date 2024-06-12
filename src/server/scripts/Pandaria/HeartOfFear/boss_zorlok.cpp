@@ -566,9 +566,9 @@ class boss_zorlok : public CreatureScript
                     instance->SetBossState(DATA_ZORLOK, FAIL);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
                 Talk(TALK_AGGRO);
                 me->CastSpell(tabCenter.GetPositionX(), tabCenter.GetPositionY(), tabCenter.GetPositionZ(), SPELL_PHEROMONES_CLOUD, false);

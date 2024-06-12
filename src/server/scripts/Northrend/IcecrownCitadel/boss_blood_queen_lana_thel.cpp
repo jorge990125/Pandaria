@@ -199,7 +199,7 @@ class boss_blood_queen_lana_thel : public CreatureScript
                     me->GetMap()->SetWorldState(WORLDSTATE_ONCE_BITTEN_25, 1);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 DoCastAOE(SPELL_REMOVE_EMPOWERED_BLOOD, true);
 

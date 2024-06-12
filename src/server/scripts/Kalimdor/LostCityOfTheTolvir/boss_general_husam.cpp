@@ -115,9 +115,9 @@ class boss_general_husam : public CreatureScript
                     me->CastSpell(who, SPELL_HURL_SCRIPT, false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);

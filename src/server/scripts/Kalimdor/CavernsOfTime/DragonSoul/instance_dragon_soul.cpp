@@ -354,7 +354,7 @@ class instance_dragon_soul : public InstanceMapScript
                 }
             }
 
-            void OnCreatureRemove(Creature* creature)
+            void OnCreatureRemove(Creature* creature) override
             {
                 switch (creature->GetEntry())
                 {
@@ -900,7 +900,7 @@ class instance_dragon_soul : public InstanceMapScript
                 return false;
             }
 
-            Creature* GetNextTwilightAssaulterStalker(Creature const* current)
+            Creature* GetNextTwilightAssaulterStalker(Creature const* current) override
             {
                 uint64 currentGuid = current->GetGUID();
                 for (uint8 row = 0; row < 7; ++row)
@@ -943,7 +943,8 @@ class instance_dragon_soul : public InstanceMapScript
                 }
                 return NULL;
             }
-            Position const* GetRandomTwilightAssaulterAssaultPosition(bool horizonal, bool fromEnd, uint8& lane, uint64& targetGUID)
+
+            Position const* GetRandomTwilightAssaulterAssaultPosition(bool horizonal, bool fromEnd, uint8& lane, uint64& targetGUID) override
             {
                 if (horizonal)
                 {
@@ -1046,14 +1047,16 @@ class instance_dragon_soul : public InstanceMapScript
                     return assaultPos;
                 }
             }
-            void FreeTwilightAssaulterAssaultLane(bool horizontal, uint8 lane)
+
+            void FreeTwilightAssaulterAssaultLane(bool horizontal, uint8 lane) override
             {
                 if (horizontal)
                     twilightAssaultLanesUsedH[lane] = 0;
                 else
                     twilightAssaultLanesUsedV[lane] = 0;
             }
-            virtual void CleanTwilightAssaulterAssaultLane(bool horizontal, uint8 lane)
+
+            virtual void CleanTwilightAssaulterAssaultLane(bool horizontal, uint8 lane) override
             {
                 if (horizontal)
                 {

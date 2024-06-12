@@ -80,7 +80,7 @@ class npc_ritual_tiki_mask : public CreatureScript
                 me->SetDisableGravity(false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_TIKI_BURN, urand(5000, 6000));
             }

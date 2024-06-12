@@ -285,12 +285,12 @@ class boss_tsulong : public CreatureScript
                 CreatureAI::MoveInLineOfSight(who);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (instance && instance->GetData(DATA_TSULONG) == DONE)
                     return;
 
-                _EnterCombat();
+                _JustEngagedWith();
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
 
                 Talk(SAY_AGGRO);

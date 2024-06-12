@@ -322,7 +322,7 @@ class boss_rook_stonetoe : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetReactState(REACT_AGGRESSIVE);
 
@@ -347,7 +347,7 @@ class boss_rook_stonetoe : public CreatureScript
                 if (instance)
                     instance->SetData(DATA_FALLEN_PROTECTORS, IN_PROGRESS);
 
-                _EnterCombat();
+                _JustEngagedWith();
             }
 
             void DamageTaken(Unit* /*attacker*/, uint32& damage) override
@@ -747,7 +747,7 @@ class boss_he_softfoot : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetReactState(REACT_AGGRESSIVE);
 
@@ -765,7 +765,7 @@ class boss_he_softfoot : public CreatureScript
                 events.ScheduleEvent(EVENT_HE_GOUGE, 23000);
                 events.ScheduleEvent(EVENT_HE_POISON_DAGGERS, 45000);
 
-                _EnterCombat();
+                _JustEngagedWith();
             }
 
             void SpellHit(Unit* caster, const SpellInfo* spell) override
@@ -1111,7 +1111,7 @@ class boss_sun_tenderheart : public CreatureScript
                 return shadowWordTargetGUID;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->SetReactState(REACT_AGGRESSIVE);
 
@@ -1129,7 +1129,7 @@ class boss_sun_tenderheart : public CreatureScript
                 events.ScheduleEvent(EVENT_SUN_SHADOW_WORD_BANE, 15000);
                 events.ScheduleEvent(EVENT_SUN_CALAMITY, 31000);
 
-                _EnterCombat();
+                _JustEngagedWith();
             }
 
             void DamageTaken(Unit* /*attacker*/, uint32& damage) override
@@ -1482,7 +1482,7 @@ struct npc_embodied_misery : public ScriptedAI
         return 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override { }
+    void JustEngagedWith(Unit* /*who*/) override { }
 
     void MovementInform(uint32 type, uint32 pointId) override
     {
@@ -1592,7 +1592,7 @@ struct npc_embodied_sorrow : public ScriptedAI
         return 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override { }
+    void JustEngagedWith(Unit* /*who*/) override { }
 
     void MovementInform(uint32 type, uint32 pointId) override
     {
@@ -1701,7 +1701,7 @@ struct npc_embodied_gloom : public ScriptedAI
         return 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override { }
+    void JustEngagedWith(Unit* /*who*/) override { }
 
     void MovementInform(uint32 type, uint32 pointId) override
     {
@@ -1813,7 +1813,7 @@ struct npc_embodied_anguish : public ScriptedAI
         me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_SHADOW_WEAKNESS_AURA);
 
@@ -3195,7 +3195,7 @@ class spell_rook_vengeful_strikes_periodic : public AuraScript
 {
     PrepareAuraScript(spell_rook_vengeful_strikes_periodic);
 
-    bool Load()
+    bool Load() override
     {
         tickCount = 0;
         return true;

@@ -186,7 +186,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 builder.AppendState(WORLDSTATE_ATTEMPTS_MAX,       MaxHeroicAttempts);
             }
 
-            void OnPlayerEnter(Player* player)
+            void OnPlayerEnter(Player* player) override
             {
                 if (!TeamInInstance)
                     TeamInInstance = player->GetTeam();
@@ -508,7 +508,7 @@ class instance_icecrown_citadel : public InstanceMapScript
             }
 
             // Weekly quest spawn prevention
-            uint32 GetCreatureEntry(uint32 guidLow, CreatureData const* data)
+            uint32 GetCreatureEntry(uint32 guidLow, CreatureData const* data) override
             {
                 PickTeamInInstanceIfNeeded();
                 PickWeeklyQuestIfNeeded();
@@ -545,8 +545,8 @@ class instance_icecrown_citadel : public InstanceMapScript
                         break;
                     case NPC_GB_ZAFOD_BOOMBOX:
                         if (GameObjectTemplate const* go = sObjectMgr->GetGameObjectTemplate(GO_THE_SKYBREAKER_ALLIANCE_ICC))
-                            if ((TeamInInstance == ALLIANCE && data->mapid == go->moTransport.mapID) ||
-                                (TeamInInstance == HORDE && data->mapid != go->moTransport.mapID))
+                            if ((TeamInInstance == ALLIANCE && data->mapId == go->moTransport.mapID) ||
+                                (TeamInInstance == HORDE && data->mapId != go->moTransport.mapID))
                                 return entry;
                         return 0;
                     case NPC_GB_HIGH_OVERLORD_SAURFANG:
@@ -556,6 +556,8 @@ class instance_icecrown_citadel : public InstanceMapScript
                             (TeamInInstance == HORDE && data->posX < 10.0f))
                             return GetBossState(DATA_GUNSHIP_EVENT) != DONE ? entry : 0;
                         return 0;
+                    case NPC_SE_HIGH_OVERLORD_SAURFANG:
+                        return TeamInInstance == ALLIANCE ? NPC_SE_MURADIN_BRONZEBEARD : NPC_SE_HIGH_OVERLORD_SAURFANG;                        
                     default:
                         break;
                 }

@@ -789,7 +789,7 @@ class npc_kirthik_rager : public CreatureScript
 
             void DoAction(int32 /*actionId*/) override { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SAVAGE, 6 * IN_MILLISECONDS);
             }

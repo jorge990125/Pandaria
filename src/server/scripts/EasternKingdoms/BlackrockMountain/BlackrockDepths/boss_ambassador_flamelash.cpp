@@ -72,7 +72,7 @@ class boss_ambassador_flamelash : public CreatureScript
                 SpiritsPos = { 0, 1, 2, 3, 4, 5, 6 };
             }
 
-            void EnterCombat(Unit* /*who*/) override 
+            void JustEngagedWith(Unit* /*who*/) override 
             {
                 Talk(TALK_INTRO);
                 SummonSpirits();

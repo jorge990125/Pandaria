@@ -132,9 +132,9 @@ class boss_siamat : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
             }
             
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -332,7 +332,7 @@ class npc_servant_of_siamat : public CreatureScript
                 LightningCharge = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_THUNDER_CRASH, 1000);
                 events.ScheduleEvent(EVENT_LIGHTNING_NOVA, 5000);

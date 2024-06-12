@@ -63,10 +63,10 @@ class boss_lava_guard_gordoth : public CreatureScript
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 // @TODO: Set in combat for other protectors
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                 {

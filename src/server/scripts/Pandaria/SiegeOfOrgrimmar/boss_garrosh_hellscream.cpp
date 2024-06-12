@@ -292,7 +292,7 @@ class TouchYshaarjAI : public PlayerAI
                     if (me->GetMap()->IsHeroic())
                         amount += 150;
 
-                    me->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_PCT, float(amount), true);
+                    me->ApplyStatPctModifier(UNIT_MOD_HEALTH, TOTAL_PCT, float(amount));
                     if (me->IsAlive())
                         me->SetHealth(std::max(uint32(me->GetMaxHealth() * percent / 100.f), uint32(1)));
                 }
@@ -320,7 +320,7 @@ class TouchYshaarjAI : public PlayerAI
                     float percent = me->GetHealthPct();
                     uint32 currentHealth = me->GetHealth();
 
-                    me->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_PCT, float(amount), false);
+                    me->ApplyStatPctModifier(UNIT_MOD_HEALTH, TOTAL_PCT, float(amount));
 
                     // Set Current health depend of improved health of Y`shaarj
                     if (me->IsAlive())
@@ -567,9 +567,9 @@ class boss_garrosh_hellscream : public CreatureScript
                 _DespawnAtEvade();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 if (instance)
                 {
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -1501,7 +1501,7 @@ struct npc_korkron_warbringer : public soo_garrosh_guards_typeAI
             DoCast(me, SPELL_BLOOD_FRENZIED);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (IsHeroic())
             DoCast(me, SPELL_BLOOD_FRENZIED_SELECTOR);
@@ -1563,7 +1563,7 @@ struct npc_wolf_rider_farseer : public soo_garrosh_guards_typeAI
         me->AddUnitState(UNIT_STATE_IGNORE_PATHFINDING);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, urand(4 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_CHAIN_HEAL, urand(6.5 * IN_MILLISECONDS, 19.5 *IN_MILLISECONDS));
@@ -1731,7 +1731,7 @@ struct npc_soo_embodied_minions : public ScriptedAI
             despair->CastSpell(despair, SPELL_ULTIMATE_DESPAIR, true);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->InterruptNonMeleeSpells(false, SPELL_COSMETIC_CHANNEL);
 
@@ -1946,7 +1946,7 @@ struct npc_garrosh_unstable_iron_star : public ScriptedAI
         DoCast(me, SPELL_UNSTABLE_IRON_STAR_AT);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->PrepareChanneledCast(me->GetOrientation());
 
@@ -2162,7 +2162,7 @@ class spell_soo_whirling_corruption : public AuraScript
 {
     PrepareAuraScript(spell_soo_whirling_corruption);
 
-    bool Load()
+    bool Load() override
     {
         minionsCount = 0;
         return true;
@@ -3209,7 +3209,7 @@ class spell_garrosh_clump_check : public SpellScript
 {
     PrepareSpellScript(spell_garrosh_clump_check);
 
-    bool Load()
+    bool Load() override
     {
         launched = false;
         return true;
@@ -3258,7 +3258,7 @@ class spell_garrosh_call_bombardment : public AuraScript
 {
     PrepareAuraScript(spell_garrosh_call_bombardment);
 
-    bool Load()
+    bool Load() override
     {
         procCount = 0; // limit is 4, so first trigger after 1s cast finishing bombardment. next - trigger each 3s
         bombardCounter = 0; // 30 per 10 sec, so trigger 3 each 1s, not 500ms

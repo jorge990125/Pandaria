@@ -67,7 +67,7 @@ class boss_nalak : public CreatureScript
                 events.Reset();
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_NALAK_AGGRO);
                 DoCast(me, SPELL_STATIC_SHIELD, true);

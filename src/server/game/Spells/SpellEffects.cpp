@@ -3700,7 +3700,7 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
         float weapon_total_pct = 1.0f;
         if (m_spellInfo->SchoolMask & SPELL_SCHOOL_MASK_NORMAL)
         {
-            weapon_total_pct = m_caster->GetModifierValue(unitMod, TOTAL_PCT);
+            weapon_total_pct = m_caster->GetPctModifierValue(unitMod, TOTAL_PCT);
             weapon_total_pct *= m_caster->GetTotalAuraEffectValue(SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
             weapon_total_pct *= m_caster->GetScallingDamageMod();
             // Bonus weapon damage should not be subject to 50% off-hand damage penalty
@@ -5211,11 +5211,6 @@ void Spell::EffectLeap(SpellEffIndex effIndex)
         return;
 
     Position pos;
-    destTarget->GetPosition(&pos);
-    if (m_spellInfo->Effects[effIndex].TargetB.GetTarget() != TARGET_DEST_CASTER_FRONT_LEAP && 
-        m_spellInfo->Effects[effIndex].TargetB.GetTarget() != TARGET_DEST_CASTER_MOVEMENT_DIR &&
-        m_spellInfo->Effects[effIndex].TargetB.GetTarget() != TARGET_DEST_CASTER_FRONT)
-        unitTarget->GetFirstCollisionPosition(pos, unitTarget->GetDistance(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ() + 2.0f), 0.0f);
     unitTarget->NearTeleportTo(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), unitTarget == m_caster);
 }
 

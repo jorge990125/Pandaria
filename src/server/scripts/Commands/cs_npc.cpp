@@ -262,7 +262,7 @@ public:
             data.displayid = cinfo->GetFirstValidModelId();
             data.dynamicflags = 0;
             data.equipmentId = 0;
-            data.mapid = trans->GetGOInfo()->moTransport.mapID;
+            data.mapId = trans->GetGOInfo()->moTransport.mapID;
             data.movementType = 0;
             data.npcflag = 0;
             data.npcflag2 = 0;
@@ -612,16 +612,14 @@ public:
         // Update in memory..
         if (CreatureTemplate const* cinfo = creature->GetCreatureTemplate())
         {
-            const_cast<CreatureTemplate*>(cinfo)->faction_A = factionId;
-            const_cast<CreatureTemplate*>(cinfo)->faction_H = factionId;
+            const_cast<CreatureTemplate*>(cinfo)->faction = factionId;
         }
 
         // ..and DB
         WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_UPD_CREATURE_FACTION);
 
         stmt->setUInt16(0, uint16(factionId));
-        stmt->setUInt16(1, uint16(factionId));
-        stmt->setUInt32(2, creature->GetEntry());
+        stmt->setUInt32(1, creature->GetEntry());
 
         WorldDatabase.Execute(stmt);
 
@@ -865,7 +863,7 @@ public:
                     return false;
                 }
 
-                uint32 map_id = data->mapid;
+                uint32 map_id = data->mapId;
 
                 if (handler->GetSession()->GetPlayer()->GetMapId() != map_id)
                 {

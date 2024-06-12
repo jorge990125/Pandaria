@@ -19,6 +19,7 @@
 #define DBCSTORE_H
 
 #include "DBCFileLoader.h"
+#include "DBStorageIterator.h"
 #include "Log.h"
 #include "Field.h"
 #include "DatabaseWorkerPool.h"
@@ -68,20 +69,25 @@ template<class T>
 class DBCStorage
 {
     friend void LoadDBCStores(const std::string&, uint32& availableDbcLocales);
-    typedef std::list<char*> StringPoolList;
+    typedef std::vector<char*> StringPoolList;
+    typedef DBStorageIterator<T> iterator;
     public:
         explicit DBCStorage(char const* f)
-            : fmt(f), nCount(0), fieldCount(0), dataTable(NULL)
+            : fmt(f), nCount(0), fieldCount(0), dataTable(nullptr)
         {
-            indexTable.asT = NULL;
+            indexTable.asT = nullptr;
         }
 
-        ~DBCStorage() { Clear(); }
+        ~DBCStorage() 
+        { 
+            delete[] reinterpret_cast<char*>(indexTable.asT); 
+        }
 
         T const* LookupEntry(uint32 id) const
         {
-            return (id >= nCount) ? NULL : indexTable.asT[id];
+            return (id >= nCount) ? nullptr : indexTable.asT[id];
         }
+        T const* AssertEntry(uint32 id) const { return ASSERT_NOTNULL(LookupEntry(id)); }
 
         uint32  GetNumRows() const { return nCount; }
         char const* GetFormat() const { return fmt; }
@@ -96,8 +102,8 @@ class DBCStorage
 
             uint32 sqlRecordCount = 0;
             uint32 sqlHighestIndex = 0;
-            Field* fields = NULL;
-            QueryResult result = QueryResult(NULL);
+            Field* fields = nullptr;
+            QueryResult result = QueryResult(nullptr);
             // Load data from sql
             if (sql)
             {
@@ -126,7 +132,7 @@ class DBCStorage
                 }
             }
 
-            char* sqlDataTable = NULL;
+            char* sqlDataTable = nullptr;
             fieldCount = dbc.GetCols();
 
             dataTable = reinterpret_cast<T*>(dbc.AutoProduceData(fmt, nCount, indexTable.asChar,
@@ -227,14 +233,14 @@ class DBCStorage
                             return false;
                         }
 
-                        fields = NULL;
+                        fields = nullptr;
                         ++rowIndex;
                     } while (result->NextRow());
                 }
             }
 
             // error in dbc file at loading if NULL
-            return indexTable.asT != NULL;
+            return indexTable.asT != nullptr;
         }
 
         bool LoadStringsFrom(char const* fn, LocaleConstant loc)
@@ -253,24 +259,8 @@ class DBCStorage
             return true;
         }
 
-        void Clear()
-        {
-            if (!indexTable.asT)
-                return;
-
-            delete[] reinterpret_cast<char*>(indexTable.asT);
-            indexTable.asT = NULL;
-            delete[] reinterpret_cast<char*>(dataTable);
-            dataTable = NULL;
-
-            while (!stringPoolList.empty())
-            {
-                delete[] stringPoolList.front();
-                stringPoolList.pop_front();
-            }
-
-            nCount = 0;
-        }
+        iterator begin() { return iterator(indexTable.asT, nCount); }
+        iterator end() { return iterator(indexTable.asT, nCount, nCount); }
 
     private:
         char const* fmt;

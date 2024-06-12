@@ -369,7 +369,7 @@ struct npc_black_harvest_essence_of_order : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_SPECIAL_1);
         events.ScheduleEvent(EVENT_SPELLFLAME, 7 * IN_MILLISECONDS);
@@ -486,7 +486,7 @@ struct npc_black_harvest_unbound_centurion : public demon_baseAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SONIC_STRIKE, 5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_CLEAVE, urand(1.5 * IN_MILLISECONDS, 3.5 * IN_MILLISECONDS));
@@ -523,7 +523,7 @@ struct npc_black_harvest_unbound_nightlord : public demon_baseAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHADOW_INFERNO, 9.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_FEAR, urand(5.5 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
@@ -560,7 +560,7 @@ struct npc_black_harvest_unbound_bonemender : public demon_baseAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DARK_MENDING, 9.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_SHADOW_BOLT, urand(1.5 * IN_MILLISECONDS, 2.5 * IN_MILLISECONDS));
@@ -619,7 +619,7 @@ struct npc_black_harvest_unbound_succubus : public demon_baseAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHADOW_SHOCK, 3.5 * IN_MILLISECONDS);
     }
@@ -654,7 +654,7 @@ struct npc_black_harvest_unbound_shivarra : public demon_baseAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_MELT_FLESH, 3.5 * IN_MILLISECONDS);
     }
@@ -689,7 +689,7 @@ struct npc_black_harvest_freed_imp : public demon_baseAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FIREBOLT, 1 * IN_MILLISECONDS);
     }
@@ -724,7 +724,7 @@ struct npc_black_harvest_suffering_soul_fragment : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SOUL_BLAST, 9.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_SHADOW_BOLT, urand(1.5 * IN_MILLISECONDS, 2.5 * IN_MILLISECONDS));
@@ -762,7 +762,7 @@ struct npc_black_harvest_ashtongue_shaman : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_HEX, 1.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_LIGHTNING, 3 * IN_MILLISECONDS);
@@ -818,7 +818,7 @@ struct npc_black_harvest_ashtongue_primalist : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         DoCast(who, SPELL_NETTED, true);
         events.ScheduleEvent(EVENT_MULTI_SHOT, 1.5*IN_MILLISECONDS);
@@ -970,7 +970,7 @@ struct npc_black_harvest_kanrethad_ebonlocke : public customCreatureAI
         me->GetMotionMaster()->MoveTargetedHome();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         delay = 0;
 

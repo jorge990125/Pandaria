@@ -645,7 +645,7 @@ struct npc_terracotta_gladiator : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_WICKED_BLADE, randtime(4s + 500ms, 13s));
         events.ScheduleEvent(EVENT_GROUND_SMASH, 10s);
@@ -690,7 +690,7 @@ struct npc_terracotta_defender : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_PETRFYING_STRIKE, randtime(4s + 500ms, 12s));
     }
@@ -729,7 +729,7 @@ struct npc_upland_raven : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SWOOP, randtime(4s + 500ms, 13s));
         events.ScheduleEvent(EVENT_HAWK_REND, 8s);
@@ -776,7 +776,7 @@ struct npc_zandalari_warrior : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SLAM, randtime(4s + 500ms, 13s));
         events.ScheduleEvent(EVENT_BACKHAND, 8s);
@@ -823,7 +823,7 @@ struct npc_hungry_yeti : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_STOMP, 8s);
     }
@@ -862,7 +862,7 @@ struct npc_mischievous_snow_sprite : public ScriptedAI
         hasKnee = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SNOWBALL, randtime(4s + 500ms, 6s));
     }
@@ -910,7 +910,7 @@ struct npc_tomb_guardian : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_JADE_LIGHTNING, randtime(4s + 500ms, 12s));
         events.ScheduleEvent(EVENT_JADE_STRIKE, 10s);
@@ -1099,7 +1099,7 @@ struct npc_ordo_overseer : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*victim*/)
+    void JustEngagedWith(Unit* /*victim*/) override
     {
         events.ScheduleEvent(EVENT_AGONIZING_STRIKE, randtime(5s, 10s));
     }
@@ -1328,7 +1328,7 @@ class npc_shado_pan_sentinel : public CreatureScript
 
             void Reset() override
             {
-                me->SetFaction(me->GetCreatureTemplate()->faction_A);
+                me->SetFaction(me->GetCreatureTemplate()->faction);
             }
         };
 
@@ -1479,7 +1479,7 @@ struct npc_relcaimer_zuan_pets : public ScriptedAI
         }
     }
 
-    void EnterCombat(Unit* /*victim*/)
+    void JustEngagedWith(Unit* /*victim*/) override
     {
         if (me->GetEntry() == NPC_RECLAIMER_ZUAN)
         {
@@ -1929,7 +1929,7 @@ struct celestial_experience_sha : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*victim*/)
+    void JustEngagedWith(Unit* /*victim*/) override
     {
         events.ScheduleEvent(EVENT_HATED_BLAST, randtime(2s, 3s));
         events.ScheduleEvent(EVENT_SHA_CORRUPTION, 8s);
@@ -2031,7 +2031,7 @@ struct npc_varatus_the_conqueror : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_INEVITABILITY, randtime(1s + 500ms, 2s + 500ms));
     }
@@ -2184,7 +2184,7 @@ struct npc_korda_torros : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(SAY_KORDA_TORROS_AGGRO);
 
@@ -2244,7 +2244,7 @@ struct npc_borginn_darkfist : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(SAY_BORGINN_DARKFIST_AGGRO);
 
@@ -2294,7 +2294,7 @@ struct npc_scritch : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(SAY_SCRITCH_AGGRO);
 
@@ -2354,7 +2354,7 @@ struct npc_the_yowler : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(SAY_YOWLER_AGGRO);
 
@@ -2487,7 +2487,7 @@ struct npc_ooking_shaman : public hozen_grind_baseAI
 {
     npc_ooking_shaman(Creature* creature) : hozen_grind_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_LIGHTNING_BOLT, 1s);
         events.ScheduleEvent(EVENT_EARTH_SHOCK, 6s);
@@ -2518,7 +2518,7 @@ struct npc_silverback_piker : public hozen_grind_baseAI
 {
     npc_silverback_piker(Creature* creature) : hozen_grind_baseAI(creature) { }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_POKE_YOU, 2s + 500ms);
         events.ScheduleEvent(EVENT_SLING_DERK, 4s);

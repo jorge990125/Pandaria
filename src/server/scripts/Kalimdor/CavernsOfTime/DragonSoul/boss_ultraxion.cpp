@@ -233,7 +233,7 @@ class boss_ultraxion: public CreatureScript
                 events.ScheduleEvent(EVENT_ULTRAXION_SPAWNED, 3000);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 

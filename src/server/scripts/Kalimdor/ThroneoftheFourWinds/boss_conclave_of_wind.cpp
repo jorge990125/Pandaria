@@ -252,9 +252,9 @@ struct boss_conclave_of_wind : public BossAI
                 rohash->AI()->EnterEvadeMode();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
-        _EnterCombat();
+        _JustEngagedWith();
         summons.DespawnAll(); // Just in case
 
         instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -632,7 +632,7 @@ class boss_anshal : public CreatureScript
         {
             boss_anshalAI(Creature* creature) : boss_conclave_of_wind(creature) { }
 
-            void SetupEvents()
+            void SetupEvents() override
             {
                 events.ScheduleEvent(EVENT_SOOTHING_BREEZE,     16000);
                 events.ScheduleEvent(EVENT_NURTURE,             30000);
@@ -644,7 +644,7 @@ class boss_anshal : public CreatureScript
                 summons.Summon(summon);
             }
 
-            void HandleEvent(uint32 eventId)
+            void HandleEvent(uint32 eventId) override
             {
                 switch (eventId)
                 {
@@ -669,7 +669,7 @@ class boss_anshal : public CreatureScript
                 }
             }
 
-            void UltimateStarted()
+            void UltimateStarted() override
             {
                 events.RescheduleEvent(SPELL_SOOTHING_BREEZE, 15000 + 16000);
                 events.RescheduleEvent(EVENT_NURTURE, 15000 + 35000);
@@ -691,7 +691,7 @@ class boss_nezir : public CreatureScript
         {
             boss_nezirAI(Creature* creature) : boss_conclave_of_wind(creature) { }
 
-            void SetupEvents()
+            void SetupEvents() override
             {
                 events.ScheduleEvent(EVENT_ICE_PATCH,           urand(10000,12000));
                 events.ScheduleEvent(EVENT_PERMAFROST,          10000);
@@ -717,7 +717,7 @@ class boss_nezir : public CreatureScript
                 summon->AI()->DoZoneInCombat();
             }
 
-            void HandleEvent(uint32 eventId)
+            void HandleEvent(uint32 eventId) override
             {
                 switch (eventId)
                 {
@@ -769,7 +769,7 @@ class boss_rohash : public CreatureScript
         {
             boss_rohashAI(Creature* creature) : boss_conclave_of_wind(creature) { }
 
-            void SetupEvents()
+            void SetupEvents() override
             {
                 if (Creature* trigger = me->FindNearestCreature(NPC_WIND_BLAST_TARGET, 100))
                 {
@@ -814,7 +814,7 @@ class boss_rohash : public CreatureScript
                 }
             }
 
-            void HandleEvent(uint32 eventId)
+            void HandleEvent(uint32 eventId) override
             {
                 switch (eventId)
                 {
@@ -846,7 +846,7 @@ class boss_rohash : public CreatureScript
                 }
             }
 
-            void HandlePersistantEvent(uint32 eventId)
+            void HandlePersistantEvent(uint32 eventId) override
             {
                 if (eventId == EVENT_HURRICANE)
                 {
@@ -857,13 +857,13 @@ class boss_rohash : public CreatureScript
                 }
             }
 
-            void UltimateStarted()
+            void UltimateStarted() override
             {
                 if (IsHeroic())
                     events.RescheduleEvent(EVENT_STORM_SHIELD, 15000 + 35000);
             }
 
-            void UpdateHook()
+            void UpdateHook() override
             {
                 if (Spell* spell = me->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
                 {

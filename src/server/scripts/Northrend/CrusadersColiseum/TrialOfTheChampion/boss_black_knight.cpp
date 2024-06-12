@@ -179,7 +179,7 @@ class boss_black_knight : public CreatureScript
                 ScriptedAI::EnterEvadeMode();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 isAttacked = true;
                 Talk(SAY_AGGRO);
@@ -427,7 +427,7 @@ class npc_risen_ghoul : public CreatureScript
                 _events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 _events.ScheduleEvent(EVENT_CLAW, urand(5000, 10000));
 
@@ -524,7 +524,7 @@ class npc_black_knight_skeletal_gryphon : public CreatureScript
                 me->UpdateObjectVisibility();
             }
 
-            void WaypointReached(uint32 uiPointId)
+            void WaypointReached(uint32 uiPointId) override
             {
                 switch (uiPointId)
                 {
@@ -606,7 +606,7 @@ class npc_gr : public CreatureScript
 
             InstanceScript* instance;
 
-            void WaypointReached(uint32 uiPointId)
+            void WaypointReached(uint32 uiPointId) override
             {
                 switch (uiPointId)
                 {

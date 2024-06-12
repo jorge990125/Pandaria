@@ -220,7 +220,7 @@ class npc_firelands_ancient_core_hound : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_DINNER_TIME, urand (15000, 20000));
                 events.ScheduleEvent(EVENT_TERRIFYING_ROAR, urand(8000, 20000));
@@ -282,7 +282,7 @@ class npc_firelands_ancient_lava_dweller : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_LAVA_SHOWER, urand(15000, 20000));
             }
@@ -371,7 +371,7 @@ class npc_firelands_fire_turtle_hatchling : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHELL_SPIN, urand(10000, 20000));
             }
@@ -436,7 +436,7 @@ class npc_firelands_flame_archon : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FLAME_TORRENT, 10000);
                 events.ScheduleEvent(EVENT_FIERY_TORMENT, 20000);
@@ -513,7 +513,7 @@ class npc_firelands_molten_lord : public CreatureScript
                 AllowAcceptLegendaryQuest();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FLAME_STOMP, 5000);
                 events.ScheduleEvent(EVENT_MELT_ARMOR, urand(3000, 7000));
@@ -620,7 +620,7 @@ class npc_firelands_molten_flamefather : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_EARTHQUAKE, urand(5000, 10000));
                 events.ScheduleEvent(EVENT_MAGMA_CONDUIT, urand(6000, 7000));
@@ -1068,7 +1068,7 @@ class npc_harbinger_of_flame : public CreatureScript
         {
             npc_harbinger_of_flameAI(Creature* creature) : ScriptedAI(creature) { }
 
-            void EnterCombat(Unit* /*who*/)
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* bird = ObjectAccessor::GetCreature(*me, me->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
                     DoZoneInCombat(bird, 200.0f);
@@ -1166,7 +1166,7 @@ class npc_blazing_monstrosity : public CreatureScript
                 AlysrazorTrashEvaded(me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat();
                 me->RemoveAurasDueToSpell(SPELL_SLEEP_ULTRA_HIGH_PRIORITY);
@@ -1475,7 +1475,7 @@ class npc_firelands_volcanus : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FLAMEWAKE, 3000);
             }
@@ -1536,7 +1536,7 @@ class spell_alysrazor_cosmetic_egg_xplosion : public SpellScriptLoader
         {
             PrepareSpellScript(spell_alysrazor_cosmetic_egg_xplosion_SpellScript);
 
-            bool Validate(SpellInfo const* /*spellInfo*/)
+            bool Validate(SpellInfo const* /*spellInfo*/) override
             {
                 if (!sCreatureDisplayInfoStore.LookupEntry(MODEL_INVISIBLE_STALKER))
                     return false;
@@ -1573,7 +1573,7 @@ class spell_alysrazor_turn_monstrosity : public SpellScriptLoader
         {
             PrepareSpellScript(spell_alysrazor_turn_monstrosity_SpellScript);
 
-            bool Validate(SpellInfo const* /*spellInfo*/)
+            bool Validate(SpellInfo const* /*spellInfo*/) override
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_GENERIC_DUMMY_CAST))
                     return false;
@@ -1769,7 +1769,7 @@ struct npc_firelands_majordomo_stagheim_event : public CreatureAI
             me->Respawn();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         if (hasInitialize)
             return;

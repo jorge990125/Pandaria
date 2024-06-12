@@ -82,10 +82,9 @@ class TC_GAME_API CreatureAI : public UnitAI
         void Talk(uint8 id, WorldObject const* whisperTarget = nullptr);
         void TalkToMap(uint8 id, WorldObject const* whisperTarget = nullptr);
 
-        explicit CreatureAI(Creature* creature) : UnitAI(creature), me(creature), m_MoveInLineOfSight_locked(false), m_canSeeEvenInPassiveMode(false)
-        { }
+        explicit CreatureAI(Creature* creature);
 
-        virtual ~CreatureAI() { }
+        virtual ~CreatureAI();
 
         /// == Reactions At =================================
 
@@ -102,7 +101,7 @@ class TC_GAME_API CreatureAI : public UnitAI
         virtual void EnterEvadeMode();
 
         // Called for reaction at enter to combat if not in combat yet (enemy can be NULL)
-        virtual void EnterCombat(Unit* /*victim*/) { }
+        virtual void JustEngagedWith(Unit* /*victim*/) { }
 
         // Called when the creature is killed
         virtual void JustDied(Unit* /*killer*/) { }
@@ -183,7 +182,8 @@ class TC_GAME_API CreatureAI : public UnitAI
         /// == Gossip system ================================
 
         // Called when the dialog status between a player and the creature is requested.
-        // virtual Optional<QuestGiverStatus> GetDialogStatus(Player* player); TC master branch
+        //virtual Optional<QuestGiverStatus> GetDialogStatus(Player* /*player*/) { return {}; }
+        virtual uint32 GetDialogStatus(Player* /*player*/) { return 100; } // todo
 
         // Called when a player opens a gossip dialog with the creature.
         virtual bool OnGossipHello(Player* /*player*/) { return false; }

@@ -248,9 +248,9 @@ class boss_general_nazgrim : public CreatureScript
                     instance->SetBossState(DATA_GENERAL_NAZGRIM, FAIL);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                 {
@@ -634,7 +634,7 @@ struct npc_orgrimmar_faithful : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->CallForHelp(15.0f);
     }
@@ -676,7 +676,7 @@ struct npc_nazgrim_korkron_ironblade : public ScriptedAI
         });
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         scheduler.CancelAll();
         uint32 timer = me->GetDBTableGUIDLow() ? 1 * IN_MILLISECONDS : urand(5 * IN_MILLISECONDS, 10 * IN_MILLISECONDS);
@@ -771,7 +771,7 @@ struct npc_nazgrim_korkron_arcweaver : public ScriptedAI
             me->SetLootRecipient(NULL);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ARCANE_SHOCK, 2 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_MAGISTRIKE, 8.5 * IN_MILLISECONDS);
@@ -848,7 +848,7 @@ struct npc_nazgrim_korkron_assassin : public ScriptedAI
         markGUID = guid;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, me->GetDBTableGUIDLow() ? SPELL_ASSASSINS_MARK : SPELL_STEALTH, true);
         me->ClearUnitState(UNIT_STATE_CASTING);
@@ -943,7 +943,7 @@ struct npc_nazgrim_korkron_warshaman : public ScriptedAI
         events.RescheduleEvent(EVENT_CHAIN_HEAL, 6 * IN_MILLISECONDS);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         me->InterruptNonMeleeSpells(false, SPELL_FIRE_CHANNELING);
         events.ScheduleEvent(EVENT_CHAIN_HEAL, 5.5 * IN_MILLISECONDS);
@@ -1020,7 +1020,7 @@ struct npc_nazgrim_korkron_sniper : public ScriptedAI
             DoStartNoMovement(target);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_HUNTERS_MARK, true);
         me->ClearUnitState(UNIT_STATE_CASTING);

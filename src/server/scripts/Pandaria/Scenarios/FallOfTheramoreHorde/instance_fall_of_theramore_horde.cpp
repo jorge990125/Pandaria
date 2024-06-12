@@ -273,7 +273,7 @@ class instance_fall_of_theramore_horde : public InstanceMapScript
                 return 0;
             }
 
-            bool IsWipe(float range, Unit* source)
+            bool IsWipe(float range, Unit* source) override
             {
                 Map::PlayerList const &playerList = instance->GetPlayers();
 

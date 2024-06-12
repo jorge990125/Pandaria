@@ -85,7 +85,7 @@ class boss_sjonnir : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_ABUSE_THE_OOZEE, 0);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_SJONNIR, who->ToPlayer()))
                 {
@@ -93,7 +93,7 @@ class boss_sjonnir : public CreatureScript
                     return;
                 }
 
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(SAY_AGGRO);
 
                 events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, urand(3000, 8000));

@@ -357,7 +357,7 @@ class npc_dread_kunchong : public CreatureScript
                 events.ScheduleEvent(EVENT_UNSTABLE_SERUM_3, 22000);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Player* player = who->ToPlayer();
 
@@ -877,7 +877,7 @@ class npc_ik_thik_terrorclaw : public CreatureScript
                 events.ScheduleEvent(EVENT_UNSTABLE_SERUM_9, 22000);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Player* player = who->ToPlayer();
 
@@ -1346,7 +1346,7 @@ class npc_wake_of_horror : public CreatureScript
                 events.ScheduleEvent(EVENT_UNSTABLE_SERUM_14, 20000);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Player* player = who->ToPlayer();
 
@@ -2035,7 +2035,7 @@ struct npc_shekzeer_clutch_keeper : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHA_BLAST, urand(3.5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_DREAD_QUICK, 11 * IN_MILLISECONDS);
@@ -2084,7 +2084,7 @@ struct npc_mistblade_reapper : public ScriptedAI
         targetGUID = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SLOWING_POISON, urand(4.5 * IN_MILLISECONDS, 12 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_SHADOWSTEP, 7.5 * IN_MILLISECONDS);
@@ -2144,7 +2144,7 @@ struct npc_coldbite_matriarch : public ScriptedAI
         triggered = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_INFECTED_BITE, urand(4.5 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_SNAPJAW_1, 8 * IN_MILLISECONDS);
@@ -2206,7 +2206,7 @@ struct npc_ik_thik_whisperer : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_RAIN_OF_SHA, urand(3.5 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
     }
@@ -2246,7 +2246,7 @@ struct npc_ik_thik_clutch_guard : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DREAD_STRENGTH, 6 * IN_MILLISECONDS);
     }
@@ -3320,7 +3320,7 @@ struct npc_dread_waster_dread_lurker : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DREAD_CLAW_2, 4 * IN_MILLISECONDS);
     }
@@ -3361,7 +3361,7 @@ struct npc_dread_waster_nagging_dreadling : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHADOW_CLAW, urand(3 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
     }

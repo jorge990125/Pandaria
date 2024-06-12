@@ -94,7 +94,7 @@ class npc_brewmaster_blanche : public CreatureScript
     public:
         npc_brewmaster_blanche() : CreatureScript("npc_brewmaster_blanche") { }
 
-        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
         {
             player->PlayerTalkClass->ClearMenus();
 
@@ -119,7 +119,7 @@ class npc_brewmaster_blanche : public CreatureScript
             return true;
         }
 
-        bool OnGossipHello(Player* player, Creature* creature)
+        bool OnGossipHello(Player* player, Creature* creature) override
         {
             if (InstanceScript* instance = creature->GetInstanceScript())
             {
@@ -493,7 +493,7 @@ struct npc_viletongue_sauroks : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         if (who)
             DoCast(who, SPELL_LEAPING_CLEAVE);
@@ -662,7 +662,7 @@ struct npc_borokhula_the_destroyer : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SWAMP_SMASH, urand(3 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_EARTH_SHATTERING, urand(12 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
@@ -765,7 +765,7 @@ struct npc_viletongue_decimator : public ScriptedAI
         summons.DespawnAll();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_TORCH_TOSS, urand(7 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_WIND_SLASH, 5 * IN_MILLISECONDS);

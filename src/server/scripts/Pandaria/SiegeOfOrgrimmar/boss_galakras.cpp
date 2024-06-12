@@ -355,9 +355,9 @@ class boss_galakras : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 me->GetMotionMaster()->Clear();
                 scheduler.CancelAll();
@@ -944,7 +944,7 @@ struct npc_master_cannoneer_dagryn : public ScriptedAI
         me->GetMotionMaster()->MoveChase(target, 0.0f, me->GetAngle(target));
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_INTRO);
         events.ScheduleEvent(EVENT_SHOOT, 1.5 * IN_MILLISECONDS);
@@ -1070,7 +1070,7 @@ struct npc_high_enforcer_thranok : public ScriptedAI
             me->GetMotionMaster()->MoveChase(victim);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHATTERED_CLEAVE, 6.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_SKULLCRACKER, 17.5 * IN_MILLISECONDS);
@@ -1146,7 +1146,7 @@ struct npc_lieutenant_krugruk : public ScriptedAI
         targetGUID = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_INTRO);
         events.ScheduleEvent(EVENT_THUNDER_CLAP, 4.5 * IN_MILLISECONDS);
@@ -1263,7 +1263,7 @@ struct npc_korgra_the_snake : public ScriptedAI
             me->GetMotionMaster()->MoveChase(victim);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_POISON_CLOUD, 5.5 * IN_MILLISECONDS); // In blizzard this spell is only casted Once
         events.ScheduleEvent(EVENT_TIPPED_BLADES, 4.5 * IN_MILLISECONDS);
@@ -1353,7 +1353,7 @@ struct npc_galakras_dragonmaw_bonecrusher : public ScriptedAI
             me->GetMotionMaster()->MoveChase(victim);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHATTERING_ROAR, urand(8 * IN_MILLISECONDS, 14.5 * IN_MILLISECONDS));
         events.ScheduleEvent(EVENT_FRACTURE, urand(17 * IN_MILLISECONDS, 20 * IN_MILLISECONDS));
@@ -1478,7 +1478,7 @@ struct npc_galakras_dragonmaw_flagbearer : public ScriptedAI
             me->GetMotionMaster()->MoveChase(victim);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_WAR_BANNER, 8.5 * IN_MILLISECONDS);
     }
@@ -1537,7 +1537,7 @@ struct npc_galakras_dragonmaw_tidal_shaman : public ScriptedAI
             me->GetMotionMaster()->MoveChase(victim);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_TIDAL_WAVE, 12 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_CHAIN_HEAL, 5.5 * IN_MILLISECONDS);
@@ -1637,7 +1637,7 @@ struct npc_galakras_dragonmaw_flameslinger : public ScriptedAI
         arrowTargetGUID = guid;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FLAME_ARROWS, 2.5 * IN_MILLISECONDS);
     }
@@ -1748,7 +1748,7 @@ struct npc_galakras_dragonmaw_grunt : public ScriptedAI
         inTower = actionId == ACTION_IN_TOWER_S ? 1 : 2;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(me->GetEntry() == NPC_DRAGONMAW_GRUNT ? EVENT_THROW_AXE : EVENT_DRAGONS_CLEAVE, urand(3 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
     }
@@ -1847,7 +1847,7 @@ struct npc_galakras_dragonmaw_grunt_tower : public ScriptedAI
         }
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_DRAGONS_CLEAVE, urand(3 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
     }
@@ -2060,7 +2060,7 @@ struct npc_galakras_varian_wrynn : public ScriptedAI
             me->DespawnOrUnsummon();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_VARIAN_CLEAVE, 4 * IN_MILLISECONDS);
     }
@@ -2144,7 +2144,7 @@ struct npc_galakras_sylvanas_windrunner : public ScriptedAI
             me->DespawnOrUnsummon();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SYLVANAS_SHOT, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_SYLVANAS_MULTI_SHOT, 9 * IN_MILLISECONDS);
@@ -2244,7 +2244,7 @@ struct npc_galakras_aethas_sunreaver : public ScriptedAI
         ScriptedAI::EnterEvadeMode();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_FLAMESTRIKE, 24 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_AETHAS_FIREBALL, 1 * IN_MILLISECONDS);
@@ -2334,7 +2334,7 @@ struct npc_galakras_vereesa_windrunner : public ScriptedAI
             me->DespawnOrUnsummon();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SYLVANAS_SHOT, 1 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_SYLVANAS_MULTI_SHOT, 9 * IN_MILLISECONDS);
@@ -2463,7 +2463,7 @@ class npc_galakras_jaina_proudmoore : public CreatureScript
                     me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FROST_RING, 24 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_JAINA_FROST_BOLT, 1 * IN_MILLISECONDS);
@@ -2792,7 +2792,7 @@ class npc_galakras_lorthemar_theron : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_LORTHEMAR_ARCANE_SHOT, 8.5 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_LORTHEMAR_CLEAVE, 3.5 * IN_MILLISECONDS);
@@ -2947,7 +2947,7 @@ struct npc_galakras_ally_range_assist : public ScriptedAI
         spellId = me->GetEntry() == NPC_SUNREAVER_MAGUS ? SPELL_FIRE_BALL : SPELL_RIFFLE_SHOT;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_RANGE_ASSIST, urand(3 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
     }
@@ -3060,7 +3060,7 @@ struct npc_galakras_dragonmaw_ebon_stalker : public ScriptedAI
             me->GetMotionMaster()->MoveChase(victim);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHADOW_STALK, urand(5.5 * IN_MILLISECONDS, 10 * IN_MILLISECONDS));
     }

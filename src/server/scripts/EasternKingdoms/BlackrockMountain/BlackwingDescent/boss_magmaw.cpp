@@ -198,7 +198,7 @@ class boss_magmaw : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_PARASITE_EVENING, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BERSERK, 6 * MINUTE * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_MELEE_CHECK, 6000);

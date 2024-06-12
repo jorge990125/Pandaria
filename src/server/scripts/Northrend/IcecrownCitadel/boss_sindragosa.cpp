@@ -215,7 +215,7 @@ class boss_sindragosa : public CreatureScript
                 DoCast(me, SPELL_FROST_INFUSION_CREDIT);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_SINDRAGOSA, who->ToPlayer()))
                 {
@@ -224,7 +224,7 @@ class boss_sindragosa : public CreatureScript
                     return;
                 }
 
-                BossAI::EnterCombat(who);
+                BossAI::JustEngagedWith(who);
                 instance->SetBossState(DATA_SINDRAGOSA, IN_PROGRESS);
                 DoCast(me, SPELL_FROST_AURA);
                 DoCast(me, SPELL_PERMAEATING_CHILL);
@@ -774,7 +774,7 @@ class npc_spinestalker : public CreatureScript
                     me->OverrideInhabitType(INHABIT_GROUND);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 // Close this door when Rimefang or Spinestalker get infight
                 // Server crashes can be ignored in this case, since teleporter to Sindragosa is active
@@ -1004,7 +1004,7 @@ class npc_rimefang : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_FROST_AURA_RIMEFANG, true);
 

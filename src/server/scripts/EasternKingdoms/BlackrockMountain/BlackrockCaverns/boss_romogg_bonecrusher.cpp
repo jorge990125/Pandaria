@@ -132,9 +132,9 @@ class boss_romogg_bonecrusher : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 DoCast(me, SPELL_CALL_FOR_HELP);
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_WOUNDING_STRIKE, urand(5000, 7000));

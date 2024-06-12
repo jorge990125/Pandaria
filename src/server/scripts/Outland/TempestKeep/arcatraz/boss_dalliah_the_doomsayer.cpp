@@ -66,9 +66,9 @@ class boss_dalliah_the_doomsayer : public CreatureScript
                 return 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 Talk(TALK_SD_AGGRO);
 
                 if (Creature* soccothrates = Soccothrates())

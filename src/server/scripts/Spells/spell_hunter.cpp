@@ -1169,19 +1169,19 @@ class sat_hunt_ice_trap : public IAreaTriggerAura
         return object->ToUnit() && GetCaster()->IsValidAttackTarget(object->ToUnit(), sSpellMgr->GetSpellInfo(spellId), nullptr, true);
     }
 
-    void OnTriggeringApply(WorldObject* object)
+    void OnTriggeringApply(WorldObject* object) override
     {
         object->ToUnit()->CastSpell(object->ToUnit(), spellId, true);
     }
 
-    void OnTriggeringUpdate(WorldObject* object)
+    void OnTriggeringUpdate(WorldObject* object) override
     {
         Unit* unit = object->ToUnit();
         if (!unit->HasAura(spellId))
             unit->CastSpell(object->ToUnit(), spellId, true);
     }
 
-    void OnTriggeringRemove(WorldObject* object)
+    void OnTriggeringRemove(WorldObject* object) override
     {
         object->ToUnit()->RemoveAurasDueToSpell(spellId);
     }
@@ -1195,18 +1195,18 @@ class sat_hunt_ice_trap_black_ice : public IAreaTriggerAura
         return object == GetCaster();
     }
 
-    void OnTriggeringApply(WorldObject* object)
+    void OnTriggeringApply(WorldObject* object) override
     {
         GetCaster()->CastSpell(GetCaster(), SPELL_HUNTER_BLACK_ICE, true);
     }
 
-    void OnTriggeringUpdate(WorldObject* object)
+    void OnTriggeringUpdate(WorldObject* object) override
     {
         if (!GetCaster()->HasAura(SPELL_HUNTER_BLACK_ICE))
             GetCaster()->CastSpell(GetCaster(), SPELL_HUNTER_BLACK_ICE, true);
     }
 
-    void OnTriggeringRemove(WorldObject* object)
+    void OnTriggeringRemove(WorldObject* object) override
     {
         GetCaster()->RemoveAurasDueToSpell(SPELL_HUNTER_BLACK_ICE);
     }
@@ -1638,7 +1638,7 @@ class spell_hunt_camouflage_driver : public AuraScript
 
     Player* hunter = nullptr;
 
-    bool Load()
+    bool Load() override
     {
         hunter = GetOwner()->ToPlayer();
         return hunter != nullptr;
@@ -2568,12 +2568,12 @@ class sat_hunt_flare : public IAreaTriggerAura
         return target && target->IsAlive() && GetCaster()->IsValidAttackTarget(target, nullptr, nullptr, true) && GetAreaTrigger()->IsWithinLOSInMap(target);
     }
 
-    void OnTriggeringApply(WorldObject* object)
+    void OnTriggeringApply(WorldObject* object) override
     {
         object->ToUnit()->CastSpell(object->ToUnit(), SPELL_HUNTER_FLARE, true);
     }
 
-    void OnTriggeringRemove(WorldObject* object)
+    void OnTriggeringRemove(WorldObject* object) override
     {
         object->ToUnit()->RemoveAurasDueToSpell(SPELL_HUNTER_FLARE);
     }
@@ -3054,7 +3054,7 @@ struct npc_pet_hunter_snake : public ScriptedAI
 
     enum { NPC_HUNTER_VIPER = 19921 };
 
-    void EnterCombat(Unit*) override { }
+    void JustEngagedWith(Unit*) override { }
 
     void InitializeAI() override
     {
@@ -3236,7 +3236,7 @@ class spell_hunt_t16_4p_bonus : public AuraScript
 
     Player* hunter = nullptr;
 
-    bool Load()
+    bool Load() override
     {
         hunter = GetOwner()->ToPlayer();
         return hunter != nullptr;

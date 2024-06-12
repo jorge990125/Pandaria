@@ -90,12 +90,12 @@ class boss_general_pavalak : public CreatureScript
                 _Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 events.ScheduleEvent(EVENT_BLADE_RUSH, 10000, EVENT_GROUP_COMBAT);
                 events.ScheduleEvent(EVENT_TEMPEST, 15000, EVENT_GROUP_COMBAT);
-                _EnterCombat();
+                _JustEngagedWith();
             }
 
             void DoAction(int32 actionId) override

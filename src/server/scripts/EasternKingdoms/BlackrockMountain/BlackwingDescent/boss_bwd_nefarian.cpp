@@ -385,9 +385,9 @@ class boss_bd_nefarian : public CreatureScript
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
             }
 
             void JustDied(Unit* /*killer*/) override
@@ -843,7 +843,7 @@ class boss_bd_onyxia : public CreatureScript
                 overloaded = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* nefarian = me->FindNearestCreature(NPC_NEFARIAN, 250))
                     nefarian->AI()->DoAction(ACTION_ONYXIA_AGGROED);
@@ -1130,7 +1130,7 @@ class npc_animated_bone_warrior : public CreatureScript
                 creature->SetMaxPower(POWER_ENERGY, 100);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.Reset();
                 events.ScheduleEvent(EVENT_HURL_BONE, urand(4000, 9000));
@@ -1248,7 +1248,7 @@ class npc_chromatic_prototype : public CreatureScript
                 isCasting = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 isCasting = false;
                 me->SetReactState(REACT_DEFENSIVE);

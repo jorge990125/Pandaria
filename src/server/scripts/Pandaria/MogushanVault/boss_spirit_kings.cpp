@@ -723,7 +723,7 @@ class boss_spirit_kings : public CreatureScript
                 return false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (!aggroDone)
                 {

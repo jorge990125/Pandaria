@@ -96,9 +96,9 @@ class boss_fankriss : public CreatureScript
                     Spawn->AI()->AttackStart(victim);
             }
     
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
             }
 
             void JustDied(Unit* /*killer*/) override

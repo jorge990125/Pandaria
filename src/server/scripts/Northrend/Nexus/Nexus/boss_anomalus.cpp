@@ -102,7 +102,7 @@ class boss_anomalus : public CreatureScript
                 me->GetMap()->SetWorldState(WORLD_STATE_CHAOS_THEORY, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
 

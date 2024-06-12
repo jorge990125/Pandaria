@@ -229,7 +229,7 @@ class boss_jinrokh : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_STATIC_BURST, 13 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_FOCUSED_LIGHTNING, 7500);
@@ -241,7 +241,7 @@ class boss_jinrokh : public CreatureScript
                 if (IsHeroic())
                     events.ScheduleEvent(EVENT_IONIZATION, 60 * IN_MILLISECONDS);
 
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);

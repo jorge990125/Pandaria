@@ -182,9 +182,9 @@ class boss_dark_animus : public CreatureScript
                 return animaRingGUID;
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (GameObject* go = ObjectAccessor::GetGameObject(*me, instance ? instance->GetData64(GO_ANIMUS_ENTRANCE) : 0))
                     go->SetGoState(GO_STATE_READY);
@@ -578,7 +578,7 @@ struct golemsBaseAI : public ScriptedAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
         events.Reset();
         scheduler.CancelAll();
@@ -745,7 +745,7 @@ class npc_animus_golem : public CreatureScript
         {
             npc_animus_golemAI(Creature* creature) : golemsBaseAI(creature) { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance && instance->GetBossState(DATA_DARK_ANIMUS) != IN_PROGRESS)
                     instance->SetBossState(DATA_DARK_ANIMUS, IN_PROGRESS);

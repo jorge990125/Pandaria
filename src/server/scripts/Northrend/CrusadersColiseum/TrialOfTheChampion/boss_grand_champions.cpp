@@ -235,7 +235,7 @@ class npc_faction_champion_toc5 : public CreatureScript
                     _events.RescheduleEvent(EVENT_CHARGE, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 _events.ScheduleEvent(EVENT_THRUST, urand(5000, 10000));
                 _events.ScheduleEvent(EVENT_CHARGE, urand(5000, 15000));
@@ -465,7 +465,7 @@ class boss_grand_champion_toc5 : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoZoneInCombat(me, 150.0f);
                 me->CallForHelp(20.0f);

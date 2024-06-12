@@ -177,9 +177,9 @@ class npc_arena_of_annihiliation_scar_shell : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 events.ScheduleEvent(EVENT_CRUSHING_BITE, urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_STONE_SPIN, 20 * IN_MILLISECONDS);
@@ -310,9 +310,9 @@ class npc_arena_of_annihiliation_jol_grum : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 me->CastSpell(me, SPELL_ILL_TEMPERED, false);
                 events.ScheduleEvent(EVENT_HEADBUTT, urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
@@ -427,9 +427,9 @@ class npc_arena_of_annihiliation_little_liuyang : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_BEAT_THE_HEAT, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 events.ScheduleEvent(EVENT_FLAMELINE, urand(12 * IN_MILLISECONDS, 18 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_FIREBALL, urand(3 * IN_MILLISECONDS, 5 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_FIREWALL, 36 * IN_MILLISECONDS);
@@ -750,9 +750,9 @@ class npc_arena_of_annihiliation_chagan_firehoof : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 events.ScheduleEvent(EVENT_TRAILBLAZE, urand(17 * IN_MILLISECONDS, 24 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_HAMMER_TIME, urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
             }
@@ -870,7 +870,7 @@ class npc_arena_of_annihiliation_batu : public CreatureScript
                 me->GetMotionMaster()->MovePoint(1, ArenaPos);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_YAK_BASH, urand(7 * IN_MILLISECONDS, 14 * IN_MILLISECONDS));
             }
@@ -971,9 +971,9 @@ class npc_arena_of_annihiliation_assassin : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 switch (me->GetEntry())
                 {

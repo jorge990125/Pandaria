@@ -105,7 +105,7 @@ class boss_commander_stoutbeard : public CreatureScript
                     creature->DespawnOrUnsummon();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 DoCast(me, SPELL_BATTLE_SHOUT);
@@ -204,7 +204,7 @@ class npc_alliance_cleric : public CreatureScript
                 me->SetFaction(16);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveAllAuras();
             }
@@ -282,7 +282,7 @@ class npc_alliance_ranger : public CreatureScript
                 //me->CastSpell(me, SPELL_FROZEN_PRISON, true);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 me->RemoveAllAuras();
             }
@@ -375,7 +375,7 @@ class npc_alliance_berserker : public CreatureScript
                /*me->CastSpell(me, SPELL_FROZEN_PRISON, true); */
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveAllAuras();
             }

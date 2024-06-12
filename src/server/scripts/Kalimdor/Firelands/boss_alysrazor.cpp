@@ -324,7 +324,7 @@ class boss_alysrazor : public CreatureScript
             bool bSpawnCloud;
             bool bVortex;
 
-            void IsSummonedBy(Unit* summoner)
+            void IsSummonedBy(Unit* summoner) override
             {
                 if (GameObject* volcano = ObjectAccessor::GetGameObject(*me, me->GetInstanceScript() ? me->GetInstanceScript()->GetData64(DATA_VOLCANO) : 0))
                 {
@@ -432,7 +432,7 @@ class boss_alysrazor : public CreatureScript
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 RemoveEncounterAuras();
                 Talk(SAY_AGGRO);
@@ -869,7 +869,7 @@ class npc_alysrazor_fiery_vortex : public CreatureScript
 
             void Reset() override { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_HARSH_WIND, 5000);
             }
@@ -1550,7 +1550,7 @@ class npc_alysrazor_plump_lava_worm : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCast(me, SPELL_LAVA_SPEW);
                 events.ScheduleEvent(EVENT_ROTATE, 4000);
@@ -1653,7 +1653,7 @@ class npc_alysrazor_herald_of_the_burning_end : public CreatureScript
                 SetCombatMovement(false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 DoCast(me, SPELL_RITUAL_OF_THE_FLAME, true);

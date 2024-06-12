@@ -552,7 +552,7 @@ class npc_hozen_party_animal : public CreatureScript
                 me->GetMotionMaster()->MovePoint(waypoint, aPartyWps[waypoint]);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 std::list<Creature*> temp;
                 GetCreatureListWithEntryInGrid(temp, me, me->GetEntry(), 15.f);
@@ -733,7 +733,7 @@ class npc_controlled_hozen : public CreatureScript
                 me->GetMotionMaster()->MoveTargetedHome();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 std::list<Creature*> temp;
                 GetCreatureListWithEntryInGrid(temp, me, me->GetEntry(), 60.f);

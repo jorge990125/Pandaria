@@ -46,8 +46,8 @@ struct ItemExtendedCostEntry;
 struct TrainerSpell;
 struct VendorItem;
 
-class PlayerAchievementMgr;
-class ReputationMgr;
+class BattlePetMgr;
+class CinematicMgr;
 class Channel;
 class CharacterCreateInfo;
 class Creature;
@@ -57,12 +57,13 @@ class Guild;
 class LootLockoutMap;
 class OutdoorPvP;
 class Pet;
+class PhaseMgr;
 class PlayerMenu;
 class PlayerSocial;
+class PlayerAchievementMgr;
+class ReputationMgr;
 class SpellCastTargets;
 class UpdateMask;
-class PhaseMgr;
-class BattlePetMgr;
 class PlayerAI;
 class SpellHistory;
 class TradeData;
@@ -93,7 +94,7 @@ enum PlayerUnderwaterState
     UNDERWATER_INWATER = 0x01,             // terrain type is water and player is afflicted by it
     UNDERWATER_INLAVA = 0x02,             // terrain type is lava and player is afflicted by it
     UNDERWATER_INSLIME = 0x04,             // terrain type is lava and player is afflicted by it
-    UNDERWARER_INDARKWATER = 0x08,             // terrain type is dark water and player is afflicted by it
+    UNDERWATER_INDARKWATER = 0x08,             // terrain type is dark water and player is afflicted by it
 
     UNDERWATER_EXIST_TIMERS = 0x10
 };
@@ -913,7 +914,8 @@ enum PlayerDelayedOperations
 
 // Player summoning auto-decline time (in secs)
 #define MAX_PLAYER_SUMMON_DELAY                   (2*MINUTE)
-#define MAX_MONEY_AMOUNT               (UI64LIT(9999999999)) // TODO: Move this restriction to worldserver.conf, default to this value, hardcap at uint64.max
+// Maximum money amount : 2^31 - 1
+TC_GAME_API extern uint64 const MAX_MONEY_AMOUNT;
 
 struct InstancePlayerBind
 {
@@ -1224,9 +1226,10 @@ enum class LootLockoutType
     Max
 };
 
-class Player : public Unit, public GridObject<Player>
+class TC_GAME_API Player : public Unit, public GridObject<Player>
 {
     friend class WorldSession;
+    friend class CinematicMgr;
     friend void Item::AddToUpdateQueueOf(Player* player);
     friend void Item::RemoveFromUpdateQueueOf(Player* player);
     public:
@@ -1261,12 +1264,6 @@ class Player : public Unit, public GridObject<Player>
     static bool BuildEnumData(PreparedQueryResult result, ByteBuffer* dataBuffer, ByteBuffer* bitBuffer, bool boosted = false);
 
     void SetInWater(bool apply);
-
-    bool IsInWater() const
-    {
-        return m_isInWater;
-    }
-    bool IsUnderWater() const;
 
     void SendInitialPacketsBeforeAddToMap();
     void SendInitialPacketsAfterAddToMap();
@@ -1641,10 +1638,10 @@ class Player : public Unit, public GridObject<Player>
     float GetReputationPriceDiscount(Creature const* creature) const;
 
     Player* GetTrader() const;
-
     TradeData* GetTradeData() const { return m_trade; }
-    
     void TradeCancel(bool sendback);
+
+    CinematicMgr* GetCinematicMgr() const { return _cinematicMgr; }
 
     void UpdateEnchantTime(uint32 time);
     void UpdateSoulboundTradeItems();
@@ -1897,15 +1894,9 @@ class Player : public Unit, public GridObject<Player>
         m_weaponChangeTimer = time;
     }
 
-    uint64 GetMoney() const
-    {
-        return GetUInt64Value(PLAYER_FIELD_COINAGE);
-    }
+    uint64 GetMoney() const { return GetUInt64Value(PLAYER_FIELD_COINAGE); }
     bool ModifyMoney(int64 amount, bool sendError = true);
-    bool HasEnoughMoney(uint64 amount) const
-    {
-        return (GetMoney() >= amount);
-    }
+    bool HasEnoughMoney(uint64 amount) const { return (GetMoney() >= amount); }
     bool HasEnoughMoney(int64 amount) const;
     void SetMoney(uint64 value);
 
@@ -2178,14 +2169,8 @@ class Player : public Unit, public GridObject<Player>
     }
     void ResurrectUsingRequestData();
 
-    uint8 getCinematic()
-    {
-        return m_cinematic;
-    }
-    void setCinematic(uint8 cine)
-    {
-        m_cinematic = cine;
-    }
+    uint8 getCinematic() const { return m_cinematic; }
+    void setCinematic(uint8 cine) { m_cinematic = cine; }
 
     ActionButton* addActionButton(uint8 button, uint32 action, uint8 type);
     void removeActionButton(uint8 button);
@@ -2336,7 +2321,6 @@ public:
     void UpdateMaxHealth();
     void UpdateMaxPower(Powers power);
     void UpdateAttackPowerAndDamage(bool ranged = false);
-    void UpdateDamagePhysical(WeaponAttackType attType);
     void ApplySpellPowerBonus(int32 amount, bool apply);
     void UpdateSpellDamageAndHealingBonus();
     void ApplyRatingMod(CombatRating cr, int32 value, bool apply);
@@ -2347,7 +2331,7 @@ public:
     void UpdatePvpPower();
     bool CanUseMastery() const;
 
-    void CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bool addTotalPct, float& min_damage, float& max_damage);
+    void CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bool addTotalPct, float& min_damage, float& max_damage, uint8 damageIndex) const override;
 
     inline void RecalculateRating(CombatRating cr)
     {
@@ -2432,8 +2416,7 @@ public:
     {
         return UpdatePosition(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), teleport);
     }
-    void UpdateUnderwaterState(Map* m, float x, float y, float z);
-
+    void ProcessTerrainStatusUpdate(ZLiquidStatus oldLiquidStatus, Optional<LiquidData> const& newLiquidData) override;
     void SendMessageToSet(WorldPacket* data, bool self)
     {
         SendMessageToSetInRange(data, GetVisibilityRange() + 2 * World::Visibility_RelocationLowerLimit, self);
@@ -3300,8 +3283,6 @@ public:
     void UpdateValorOfTheAncients();
     void UpdatePromotionAuras();
 
-    void UpdateMount();
-
     void ApplyDeserter(bool reset = false);
     uint8 GetDeserterMod() { return deserterMod; }
     time_t GetLastDeserterTime() { return lastDeserterTime; }
@@ -3617,6 +3598,8 @@ protected:
     InventoryResult CanStoreItem_InInventorySlots(uint8 slot_begin, uint8 slot_end, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool merge, Item* pSrcItem, uint8 skip_bag, uint8 skip_slot) const;
     Item* _StoreItem(uint16 pos, Item* pItem, uint32 count, bool clone, bool update);
     Item* _LoadItem(CharacterDatabaseTransaction trans, uint32 zoneId, uint32 timeDiff, Field* fields);
+
+    CinematicMgr* _cinematicMgr;
 
     std::set<uint32> m_refundableItems;
     void SendRefundInfo(Item* item);

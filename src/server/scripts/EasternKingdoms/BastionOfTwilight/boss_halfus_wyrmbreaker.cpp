@@ -311,7 +311,7 @@ class boss_halfus_wyrmbreaker : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_ONLY_ESCAPE, 0);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             { 
                 if (!slatedrake->HasAura(SPELL_UNRESPONSIVE_DRAKE))
                     slatedrake->GetAI()->DoAction(ACTION_ACTIVE_GOSSIP);
@@ -498,7 +498,7 @@ class npc_proto_behemoth : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (me->HasAura(SPELL_SUPERHEATED_BREATH))
                     events.ScheduleEvent(EVENT_SCORCHING_BREATH, 30000);

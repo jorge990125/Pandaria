@@ -103,7 +103,7 @@ class boss_ordos : public CreatureScript
                 summons.Summon(summon);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 Talk(SAY_ORDOS_AGGRO);
 

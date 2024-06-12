@@ -303,7 +303,7 @@ class boss_xin_the_weaponmaster : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_RING_OF_FIRE, 15000);
                 events.ScheduleEvent(EVENT_GROUND_SLAM, urand(10000, 15000));
@@ -453,7 +453,7 @@ class npc_animated_staff : public CreatureScript
                 me->SetVisible(true);
             }
 
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
 
             void DoAction(int32 actionId) override
             {
@@ -849,7 +849,7 @@ class npc_mp_quilen_guardian : public CreatureScript
 
             void InitializeAI() override { }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_LEAPING_RUSH, urand(7000, 9000));
                 events.ScheduleEvent(EVENT_CARNIVOROUS_BITE, 3000);

@@ -122,7 +122,7 @@ class instance_halls_of_reflection : public InstanceMapScript
 
             EventMap events;
 
-            void Initialize()
+            void Initialize() override
             {
                 events.Reset();
 

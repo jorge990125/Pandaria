@@ -139,9 +139,9 @@ class boss_urom : public CreatureScript
                 me->SetFlying(false);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
                 me->InterruptSpell(CURRENT_CHANNELED_SPELL);
 
                 StartAttack();

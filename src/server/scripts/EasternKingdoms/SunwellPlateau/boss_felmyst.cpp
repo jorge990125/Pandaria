@@ -207,7 +207,7 @@ class boss_felmyst : public CreatureScript
                 });
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BERSERK, 600000);
 
@@ -571,7 +571,7 @@ class npc_felmyst_vapor : public CreatureScript
             }
 
             void Reset() override { }
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void UpdateAI(uint32 /*diff*/) override { }
         };
 
@@ -604,7 +604,7 @@ class npc_felmyst_trail : public CreatureScript
             }
 
             void Reset() override { }
-            void EnterCombat(Unit* /*who*/) override { }
+            void JustEngagedWith(Unit* /*who*/) override { }
             void AttackStart(Unit* /*who*/) override { }
             void MoveInLineOfSight(Unit* /*who*/) override { }
             void UpdateAI(uint32 /*diff*/) override { }

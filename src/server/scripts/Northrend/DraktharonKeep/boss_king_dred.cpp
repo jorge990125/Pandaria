@@ -80,7 +80,7 @@ class boss_dred : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_BETTER_OF_DRED, 0);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (instance)
                     instance->SetData(DATA_DRED_EVENT,IN_PROGRESS);

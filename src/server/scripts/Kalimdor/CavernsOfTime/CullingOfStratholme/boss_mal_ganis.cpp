@@ -103,7 +103,7 @@ class boss_mal_ganis : public CreatureScript
                      instance->SetData(DATA_MAL_GANIS_EVENT, NOT_STARTED);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(SAY_AGGRO);
                 if (instance)

@@ -64,7 +64,7 @@ class instance_ruins_of_ahnqiraj : public InstanceMapScript
                 }
             }
 
-            bool SetBossState(uint32 bossId, EncounterState state)
+            bool SetBossState(uint32 bossId, EncounterState state) override
             {
                 if (!InstanceScript::SetBossState(bossId, state))
                     return false;
@@ -112,7 +112,7 @@ class instance_ruins_of_ahnqiraj : public InstanceMapScript
                 return saveStream.str();
             }
 
-            void Load(char const* data)
+            void Load(char const* data) override
             {
                 if (!data)
                 {

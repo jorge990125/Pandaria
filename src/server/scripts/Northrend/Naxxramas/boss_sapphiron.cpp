@@ -120,9 +120,9 @@ class boss_sapphiron : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_HUNDRED_CLUB, 1); // no longer required resist - cuz resistance not exist anymore
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 me->CastSpell(me, SPELL_FROST_AURA, true);
 

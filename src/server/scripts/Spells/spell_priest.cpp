@@ -3449,7 +3449,7 @@ class spell_pri_t15_shadow_2p_bonus : public SpellScript
 {
     PrepareSpellScript(spell_pri_t15_shadow_2p_bonus);
 
-    bool Load()
+    bool Load() override
     {
         return GetCaster()->HasAura(SPELL_PRIEST_T15_SHADOW_2P_BONUS);
     }

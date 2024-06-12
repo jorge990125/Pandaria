@@ -117,7 +117,7 @@ class boss_najentus : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_HIGH_WARLORD_NAJENTUS_EVENT, who->ToPlayer()))
                 {

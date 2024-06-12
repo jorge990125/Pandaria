@@ -402,7 +402,7 @@ class npc_go_kan : public CreatureScript
 
             void JustDied(Unit* /*killer*/) override { }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 me->RemoveStandFlags(UNIT_STAND_STATE_SIT);
             }
@@ -646,7 +646,7 @@ struct npc_shieldwall_footman : public ScriptedAI
 
     EventMap events;
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_PRESS_THE_ATTACK);
     }
@@ -668,7 +668,7 @@ struct npc_krasari_tormentor : public ScriptedAI
         delay = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ANCIENT_POISON, 3s);
         events.ScheduleEvent(EVENT_TORMENTORS_SLASH, 8s + 500ms);
@@ -731,7 +731,7 @@ struct npc_krasari_runekeeper : public krasarang_casterAI
         delay = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ANCIENT_POISON, 3s);
         events.ScheduleEvent(EVENT_RUNE_OF_SUFFERING, 6s + 500ms);
@@ -798,7 +798,7 @@ struct npc_weeping_horror : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_OVERWHELMING_SADNESS, randtime(3s + 500ms, 6s));
     }
@@ -841,7 +841,7 @@ struct npc_bilgewater_sapper : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_THROW_DYNAMITE, randtime(3s + 500ms, 6s));
     }
@@ -886,7 +886,7 @@ struct npc_viceclaw_scuttler : public ScriptedAI
         triggered = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_RAGE_OF_ELDERS, 3s);
         events.ScheduleEvent(EVENT_VICE_CLAW, randtime(5s + 500ms, 12s));
@@ -944,7 +944,7 @@ struct npc_dominance_grunt : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_BLOODTHIRSTY);
         events.ScheduleEvent(EVENT_DECAPITATE, randtime(4s + 500ms, 11s + 500ms));
@@ -987,7 +987,7 @@ struct npc_elder_seadragon : public ScriptedAI
         triggered = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_ZIN_SPIN, randtime(8s + 500ms, 11s + 500ms));
     }
@@ -1035,7 +1035,7 @@ struct npc_sunwalker_scout : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CONSECRATION, 3s);
         events.ScheduleEvent(EVENT_AVENGERS_SHIELD, 12s);
@@ -1093,7 +1093,7 @@ struct npc_dojani_dominator : public ScriptedAI
         triggered = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_MOGU_RUNE_WARD);
         events.ScheduleEvent(EVENT_MIGHT_MAKES_RIGHT, randtime(8s + 500ms, 11s + 500ms));
@@ -1145,7 +1145,7 @@ struct npc_dojani_enforcer : public ScriptedAI
         triggered = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SHOCKWAVE, 4s + 500ms);
         events.ScheduleEvent(EVENT_LEAP_OF_VICTORY, randtime(8s + 500ms, 18s));
@@ -1200,7 +1200,7 @@ struct npc_dojani_surveyor : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SUNDEN_ARMOR, randtime(4s + 500ms, 13s));
     }
@@ -1240,7 +1240,7 @@ struct npc_dojani_reclaimer : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_RECLAIM_STRENGTH, 6s + 500ms);
         events.ScheduleEvent(EVENT_ANCIENT_RUNE_OF_STRIKING, 1s + 500ms);
@@ -1286,7 +1286,7 @@ struct npc_riverblade_slayer : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_SAVAGE_STRIKES, randtime(4s + 500ms, 13s));
     }
@@ -1329,7 +1329,7 @@ struct npc_sha_of_despair : public ScriptedAI
         SetCombatMovement(false);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_CALL_OF_DESPAIR, randtime(8s, 20s));
         events.ScheduleEvent(EVENT_GLOOM_WHIRL, 13s);
@@ -1390,7 +1390,7 @@ struct npc_echo_of_despair : public ScriptedAI
         me->SetDisplayId(40884);
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_LANGUOR, randtime(4s + 500ms, 17s));
     }
@@ -1430,7 +1430,7 @@ struct npc_source_of_despair : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_LANGUOR, randtime(4s + 500ms, 17s));
         events.ScheduleEvent(EVENT_WAVE_OF_DESPAIR, 10s);
@@ -1480,7 +1480,7 @@ struct npc_child_of_chi_ji_krasarang : public krasarang_casterAI
         delay = 0;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_HEALING_SONG, 15s);
         events.ScheduleEvent(EVENT_BEAK_STAB, randtime(8s + 500ms, 14s));
@@ -1548,7 +1548,7 @@ struct npc_student_of_chi_ji : public krasarang_casterAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_BLESSING_OF_CHI_JI, 15s);
         events.ScheduleEvent(EVENT_WRATH_OF_CHI_JI, randtime(4s + 500ms, 15s));
@@ -1876,7 +1876,7 @@ struct npc_high_marshal_twinbraid : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         Talk(TALK_SPECIAL_1);
         events.ScheduleEvent(EVENT_CANNONBALL_SPIN, randtime(8s + 500ms, 19s));
@@ -1925,7 +1925,7 @@ struct npc_warlord_bloodhilt : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_COUP_DE_GRACE, randtime(3s + 500ms, 8s));
         events.ScheduleEvent(EVENT_BLOODY_KNIVES, 12s);
@@ -2204,7 +2204,7 @@ struct npc_nahassa : public ScriptedAI
         JustRespawned();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         me->RemoveAurasDueToSpell(SPELL_NAHASSA_INJURED_ANIM);
         me->RemoveAurasDueToSpell(SPELL_DYING);
@@ -2344,7 +2344,7 @@ struct npc_groundbreaker_brojai : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_EARTH_SPIKE, randtime(3s + 500ms, 12s));
     }
@@ -2951,7 +2951,7 @@ struct npc_lorekeeper_vaeldrin : public ScriptedAI
 {
     npc_lorekeeper_vaeldrin(Creature* creature) : ScriptedAI(creature) { }
 
-    void Reset()
+    void Reset() override
     {
         if (me->GetAreaId() == 6009)
             me->HandleEmoteStateCommand(EMOTE_STATE_READ);

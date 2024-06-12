@@ -287,7 +287,7 @@ class boss_garajal : public CreatureScript
                 instance->SetData(DATA_GARAJAL, DONE);
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 if (!instance->CheckRequiredBosses(DATA_GARAJAL, who->ToPlayer()))
                 {

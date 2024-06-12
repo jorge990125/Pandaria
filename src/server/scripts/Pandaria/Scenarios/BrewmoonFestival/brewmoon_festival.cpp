@@ -53,7 +53,7 @@ struct brewmoon_yaungol_typeAI : public ScriptedAI
         onBloat = false;
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         nonCombatEvents.Reset();
         me->SetHomePosition(*me);
@@ -99,7 +99,7 @@ class npc_den_mother_moof : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 if (Creature* kieu = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(NPC_ASSISTANT_KIEU) : 0))
                     kieu->AI()->Talk(TALK_SPECIAL_3);
@@ -206,7 +206,7 @@ class npc_li_te : public CreatureScript
                 summons.DespawnAll();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_WATER_SHELL, 20 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_WATER_BOLT, urand(3 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
@@ -326,7 +326,7 @@ class npc_karsar_bloodletter : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BLOODLETTING, urand(3 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
             }
@@ -400,7 +400,7 @@ class npc_disturbed_saurok : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_GASH, urand(4 * IN_MILLISECONDS, 4.5 * IN_MILLISECONDS));
             }
@@ -468,7 +468,7 @@ class npc_brewmoon_water_spirit : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_WATER_BOLT, urand(4 * IN_MILLISECONDS, 4.5 * IN_MILLISECONDS));
             }
@@ -986,7 +986,7 @@ class npc_bataari_yaungol : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CLEAVE, urand(4 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_HEROIC_LEAP, urand(8 * IN_MILLISECONDS, 14.5 * IN_MILLISECONDS));
@@ -1150,7 +1150,7 @@ class npc_bataari_flamecaller : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_FIREBALL, urand(4 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_FLAME_SHELL, urand(10 * IN_MILLISECONDS, 15 * IN_MILLISECONDS));
@@ -1267,7 +1267,7 @@ class npc_bataari_outrunner : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_QUICKEN, urand(5 * IN_MILLISECONDS, 8 * IN_MILLISECONDS));
             }
@@ -1381,7 +1381,7 @@ class npc_bataari_war_yeti : public CreatureScript
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_YETI_SMASH, urand(9 * IN_MILLISECONDS, 12.5 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_GROUND_SLAM, urand(15 * IN_MILLISECONDS, 25 * IN_MILLISECONDS));
@@ -1539,7 +1539,7 @@ class npc_warbringer_qobi : public CreatureScript
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_THROW_OIL, urand(10.5 * IN_MILLISECONDS, 14 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_FIRELINE, urand(15 * IN_MILLISECONDS, 25 * IN_MILLISECONDS));

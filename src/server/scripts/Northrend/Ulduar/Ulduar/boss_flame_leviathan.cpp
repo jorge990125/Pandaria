@@ -368,7 +368,7 @@ class boss_flame_leviathan : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_ORBIT_UARY, 0);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 // idk fow it must works, but Shutdown increments after reset but not in combat
                 Shutdown = 0;
@@ -379,7 +379,7 @@ class boss_flame_leviathan : public CreatureScript
                     return;
                 }
 
-                _EnterCombat();
+                _JustEngagedWith();
                 firstPursuit = true;
                 events.ScheduleEvent(EVENT_PURSUE, 1);
                 events.ScheduleEvent(EVENT_MISSILE, urand(1500, 4*IN_MILLISECONDS));
@@ -926,7 +926,7 @@ class boss_flame_leviathan_defense_cannon : public CreatureScript
                     NapalmTimer -= diff;
             }
 
-            bool CanAIAttack(Unit const* who) const
+            bool CanAIAttack(Unit const* who) const override
             {
                 if (who->GetTypeId() != TYPEID_PLAYER || !who->GetVehicle() || who->GetVehicleBase()->GetEntry() == NPC_LEVIATHAN_SEATS)
                     return false;
@@ -955,7 +955,7 @@ class boss_flame_leviathan_defense_turret : public CreatureScript
                     damage = 0;
             }
 
-            bool CanAIAttack(Unit const* who) const
+            bool CanAIAttack(Unit const* who) const override
             {
                 if (who->GetTypeId() != TYPEID_PLAYER || !who->GetVehicle() || who->GetVehicleBase()->GetEntry() != NPC_LEVIATHAN_SEATS)
                     return false;
@@ -1010,7 +1010,7 @@ class boss_flame_leviathan_safety_container : public CreatureScript
         {
             boss_flame_leviathan_safety_containerAI(Creature* creature) : PassiveAI(creature) { }
 
-            void JustDied(Unit* /*killer*/)
+            void JustDied(Unit* /*killer*/) override
             {
                 //float x, y, z;
                 //me->GetPosition(x, y, z);
@@ -1052,7 +1052,7 @@ class npc_mechanolift : public CreatureScript
                 me->SetVisible(true);
             }
 
-            void JustDied(Unit* /*killer*/)
+            void JustDied(Unit* /*killer*/) override
             {
                 me->GetMotionMaster()->MoveTargetedHome();
                 DoCast(me, SPELL_DUSTY_EXPLOSION);
@@ -1221,7 +1221,7 @@ class npc_colossus : public CreatureScript
                 availablecheck = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 groundSlamTimer = urand(8 * IN_MILLISECONDS, 10 * IN_MILLISECONDS);
                 availablecheck = 5*IN_MILLISECONDS;
@@ -1903,14 +1903,14 @@ class spell_pursue : public SpellScriptLoader
         {
             PrepareSpellScript(spell_pursue_SpellScript);
 
-            bool Validate(SpellInfo const* /*spell*/)
+            bool Validate(SpellInfo const* /*spell*/) override
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_PURSUED))
                     return false;
                 return true;
             }
 
-            bool Load()
+            bool Load() override
             {
                 _target = nullptr;
                 return true;
@@ -2105,7 +2105,7 @@ class spell_grab_crate : public SpellScriptLoader
         {
             PrepareSpellScript(spell_grab_crate_SpellScript);
 
-            bool Validate(SpellInfo const* /*spell*/)
+            bool Validate(SpellInfo const* /*spell*/) override
             {
                 if (!sSpellMgr->GetSpellInfo(62479))
                     return false;

@@ -80,7 +80,7 @@ class TC_GAME_API SmartAI : public CreatureAI
         void JustReachedHome() override;
 
         // Called for reaction at enter to combat if not in combat yet (enemy can be NULL)
-        void EnterCombat(Unit* enemy) override;
+        void JustEngagedWith(Unit* enemy) override;
 
         // Called for reaction at stopping attack at no attackers or targets
         void EnterEvadeMode() override;
@@ -282,7 +282,7 @@ class TC_GAME_API SmartGameObjectAI : public GameObjectAI
         bool OnGossipSelectCode(Player* /*player*/, uint32 /*sender*/, uint32 /*action*/, const char* /*code*/) override;
         bool OnQuestAccept(Player* player, Quest const* quest) override;
         bool OnQuestReward(Player* player, Quest const* quest, uint32 opt) override;
-        uint32 GetDialogStatus(Player* /*player*/);
+        uint32 GetDialogStatus(Player* /*player*/) override;
         void Destroyed(Player* player, uint32 eventId) override;
         void SetData(uint32 id, uint32 value) override;
         void SetScript9(SmartScriptHolder& e, uint32 entry, Unit* invoker);

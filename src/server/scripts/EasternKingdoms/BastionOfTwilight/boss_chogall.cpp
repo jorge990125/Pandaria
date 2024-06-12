@@ -268,7 +268,7 @@ class boss_chogall : public CreatureScript
                 summons.Despawn(summon);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 DoCorruption(CORRUPTION_CLEAR);
                 DoCorruption(CORRUPTION_INIT);

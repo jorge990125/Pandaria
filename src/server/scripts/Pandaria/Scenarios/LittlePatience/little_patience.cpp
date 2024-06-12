@@ -99,7 +99,7 @@ struct npc_little_patience_muckmaw_crocolisk : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         DoCast(me, SPELL_GORGE);
         events.ScheduleEvent(EVENT_GORGE, 12 * IN_MILLISECONDS);
@@ -135,7 +135,7 @@ struct npc_little_patience_commander_scargash : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         Talk(TALK_INTRO);
 
@@ -189,7 +189,7 @@ struct npc_little_patience_krasari_stalker : public customCreatureAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         if (who)
             DoCast(who, SPELL_POUNCE);
@@ -569,7 +569,7 @@ struct npc_little_patience_riverblade_marauder : public little_patience_assaulte
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_VICIOUS_REND, 2 * IN_MILLISECONDS);
     }
@@ -604,7 +604,7 @@ struct npc_little_patience_bogrot : public little_patience_assaulterAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_SWAMP_GAS, 5.5 * IN_MILLISECONDS);
     }
@@ -652,7 +652,7 @@ struct npc_little_patience_wakened_mogu : public little_patience_assaulterAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* who) override
+    void JustEngagedWith(Unit* who) override
     {
         events.ScheduleEvent(EVENT_SPIRIT_BOMB, 1.5 * IN_MILLISECONDS);
         events.ScheduleEvent(EVENT_SPIRIT_BARRAGE, 8.5 * IN_MILLISECONDS);

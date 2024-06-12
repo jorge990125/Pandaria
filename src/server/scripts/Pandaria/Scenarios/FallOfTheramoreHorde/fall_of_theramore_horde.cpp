@@ -246,7 +246,7 @@ class npc_theramore_footman : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CLEAVE, urand(5 * IN_MILLISECONDS, 12.8*IN_MILLISECONDS));
             }
@@ -313,7 +313,7 @@ class npc_theramore_arcanist : public CreatureScript
                 prevSpellId = 0;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_ARCANE_BLAST, urand(2 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_SECOND_ABILITY, urand(7 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
@@ -434,7 +434,7 @@ class npc_theramore_marksman : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_SHOT, urand(2 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
             }
@@ -495,7 +495,7 @@ class npc_knight_of_theramore : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CHARGE, 1 * IN_MILLISECONDS);
                 events.ScheduleEvent(EVENT_HEAL_ANOTHER, urand(8 * IN_MILLISECONDS, 21 * IN_MILLISECONDS));
@@ -567,7 +567,7 @@ class npc_theramore_faithful : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_HOLLY_SMITE, urand(2 * IN_MILLISECONDS, 4 * IN_MILLISECONDS));
                 events.ScheduleEvent(EVENT_HEAL, 9 * IN_MILLISECONDS);
@@ -674,7 +674,7 @@ class npc_baldruc : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_KITE_FIGHT, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(TALK_SPECIAL_1);
                 events.ScheduleEvent(EVENT_STORM_TOTEM, urand(4 * IN_MILLISECONDS, 9.5 * IN_MILLISECONDS));
@@ -757,7 +757,7 @@ class npc_big_bessa : public CreatureScript
                 me->GetMap()->SetWorldState(WORLDSTATE_NO_KITE_YOU, 1);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 Talk(TALK_INTRO);
                 events.ScheduleEvent(EVENT_SIGHTS, 1 * IN_MILLISECONDS);

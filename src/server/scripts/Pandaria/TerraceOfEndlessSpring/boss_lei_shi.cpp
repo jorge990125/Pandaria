@@ -290,9 +290,9 @@ class boss_lei_shi : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 if (instance)
                 {
@@ -887,7 +887,7 @@ class npc_lei_shi_corrupted_protector : public CreatureScript
                 InFlee = false;
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_DISPERSE, 1 * IN_MILLISECONDS);
             }

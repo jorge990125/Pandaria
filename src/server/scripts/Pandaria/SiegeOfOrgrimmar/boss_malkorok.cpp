@@ -183,9 +183,9 @@ class boss_malkorok : public CreatureScript
                     instance->SetBossState(DATA_MALKOROK, FAIL);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
-                _EnterCombat();
+                _JustEngagedWith();
 
                 me->SetReactState(REACT_AGGRESSIVE);
                 Talk(TALK_AGGRO);

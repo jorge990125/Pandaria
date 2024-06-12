@@ -185,7 +185,7 @@ class boss_bethtilac : public CreatureScript
                 me->NearTeleportTo(hx, hy, hz, ho);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 uiPhase = 0;
                 uiCount = 0;
@@ -552,7 +552,7 @@ class npc_bethtilac_cinderweb_spinner : public CreatureScript
                 events.Reset();
             }
 
-            void EnterCombat(Unit* who) override
+            void JustEngagedWith(Unit* who) override
             {
                 events.ScheduleEvent(EVENT_BURNING_ACID, urand(7000, 15000));
                 if (IsHeroic())
@@ -691,7 +691,7 @@ class npc_bethtilac_cinderweb_drone : public CreatureScript
                 DoCast(me, SPELL_ENERGIZE, true);
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_BURNING_ACID, urand(7000, 15000));
                 events.ScheduleEvent(EVENT_BOILING_SPATTER, urand(14000, 20000));
@@ -853,7 +853,7 @@ class npc_bethtilac_cinderweb_spiderling : public CreatureScript
             Unit* pDrone;
             EventMap events;
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_CHECK_DRONE, 2000);
             }
@@ -935,7 +935,7 @@ class npc_bethtilac_engorged_broodling : public CreatureScript
 
             bool bBurst;
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 bBurst = false;
             }

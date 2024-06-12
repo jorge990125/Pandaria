@@ -114,7 +114,7 @@ class boss_galion : public CreatureScript
                 me->GetMotionMaster()->MoveTargetedHome();
             }
 
-            void EnterCombat(Unit* /*who*/) override
+            void JustEngagedWith(Unit* /*who*/) override
             {
                 events.ScheduleEvent(EVENT_STOMP, 50s);
                 events.ScheduleEvent(EVENT_CANNON, 25s);
@@ -274,7 +274,7 @@ struct npc_salyin_warmonger : public ScriptedAI
         events.Reset();
     }
 
-    void EnterCombat(Unit* /*who*/) override
+    void JustEngagedWith(Unit* /*who*/) override
     {
         events.ScheduleEvent(EVENT_EMPALLING, 50s);
     }

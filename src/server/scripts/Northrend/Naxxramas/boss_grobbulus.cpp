@@ -61,9 +61,9 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_ID, SPELL_POISON_CLOUD_ADD, true);
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_CLOUD, 15000);
             events.ScheduleEvent(EVENT_INJECT, 20000);
             events.ScheduleEvent(EVENT_SPRAY, 15000+rand()%15000); //not sure

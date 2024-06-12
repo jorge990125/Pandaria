@@ -971,7 +971,8 @@ class spell_rog_killing_spree_teleport : public SpellScript
         {
             target->GetPosition(&pos);
             target->MovePositionToFirstCollision(pos, GetSpellInfo()->Effects[EFFECT_0].CalcRadius(GetCaster()), M_PI, 1.5f);
-            GetCaster()->UpdateAllowedPositionZ(pos.GetPositionX(), pos.GetPositionY(), pos.m_positionZ, 1.5f);
+            float newz = 1.5f;
+            GetCaster()->UpdateAllowedPositionZ(pos.GetPositionX(), pos.GetPositionY(), pos.m_positionZ, &newz);
         }
         // If final point end up being too high (standing against a wall) or too low (standing against a hole) - just set destination to target's position
         if (abs(pos.GetPositionZ() - target->GetPositionZ()) > 2.5f)
@@ -1443,7 +1444,7 @@ class spell_rog_honor_among_thieves : public AuraScript
 {
     PrepareAuraScript(spell_rog_honor_among_thieves);
 
-    bool Load()
+    bool Load() override
     {
         return GetUnitOwner()->GetTypeId() == TYPEID_PLAYER;
     }
